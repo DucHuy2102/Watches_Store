@@ -7,7 +7,7 @@ const styleImage = 'h-full w-full object-cover';
 
 const CardComponent = () => {
     return (
-        <div className=' h-[625px] w-[466px]'>
+        <div className='h-[625px] w-[466px]'>
             {/* image watches  */}
             <div className='w-[466px] h-[466px] flex items-center justify-center bg-gray-100'>
                 {/* image  */}

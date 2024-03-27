@@ -6,3 +6,5 @@ export { default as AboutPage } from './AboutPage';
 export { default as ContactPage } from './ContactPage';
 export { default as Login } from './AccountPage/Login';
 export { default as Register } from './AccountPage/Register';
+export { default as ForgotPassword } from './AccountPage/ForgotPassword';
+export { default as ResetPassword } from './AccountPage/ResetPassword';

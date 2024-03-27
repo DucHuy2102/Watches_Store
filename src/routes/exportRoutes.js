@@ -7,6 +7,8 @@ import {
     ContactPage,
     Login,
     Register,
+    ForgotPassword,
+    ResetPassword,
 } from '../pages/exportPages';
 
 export const routes = [
@@ -43,6 +45,16 @@ export const routes = [
     {
         path: '/register',
         component: Register,
+        isShowHeader: true,
+    },
+    {
+        path: '/forgotPassword',
+        component: ForgotPassword,
+        isShowHeader: true,
+    },
+    {
+        path: '/resetPassword',
+        component: ResetPassword,
         isShowHeader: true,
     },
 

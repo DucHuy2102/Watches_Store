@@ -7,22 +7,22 @@ const Header = () => {
         <nav className='w-full h-16 px-20 flex items-center flex-grow shadow-lg font-serif'>
             <div className=''>
                 <Link to='/' className='text-3xl font-bold'>
-                    Watc<span className='text-blue-500 text-4xl'>H</span>es
+                    Watc<span className='text-yellow-400 text-4xl'>H</span>es
                 </Link>
             </div>
 
             {/* pages */}
             <div className='w-[20rem] flex items-center justify-center gap-2'>
-                <Link to='/' className='text-lg'>
+                <Link to='/' className='text-lg hover:underline hover:text-xl'>
                     Home
                 </Link>
-                <Link to='/products' className='text-lg'>
+                <Link to='/products' className='text-lg hover:underline hover:text-xl'>
                     Product
                 </Link>
-                <Link to='/about' className='text-lg'>
+                <Link to='/about' className='text-lg hover:underline hover:text-xl'>
                     About
                 </Link>
-                <Link to='/contact' className='text-lg'>
+                <Link to='/contact' className='text-lg hover:underline hover:text-xl'>
                     Contact
                 </Link>
             </div>

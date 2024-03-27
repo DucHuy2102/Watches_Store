@@ -3,59 +3,89 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [error, setError] = useState('');
-    const handleSubmit = () => {};
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+    };
     return (
-        <div className='w-full flex justify-center items-center h-[80vh] '>
-            <form
-                onSubmit={handleSubmit}
-                className='flex flex-col justify-center items-center space-y-4 w-[80%] md:w-[25%]'
-            >
-                <h1 className='text-2xl font-bold text-left'>Create an account</h1>
-
-                {/* userName */}
-                <input
-                    className='w-full px-4 py-2 border-2 border-black outline-0'
-                    type='text'
-                    placeholder='Enter your username'
+        <div className='w-full flex items-center justify-center px-20 py-5'>
+            {/* image */}
+            <div className='w-[60%]'>
+                <img
+                    src='https://timex.com/cdn/shop/files/4812_TX_TC23_featured-collectionTW2W51400.jpg?v=1710247987&width=768'
+                    alt=''
+                    className='w-full h-screen object-cover'
                 />
+            </div>
 
-                {/* email */}
-                <input
-                    className='w-full px-4 py-2 border-2 border-black outline-0'
-                    type='text'
-                    placeholder='Enter your email'
-                />
+            {/* form register */}
+            <div className='flex flex-col justify-center items-end h-screen w-[80%] font-serif'>
+                <form onSubmit={handleSubmit}>
+                    {/* name form */}
+                    <h1 className='text-4xl font-bold text-center text-black mb-5'>Sign up</h1>
 
-                {/* numberPhone */}
-                <input
-                    className='w-full px-4 py-2 border-2 border-black outline-0'
-                    type='text'
-                    placeholder='Enter your phone number'
-                />
+                    {/* userName */}
+                    <div className='mb-5 w-[45vw]'>
+                        <label htmlFor='username' className='text-xl text-black'>
+                            Username
+                        </label>
+                        <input
+                            autoFocus
+                            type='text'
+                            id='username'
+                            name='username'
+                            className='w-full px-3 py-2 border border-gray-300 rounded'
+                            placeholder='Enter your username'
+                        />
+                    </div>
 
-                {/* password */}
-                <input
-                    className='w-full px-4 py-2 border-2 border-black outline-0'
-                    type='password'
-                    placeholder='Enter your password'
-                />
+                    {/* email */}
+                    <div className='mb-5 w-[45vw]'>
+                        <label htmlFor='email' className='text-xl text-black'>
+                            Email
+                        </label>
+                        <input
+                            type='text'
+                            id='email'
+                            name='email'
+                            className='w-full px-3 py-2 border border-gray-300 rounded'
+                            placeholder='Enter your email'
+                        />
+                    </div>
 
-                {/* button Register */}
-                <button
-                    type='submit'
-                    className='w-full px-4 py-4 text-lg font-bold text-white bg-black rounded-lg hover:bg-gray-500 hover:text-black '
-                >
-                    Register
-                </button>
-                {error && <h3 className='text-red-500 text-sm '>Something went wrong</h3>}
-                <div className='flex justify-center items-center space-x-3'>
+                    {/* password */}
+                    <div className='mb-5'>
+                        <label htmlFor='password' className='block text-black'>
+                            Password
+                        </label>
+                        <input
+                            type='password'
+                            id='password'
+                            name='password'
+                            className='w-full p-2 border border-gray-300 rounded'
+                            placeholder='Enter your password'
+                        />
+                    </div>
+
+                    {/* button submit register */}
+                    <div>
+                        <button
+                            type='submit'
+                            className='w-full text-xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+
+                {/* Register */}
+                <div className='mt-5 text-lg flex'>
                     <p>Already have an account?</p>
-                    <p className='text-gray-500 hover:text-black'>
-                        <Link to='/login'>Login</Link>
-                    </p>
+                    <Link to='/login' className='pl-2 text-gray-500 hover:text-black hover:underline'>
+                        Login
+                    </Link>
                 </div>
-            </form>
+            </div>
         </div>
     );
 };

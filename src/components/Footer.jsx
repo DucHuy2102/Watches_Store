@@ -53,8 +53,8 @@ const Footer = () => {
                         variant='small'
                         className='mb-4 flex flex-col text-center font-normal text-blue-gray-900 md:mb-0'
                     >
-                        <span>Trường Đại học Sư phạm Kỹ thuật</span>
-                        <span>Thành phố Hồ Chí Minh</span>
+                        <span className='font-bold'>Trường Đại học Sư phạm Kỹ thuật</span>
+                        <span className='font-bold'>Thành phố Hồ Chí Minh</span>
                     </Typography>
                     <Typography variant='small' className='mb-4 text-center font-normal text-blue-gray-900 md:mb-0'>
                         &copy; {currentYear} <a href='https://material-tailwind.com/'>Nguyen Duc Huy</a> - Huynh Le Huy

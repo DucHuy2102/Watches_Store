@@ -2,7 +2,7 @@ import { CardComponent } from '../components/exportComponents';
 
 const ProductPage = () => {
     return (
-        <div className='h-auto w-full mt-5 mb-5 grid grid-cols-3 justify-center gap-2'>
+        <div className='mb-5 mt-5 grid grid-cols-3'>
             <CardComponent />
             <CardComponent />
             <CardComponent />
@@ -18,3 +18,4 @@ const ProductPage = () => {
 };
 
 export default ProductPage;
+// ml-20 mb-5 mt-5 grid grid-cols-3 gap-5 justify-center items-center

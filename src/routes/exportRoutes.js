@@ -39,13 +39,11 @@ export const routes = [
         path: '/login',
         component: Login,
         isShowHeader: true,
-        isShowFooter: false,
     },
     {
         path: '/register',
         component: Register,
         isShowHeader: true,
-        isShowFooter: false,
     },
 
     // not found page

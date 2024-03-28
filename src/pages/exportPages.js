@@ -8,3 +8,4 @@ export { default as Login } from './AccountPage/Login';
 export { default as Register } from './AccountPage/Register';
 export { default as ForgotPassword } from './AccountPage/ForgotPassword';
 export { default as ResetPassword } from './AccountPage/ResetPassword';
+export { default as BlogPage } from './BlogPage/BlogPage';

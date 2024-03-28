@@ -19,8 +19,8 @@ const Header = () => {
                 <Link to='/products' className='text-lg hover:underline hover:text-xl'>
                     Product
                 </Link>
-                <Link to='/about' className='text-lg hover:underline hover:text-xl'>
-                    About
+                <Link to='/blogs' className='text-lg hover:underline hover:text-xl'>
+                    Blog
                 </Link>
                 <Link to='/contact' className='text-lg hover:underline hover:text-xl'>
                     Contact

@@ -2,17 +2,19 @@ import { CardComponent } from '../components/exportComponents';
 
 const ProductPage = () => {
     return (
-        <div className='mb-5 mt-5 grid grid-cols-3'>
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
-            <CardComponent />
+        <div className='flex justify-center'>
+            <div className='mt-5 grid grid-cols-3 gap-5'>
+                <CardComponent />
+                <CardComponent />
+                <CardComponent />
+                <CardComponent />
+                <CardComponent />
+                <CardComponent />
+                <CardComponent />
+                <CardComponent />
+                <CardComponent />
+                <CardComponent />
+            </div>
         </div>
     );
 };

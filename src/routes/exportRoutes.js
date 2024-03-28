@@ -9,6 +9,7 @@ import {
     Register,
     ForgotPassword,
     ResetPassword,
+    BlogPage,
 } from '../pages/exportPages';
 
 export const routes = [
@@ -55,6 +56,11 @@ export const routes = [
     {
         path: '/resetPassword',
         component: ResetPassword,
+        isShowHeader: true,
+    },
+    {
+        path: '/blogs',
+        component: BlogPage,
         isShowHeader: true,
     },
 

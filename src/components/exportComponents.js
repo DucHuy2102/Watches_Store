@@ -4,3 +4,4 @@ export { default as Footer } from './Footer';
 export { default as Carousel } from './Carousel';
 export { default as CardComponent } from './Card';
 export { default as Blog } from './Blog';
+export { default as ShopNow } from './ShopNow';

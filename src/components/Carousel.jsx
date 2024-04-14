@@ -4,7 +4,7 @@ import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 const Carousel = () => {
     return (
-        <div className='px-20 py-2'>
+        <div className='px-10 mt-5'>
             <Swiper
                 loop={true}
                 spaceBetween={0}

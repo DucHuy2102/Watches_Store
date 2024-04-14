@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -13,6 +14,11 @@ const Carousel = () => {
             >
                 <SwiperSlide>
                     <img src={'../assets/slide_01.jpg'} alt='Image' className={styleImage} />
+                </SwiperSlide>
+                <SwiperSlide className='bg-black'>
+                    <video autoPlay={true} controls>
+                        <source src={'../assets/video_01.mp4'} type='video/mp4' />
+                    </video>
                 </SwiperSlide>
                 <SwiperSlide>
                     <img src={'../assets/slide_02.jpg'} alt='Image' className={styleImage} />

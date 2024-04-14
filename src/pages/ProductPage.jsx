@@ -3,7 +3,7 @@ import { CardComponent } from '../components/exportComponents';
 const ProductPage = () => {
     return (
         <div className='flex justify-center'>
-            <div className='mt-5 grid grid-cols-3 gap-5'>
+            <div className='mt-10 mb-10 grid grid-cols-3 gap-5'>
                 <CardComponent />
                 <CardComponent />
                 <CardComponent />

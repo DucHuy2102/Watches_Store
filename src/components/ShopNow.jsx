@@ -1,14 +1,18 @@
+import React from 'react';
+
 const ShopNow = () => {
     return (
-        <div className='px-10'>
+        <div className='px-10 mb-5'>
             <div className='flex justify-center items-center gap-5'>
                 {/* men */}
-                <div className='relative'>
-                    <img
-                        src='https://timex.com/cdn/shop/files/4967_TX_TC24_collection_mod_TW2W51600_wrist.jpg?v=1712583036'
-                        alt=''
-                        className='w-full h-full object-cover transform transition-transform duration-300 hover:scale-105'
-                    />
+                <div className='relative w-[50%] cursor-pointer'>
+                    <div className='overflow-hidden'>
+                        <img
+                            src='https://timex.com/cdn/shop/files/4967_TX_TC24_collection_mod_TW2W51600_wrist.jpg?v=1712583036'
+                            alt=''
+                            className='w-full h-full object-cover transform transition-transform duration-300 hover:scale-105'
+                        />
+                    </div>
                     <div className='absolute top-[80vh] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[30vw] h-full flex justify-center items-center'>
                         <button
                             type='button'
@@ -30,12 +34,14 @@ const ShopNow = () => {
                 </div>
 
                 {/* women */}
-                <div className='relative'>
-                    <img
-                        src='https://timex.com/cdn/shop/files/TW2W32200_CollectionMod.jpg?v=1711979408'
-                        className='w-full h-full object-cover transform transition-transform duration-300 hover:scale-105'
-                        alt=''
-                    />
+                <div className='relative w-[50%] cursor-pointer'>
+                    <div className='overflow-hidden'>
+                        <img
+                            src='https://timex.com/cdn/shop/files/TW2W32200_CollectionMod.jpg?v=1711979408'
+                            className='w-full h-full object-cover transform transition-transform duration-300 hover:scale-105'
+                            alt=''
+                        />
+                    </div>
                     <div className='absolute top-[80vh] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[30vw] h-full flex justify-center items-center'>
                         <button
                             type='button'

@@ -30,7 +30,6 @@ const ContactPage = () => {
                             Last Name
                         </label>
                         <input
-                            autoFocus
                             type='text'
                             id='lastName'
                             name='lastName'
@@ -48,7 +47,6 @@ const ContactPage = () => {
                             Email Address
                         </label>
                         <input
-                            autoFocus
                             type='text'
                             id='emailAddress'
                             name='emailAddress'
@@ -63,7 +61,6 @@ const ContactPage = () => {
                             Phone Number
                         </label>
                         <input
-                            autoFocus
                             type='text'
                             id='numberPhone'
                             name='numberPhone'
@@ -95,7 +92,6 @@ const ContactPage = () => {
                         Comment
                     </label>
                     <textarea
-                        autoFocus
                         type='text'
                         id='comment'
                         name='comment'

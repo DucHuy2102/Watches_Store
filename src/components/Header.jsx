@@ -13,16 +13,16 @@ const Header = () => {
 
             {/* pages */}
             <div className='w-[20rem] flex items-center justify-center gap-2'>
-                <Link to='/' className='text-lg hover:text-xl transition-colors duration-300 ease-in-out'>
+                <Link to='/' className='text-lg hover:font-bold transition-colors duration-1000 ease-in-out'>
                     Home
                 </Link>
-                <Link to='/products' className='text-lg hover:text-xl transition-colors duration-300 ease-in-out'>
+                <Link to='/products' className='text-lg hover:font-bold transition-colors duration-1000 ease-in-out'>
                     Product
                 </Link>
-                <Link to='/blogs' className='text-lg hover:text-xl transition-colors duration-300 ease-in-out'>
+                <Link to='/blogs' className='text-lg hover:font-bold transition-colors duration-1000 ease-in-out'>
                     Blog
                 </Link>
-                <Link to='/contact' className='text-lg hover:text-xl transition-colors duration-300 ease-in-out'>
+                <Link to='/contact' className='text-lg hover:font-bold transition-colors duration-1000 ease-in-out'>
                     Contact
                 </Link>
             </div>

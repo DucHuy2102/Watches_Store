@@ -4,15 +4,15 @@ const ContactPage = () => {
     return (
         <div className='flex flex-col justify-center items-center mt-10 mb-10'>
             {/* name page */}
-            <h1 className='text-center text-4xl font-bold mb-10 font-serif'>Contact Us</h1>
+            <h1 className='text-center text-4xl font-bold mb-10'>Liên hệ với chúng tôi</h1>
 
-            <form className='font-serif'>
+            <form className='font-sans'>
                 {/* name */}
                 <div className='flex justify-center gap-10'>
                     {/* firstName */}
                     <div className='mb-5 w-[20vw]'>
                         <label htmlFor='firstName' className='text-xl text-black'>
-                            First Name
+                            Họ và chữ lót
                         </label>
                         <input
                             autoFocus
@@ -20,21 +20,21 @@ const ContactPage = () => {
                             id='firstName'
                             name='firstName'
                             className='w-full px-3 py-2 border border-gray-300 rounded'
-                            placeholder='First Name'
+                            placeholder='VD: Nguyễn Văn...'
                         />
                     </div>
 
                     {/* lastName */}
                     <div className='mb-5 w-[20vw]'>
                         <label htmlFor='lastName' className='text-xl text-black'>
-                            Last Name
+                            Tên
                         </label>
                         <input
                             type='text'
                             id='lastName'
                             name='lastName'
                             className='w-full px-3 py-2 border border-gray-300 rounded'
-                            placeholder='Last Name'
+                            placeholder='VD: A...'
                         />
                     </div>
                 </div>
@@ -44,28 +44,28 @@ const ContactPage = () => {
                     {/* email */}
                     <div className='mb-5 w-[20vw]'>
                         <label htmlFor='emailAddress' className='text-xl text-black'>
-                            Email Address
+                            Email
                         </label>
                         <input
                             type='text'
                             id='emailAddress'
                             name='emailAddress'
                             className='w-full px-3 py-2 border border-gray-300 rounded'
-                            placeholder='Email Address'
+                            placeholder='VD: ngvanA@gmail.com'
                         />
                     </div>
 
                     {/* phone */}
                     <div className='mb-5 w-[20vw]'>
                         <label htmlFor='numberPhone' className='text-xl text-black'>
-                            Phone Number
+                            Số điện thoại
                         </label>
                         <input
                             type='text'
                             id='numberPhone'
                             name='numberPhone'
                             className='w-full px-3 py-2 border border-gray-300 rounded'
-                            placeholder='Phone Number'
+                            placeholder='VD: 0123456789'
                         />
                     </div>
                 </div>
@@ -74,29 +74,29 @@ const ContactPage = () => {
 
                 <div className='w-full flex flex-col mb-5'>
                     <label htmlFor='topic' className='text-xl text-black'>
-                        Topic
+                        Chủ đề thảo luận
                     </label>
                     <select id='options' className='border border-gray-300 p-2'>
-                        <option>Please Select</option>
-                        <option>Your Order</option>
-                        <option>Site Related</option>
-                        <option>Repair Request</option>
-                        <option>Warranty Infomation</option>
-                        <option>Other</option>
+                        <option>Thái độ nhân viên</option>
+                        <option>Đơn hàng của tôi</option>
+                        <option>Các bên liên quan</option>
+                        <option>Chính sách đổi trả hàng</option>
+                        <option>Chính sách bảo hành</option>
+                        <option>Chủ đề khác</option>
                     </select>
                 </div>
 
                 {/* comment */}
                 <div className='mb-3'>
                     <label htmlFor='comment' className='text-xl text-black'>
-                        Comment
+                        Tin nhắn
                     </label>
                     <textarea
                         type='text'
                         id='comment'
                         name='comment'
                         className='w-full px-3 py-2 border border-gray-300 rounded'
-                        placeholder='Start Typing here...'
+                        placeholder='Để lại tin nhắn của bạn ở đây...'
                     />
                 </div>
 
@@ -106,7 +106,7 @@ const ContactPage = () => {
                         type='submit'
                         className='w-full text-xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
                     >
-                        Submit
+                        Gửi thông tin
                     </button>
                 </div>
             </form>
@@ -114,31 +114,29 @@ const ContactPage = () => {
             {/* contact info */}
             <div className='py-3 mt-5 w-[42.5vw] mb-5'>
                 <div>
-                    <p className='text-xl font-serif'>Get in touch</p>
+                    <p className='text-xl font-sans'>Có thể liên hệ</p>
                 </div>
                 <div className='flex justify-between items-center px-10 text-lg mt-1'>
                     {/* mail and phone */}
                     <div>
                         <div className='flex justify-start items-center'>
                             <MailOutlined className='pr-2' />
-                            <a className='font-serif' href='https://www.facebook.com/Duc.Huy2102'>
-                                Chat now
-                            </a>
+                            <a href='https://www.facebook.com/Duc.Huy2102'>Nhắn tin ngay bây giờ</a>
                         </div>
-                        <div className='flex justify-center items-center'>
+                        <div className='flex justify-start items-center'>
                             <PhoneOutlined className='pr-2' />
-                            <p>0979.657.587</p>
+                            <p>0979657587</p>
                         </div>
                     </div>
 
                     {/* time */}
                     <div className=''>
                         <div className='flex justify-start items-center'>
-                            <p>Hours of Operations:</p>
+                            <p>Thời gian hoạt động:</p>
                         </div>
                         <div className='flex justify-center items-center'>
                             <ClockCircleOutlined className='pr-2' />
-                            <p className='font-sans'>Mon - Fri: 9:00am - 7:00pm EST</p>
+                            <p className='font-sans'>Thứ 2 - Thứ 7: 7:00 - 22:00</p>
                         </div>
                     </div>
                 </div>

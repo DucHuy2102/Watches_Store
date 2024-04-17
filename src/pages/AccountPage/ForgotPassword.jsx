@@ -13,7 +13,7 @@ const ForgotPassword = () => {
             <div className='flex flex-col justify-center items-start h-screen w-[80%] font-serif'>
                 <form onSubmit={handleSubmit}>
                     {/* name form */}
-                    <h1 className='text-4xl font-bold text-center text-black mb-5'>Forget Password</h1>
+                    <h1 className='text-4xl font-bold text-center text-black mb-5'>Quên mật khẩu</h1>
 
                     {/* email */}
                     <div className='mb-5 w-[45vw]'>
@@ -25,7 +25,7 @@ const ForgotPassword = () => {
                             id='email'
                             name='email'
                             className='w-full p-2 border border-gray-300 rounded'
-                            placeholder='Enter your email'
+                            placeholder='Nhập email liên hệ'
                         />
                     </div>
 
@@ -35,14 +35,14 @@ const ForgotPassword = () => {
                             type='submit'
                             className='w-full text-xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
                         >
-                            Submit
+                            Gửi thông tin
                         </button>
                     </div>
                 </form>
 
                 {/* comeback to login page */}
                 <div className='mt-4 text-lg hover:underline'>
-                    <Link to='/login'>Cancel Reset Password</Link>
+                    <Link to='/login'>Quay lại Trang đăng nhập</Link>
                 </div>
             </div>
 

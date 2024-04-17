@@ -1,19 +1,19 @@
-import { CardComponent } from '../components/exportComponents';
+import { CardProduct } from '../components/exportComponents';
 
 const ProductPage = () => {
     return (
         <div className='flex justify-center'>
             <div className='mt-10 mb-10 grid grid-cols-3 gap-5'>
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
-                <CardComponent />
+                <CardProduct />
+                <CardProduct />
+                <CardProduct />
+                <CardProduct />
+                <CardProduct />
+                <CardProduct />
+                <CardProduct />
+                <CardProduct />
+                <CardProduct />
+                <CardProduct />
             </div>
         </div>
     );

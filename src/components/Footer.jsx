@@ -2,20 +2,25 @@ import { Typography } from '@material-tailwind/react';
 
 const SITEMAP = [
     {
-        title: 'Company',
-        links: ['About Us', 'Careers', 'Our Team', 'Projects'],
+        title: 'Công ty',
+        links: ['Về chúng tôi', 'Sự phát triển', 'Đội ngũ hoạt động', 'Các dự án'],
     },
     {
-        title: 'Help Center',
-        links: ['Discord', 'Twitter', 'GitHub', 'Contact Us'],
+        title: 'Trung tâm trợ giúp',
+        links: ['Discord', 'Twitter', 'GitHub', 'Facebook'],
     },
     {
-        title: 'Resources',
-        links: ['Blog', 'Newsletter', 'Free Products', 'Affiliate Program'],
+        title: 'Tài nguyên khác',
+        links: ['Các bài blog', 'Tin tức đồng hồ', 'Sản phẩm trải nghiệm', 'Dịch vụ quảng cáo'],
     },
     {
-        title: 'Products',
-        links: ['Templates', 'UI Kits', 'Icons', 'Mockups'],
+        title: 'Thông tin liên hệ',
+        links: [
+            'Địa chỉ: 01 Võ Văn Ngân, Thành phố Thủ Đức, Thành phố Hồ Chí Minh',
+            'Hotline: 0979657587 (Mr.Huy)',
+            'Email: watcHes@gmail.com',
+            'Giờ mở cửa: 7h - 22h00, Thứ 2 - Thứ 7',
+        ],
     },
 ];
 const currentYear = new Date().getFullYear();
@@ -23,9 +28,11 @@ const Footer = () => {
     return (
         <footer className='bg-gray-200 mb-0 w-full border-t'>
             <div className='mx-auto w-full max-w-7xl px-8'>
+                {/* top footer */}
                 <div className='mx-auto grid w-full grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-4'>
                     {SITEMAP.map(({ title, links }, key) => (
                         <div key={key} className='w-full'>
+                            {/* title */}
                             <Typography
                                 variant='small'
                                 color='blue-gray'
@@ -33,6 +40,8 @@ const Footer = () => {
                             >
                                 {title}
                             </Typography>
+
+                            {/* links */}
                             <ul className='space-y-1'>
                                 {links.map((link, key) => (
                                     <Typography key={key} as='li' color='blue-gray' className='font-normal'>
@@ -48,16 +57,19 @@ const Footer = () => {
                         </div>
                     ))}
                 </div>
+
+                {/* bottom footer */}
                 <div className='flex w-full flex-col items-center justify-center border-t border-white py-4 md:flex-row md:justify-between'>
                     <Typography
-                        variant='small'
+                        variant='paragraph'
                         className='mb-4 flex flex-col text-center font-normal text-blue-gray-900 md:mb-0'
                     >
                         <span className='font-bold'>Trường Đại học Sư phạm Kỹ thuật</span>
                         <span className='font-bold'>Thành phố Hồ Chí Minh</span>
                     </Typography>
-                    <Typography variant='small' className='mb-4 text-center font-normal text-blue-gray-900 md:mb-0'>
-                        &copy; {currentYear} <a href='https://material-tailwind.com/'>Nguyen Duc Huy</a> - Huynh Le Huy
+                    <Typography variant='paragraph' className='mb-4 text-center font-normal text-blue-gray-900 md:mb-0'>
+                        &copy; {currentYear} <a href='https://material-tailwind.com/'>Nguyễn Đức Huy</a> -{' '}
+                        <a href='https://www.facebook.com/profile.php?id=100011281114118'>Huỳnh Lê Huy</a>
                     </Typography>
                     <div className='flex gap-4 text-blue-gray-900 sm:justify-center'>
                         {/* facebook */}

@@ -10,15 +10,15 @@ const Login = () => {
     return (
         <div className='w-full flex items-center justify-center px-20 py-5'>
             {/* form login */}
-            <div className='flex flex-col justify-center items-start h-screen w-[80%] font-serif'>
+            <div className='flex flex-col justify-center items-start h-screen w-[80%]'>
                 <form onSubmit={handleSubmit}>
                     {/* name form */}
-                    <h1 className='text-4xl font-bold text-center text-black mb-5'>Login</h1>
+                    <h1 className='text-4xl font-bold text-center text-black mb-5'>Đăng nhập</h1>
 
                     {/* userName */}
                     <div className='mb-5 w-[45vw]'>
                         <label htmlFor='username' className='text-xl text-black'>
-                            Username
+                            Tên đăng nhập
                         </label>
                         <input
                             autoFocus
@@ -26,21 +26,21 @@ const Login = () => {
                             id='username'
                             name='username'
                             className='w-full px-3 py-2 border border-gray-300 rounded'
-                            placeholder='Enter your username'
+                            placeholder='VD: huynd...'
                         />
                     </div>
 
                     {/* password */}
                     <div className='mb-5'>
-                        <label htmlFor='password' className='block text-black'>
-                            Password
+                        <label htmlFor='password' className='text-xl block text-black'>
+                            Mật khẩu
                         </label>
                         <input
                             type='password'
                             id='password'
                             name='password'
                             className='w-full p-2 border border-gray-300 rounded'
-                            placeholder='Enter your password'
+                            placeholder='VD: 123@456...'
                         />
                     </div>
 
@@ -50,22 +50,22 @@ const Login = () => {
                             type='submit'
                             className='w-full text-xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
                         >
-                            Sign in
+                            Đăng nhập
                         </button>
                     </div>
                 </form>
 
                 {/* Register */}
                 <div className='mt-5 text-lg flex'>
-                    <p>If you new here?</p>
+                    <p>Bạn chưa có tài khoản để đăng nhập?</p>
                     <Link to='/register' className='pl-2 text-gray-500 hover:text-black hover:underline'>
-                        Register
+                        Đăng ký ở đây
                     </Link>
                 </div>
 
                 {/* forgot password */}
                 <div className='mt-1 text-lg hover:underline'>
-                    <Link to='/forgotPassword'>Forgot your password?</Link>
+                    <Link to='/forgotPassword'>Quên mật khẩu?</Link>
                 </div>
             </div>
 

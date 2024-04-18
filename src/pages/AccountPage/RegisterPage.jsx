@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Register = () => {
+const RegisterPage = () => {
     const [error, setError] = useState('');
 
     const handleSubmit = (e) => {
@@ -144,4 +144,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default RegisterPage;

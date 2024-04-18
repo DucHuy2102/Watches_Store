@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const ForgotPassword = () => {
+const ForgotPasswordPage = () => {
     const [error, setError] = useState('');
 
     const handleSubmit = (e) => {
@@ -58,4 +58,4 @@ const ForgotPassword = () => {
     );
 };
 
-export default ForgotPassword;
+export default ForgotPasswordPage;

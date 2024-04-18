@@ -5,7 +5,7 @@ import 'swiper/css';
 
 const styleImage = 'h-full w-full object-cover';
 
-const Blog = () => {
+const BlogCard = () => {
     return (
         <div className='h-[540px] w-[466px] hover:scale-105 transition-transform duration-300 hover:cursor-pointer'>
             {/* image watches  */}
@@ -29,4 +29,4 @@ const Blog = () => {
     );
 };
 
-export default Blog;
+export default BlogCard;

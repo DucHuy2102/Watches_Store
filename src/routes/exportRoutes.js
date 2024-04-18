@@ -5,11 +5,13 @@ import {
     NotFoundPage,
     AboutPage,
     ContactPage,
-    Login,
-    Register,
-    ForgotPassword,
-    ResetPassword,
+    LoginPage,
+    RegisterPage,
+    ForgotPasswordPage,
+    ResetPasswordPage,
     BlogPage,
+    CheckoutPage,
+    ProductDetail,
 } from '../pages/exportPages';
 
 export const routes = [
@@ -40,22 +42,22 @@ export const routes = [
     },
     {
         path: '/login',
-        component: Login,
+        component: LoginPage,
         isShowHeader: true,
     },
     {
         path: '/register',
-        component: Register,
+        component: RegisterPage,
         isShowHeader: true,
     },
     {
         path: '/forgotPassword',
-        component: ForgotPassword,
+        component: ForgotPasswordPage,
         isShowHeader: true,
     },
     {
         path: '/resetPassword',
-        component: ResetPassword,
+        component: ResetPasswordPage,
         isShowHeader: true,
     },
     {
@@ -63,8 +65,18 @@ export const routes = [
         component: BlogPage,
         isShowHeader: true,
     },
+    {
+        path: '/checkout',
+        component: CheckoutPage,
+        isShowHeader: true,
+    },
+    {
+        path: '/products/:id',
+        component: ProductDetail,
+        isShowHeader: true,
+    },
 
-    // not found page
+    // page not found
     {
         path: '*',
         component: NotFoundPage,

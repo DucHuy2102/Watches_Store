@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const LoginPage = () => {
     const [error, setError] = useState('');
 
     const handleSubmit = (e) => {
@@ -81,4 +81,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginPage;

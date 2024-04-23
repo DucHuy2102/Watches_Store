@@ -3,10 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
     const [error, setError] = useState('');
+    const [userName, setUserName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmitRegister = (e) => {
         e.preventDefault();
+        console.log(userName, phone, email, password, confirmPassword);
     };
+
     return (
         <div className='w-full flex items-center justify-center px-20'>
             {/* image */}
@@ -20,37 +27,40 @@ const RegisterPage = () => {
 
             {/* form register */}
             <div className='flex flex-col justify-center items-end h-screen w-[80%]'>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmitRegister}>
                     {/* name form */}
                     <h1 className='text-4xl font-bold text-center text-black'>Đăng ký tài khoản</h1>
 
                     {/* userName */}
                     <div className='mb-5 w-[45vw]'>
-                        <label htmlFor='username' className='text-xl text-black'>
+                        <label htmlFor='userName' className='text-xl text-black'>
                             Tên người dùng
                         </label>
                         <input
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value)}
                             autoFocus
                             type='text'
-                            id='username'
-                            name='username'
+                            id='userName'
+                            name='userName'
                             className='w-full px-3 py-2 border border-gray-300 rounded'
-                            placeholder='VD: huynd...'
+                            placeholder='Tên người dùng'
                         />
                     </div>
 
                     {/* phone */}
                     <div className='mb-5 w-[45vw]'>
-                        <label htmlFor='username' className='text-xl text-black'>
+                        <label htmlFor='numberPhone' className='text-xl text-black'>
                             Số điện thoại
                         </label>
                         <input
-                            autoFocus
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
                             type='text'
-                            id='username'
-                            name='username'
+                            id='numberPhone'
+                            name='numberPhone'
                             className='w-full px-3 py-2 border border-gray-300 rounded'
-                            placeholder='VD: 0123456789'
+                            placeholder='Số điện thoại'
                         />
                     </div>
 
@@ -60,11 +70,13 @@ const RegisterPage = () => {
                             Email
                         </label>
                         <input
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             type='text'
                             id='email'
                             name='email'
                             className='w-full px-3 py-2 border border-gray-300 rounded'
-                            placeholder='VD: huynd@gmail.com'
+                            placeholder='Email'
                         />
                     </div>
 
@@ -74,23 +86,27 @@ const RegisterPage = () => {
                             Mật khẩu
                         </label>
                         <input
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             type='password'
                             id='password'
                             name='password'
                             className='w-full p-2 border border-gray-300 rounded'
-                            placeholder='VD: 123@456...'
+                            placeholder='Nhập mật khẩu'
                         />
                     </div>
 
                     {/* confirm password */}
                     <div className='mb-5'>
-                        <label htmlFor='password' className='text-xl block text-black'>
+                        <label htmlFor='confirmPassword' className='text-xl block text-black'>
                             Xác thực mật khẩu
                         </label>
                         <input
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                             type='password'
-                            id='password'
-                            name='password'
+                            id='confirmPassword'
+                            name='confirmPassword'
                             className='w-full p-2 border border-gray-300 rounded'
                             placeholder='Nhập mật khẩu lần nữa'
                         />
@@ -100,7 +116,7 @@ const RegisterPage = () => {
                     <div className='mb-5 flex justify-start items-center gap-5'>
                         <p>Giới tính:</p>
                         <label className='flex justify-start items-center gap-1'>
-                            <input type='radio' name='gender' value='male' checked />
+                            <input type='radio' name='gender' value='male' />
                             Nam
                         </label>
                         <label className='flex justify-start items-center gap-1'>

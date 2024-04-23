@@ -2,15 +2,19 @@ import { ProductCard } from '../exportPages';
 import { PaginationComponent, Sort_Filter } from '../../components/exportComponents';
 import { useEffect } from 'react';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 const ProductPage = () => {
     const fetchAPI = async () => {
-        const res = await axios.get(`http://localhost:8080/product/findAll`);
-        console.log(res);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/product/findAll`);
+        return res.data;
     };
-    useEffect(() => {
-        fetchAPI();
-    }, []);
+
+    const query = useQuery({ queryKey: ['todos'], queryFn: fetchAPI });
+    console.log(query);
+    // useEffect(() => {
+    //     fetchAPI();
+    // }, []);
 
     return (
         <div className='w-full mb-2 flex flex-col items-center justify-center'>

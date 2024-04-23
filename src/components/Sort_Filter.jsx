@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     faChevronDown,
     faChevronUp,
@@ -44,6 +44,28 @@ const Sort_Filter = () => {
         setIsOpenFilter(false);
         // Thêm xử lý logic sắp xếp sản phẩm ở đây
     };
+
+    const filterRef = useRef(null);
+    const sortRef = useRef(null);
+    useEffect(() => {
+        const handleClickOutsideFilter = (event) => {
+            if (filterRef.current && !filterRef.current.contains(event.target)) {
+                setIsOpenFilter(false);
+            }
+        };
+        const handleClickOutsideSort = (event) => {
+            if (sortRef.current && !sortRef.current.contains(event.target)) {
+                setIsOpenSort(false);
+            }
+        };
+        document.addEventListener('click', handleClickOutsideFilter);
+        document.addEventListener('click', handleClickOutsideSort);
+        return () => {
+            document.removeEventListener('click', handleClickOutsideFilter);
+            document.removeEventListener('click', handleClickOutsideSort);
+        };
+    }, []);
+
     return (
         <div className='mt-1 h-10 text-md w-full px-10 flex justify-between items-center'>
             {/* link to page */}
@@ -58,7 +80,7 @@ const Sort_Filter = () => {
 
             {/* sort and filter */}
             <div className='flex items-center justify-end gap-2'>
-                <div className='relative mt-1'>
+                <div className='relative mt-1' ref={filterRef}>
                     <button
                         className='border border-black flex justify-center items-center bg-white text-black px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-300'
                         onClick={toggleMenuFilter}
@@ -92,7 +114,7 @@ const Sort_Filter = () => {
                 </div>
 
                 {/* sort */}
-                <div className='relative mt-1'>
+                <div className='relative mt-1' ref={sortRef}>
                     <button
                         className='border border-black flex justify-center items-center bg-white text-black px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-300'
                         onClick={() => setIsOpenSort(!isOpenSort)}

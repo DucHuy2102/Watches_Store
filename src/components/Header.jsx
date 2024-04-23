@@ -61,6 +61,7 @@ const Header = () => {
                     <div className='absolute bg-white rounded-lg top-14 z-10 h-[80px] flex flex-col justify-center items-center gap-1'>
                         <Link
                             to='/login'
+                            onClick={() => setClickAccountButton(false)}
                             className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
                         >
                             <FontAwesomeIcon icon={faRightToBracket} className='mr-2' />
@@ -68,6 +69,7 @@ const Header = () => {
                         </Link>
                         <Link
                             to='/register'
+                            onClick={() => setClickAccountButton(false)}
                             className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
                         >
                             <FontAwesomeIcon icon={faUserPlus} className='mr-2' />

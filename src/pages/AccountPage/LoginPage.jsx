@@ -25,8 +25,8 @@ const LoginPage = () => {
                             type='text'
                             id='username'
                             name='username'
-                            className='w-full px-3 py-2 border border-gray-300 rounded'
-                            placeholder='VD: huynd...'
+                            className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
+                            placeholder='Tên đăng nhập'
                         />
                     </div>
 
@@ -39,8 +39,8 @@ const LoginPage = () => {
                             type='password'
                             id='password'
                             name='password'
-                            className='w-full p-2 border border-gray-300 rounded'
-                            placeholder='VD: 123@456...'
+                            className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
+                            placeholder='Mật khẩu'
                         />
                     </div>
 
@@ -48,7 +48,7 @@ const LoginPage = () => {
                     <div>
                         <button
                             type='submit'
-                            className='w-full text-xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
+                            className='w-full text-xl p-2 border bg-black text-white rounded hover:bg-white transition duration-300 hover:text-black hover:border-black'
                         >
                             Đăng nhập
                         </button>

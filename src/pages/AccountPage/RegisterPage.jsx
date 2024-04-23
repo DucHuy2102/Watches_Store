@@ -125,7 +125,7 @@ const RegisterPage = () => {
                     <div>
                         <button
                             type='submit'
-                            className='w-full text-xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
+                            className='w-full text-xl p-2 border bg-black text-white rounded transition duration-300 hover:bg-white hover:text-black hover:border-black'
                         >
                             Đăng ký tài khoản
                         </button>

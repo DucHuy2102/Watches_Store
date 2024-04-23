@@ -31,7 +31,7 @@ const Header = () => {
                     Sản phẩm
                 </Link>
                 <Link to='/blogs' className={styleButtonPage}>
-                    Thông tin
+                    Blog
                 </Link>
                 <Link to='/contact' className={styleButtonPage}>
                     Liên hệ

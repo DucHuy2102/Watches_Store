@@ -16,7 +16,7 @@ const ShopNow = () => {
                     <div className='absolute top-[80vh] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[30vw] h-full flex justify-center items-center'>
                         <button
                             type='button'
-                            className='group inline-flex w-full items-center justify-center rounded-md bg-white px-6 py-4 text-lg font-semibold text-black transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800 hover:text-white'
+                            className='group inline-flex w-full items-center justify-center rounded-md bg-white px-6 py-4 text-lg font-semibold text-black transition-all duration-300 ease-in-out focus:shadow hover:bg-black hover:text-white'
                         >
                             Đồng hồ Nam
                             <svg
@@ -45,7 +45,7 @@ const ShopNow = () => {
                     <div className='absolute top-[80vh] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[30vw] h-full flex justify-center items-center'>
                         <button
                             type='button'
-                            className='group inline-flex w-full items-center justify-center rounded-md bg-white px-6 py-4 text-lg font-semibold text-black transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800 hover:text-white'
+                            className='group inline-flex w-full items-center justify-center rounded-md bg-white px-6 py-4 text-lg font-semibold text-black transition-all duration-300 ease-in-out focus:shadow hover:bg-black hover:text-white'
                         >
                             Đồng hồ Nữ
                             <svg

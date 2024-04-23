@@ -19,7 +19,7 @@ const ContactPage = () => {
                             type='text'
                             id='firstName'
                             name='firstName'
-                            className='w-full px-3 py-2 border border-gray-300 rounded'
+                            className='mt-1 w-full px-3 py-2 border border-gray-300 rounded'
                             placeholder='VD: Nguyễn Văn...'
                         />
                     </div>
@@ -33,7 +33,7 @@ const ContactPage = () => {
                             type='text'
                             id='lastName'
                             name='lastName'
-                            className='w-full px-3 py-2 border border-gray-300 rounded'
+                            className='mt-1 w-full px-3 py-2 border border-gray-300 rounded'
                             placeholder='VD: A...'
                         />
                     </div>
@@ -50,7 +50,7 @@ const ContactPage = () => {
                             type='text'
                             id='emailAddress'
                             name='emailAddress'
-                            className='w-full px-3 py-2 border border-gray-300 rounded'
+                            className='mt-1 w-full px-3 py-2 border border-gray-300 rounded'
                             placeholder='VD: ngvanA@gmail.com'
                         />
                     </div>
@@ -64,8 +64,8 @@ const ContactPage = () => {
                             type='text'
                             id='numberPhone'
                             name='numberPhone'
-                            className='w-full px-3 py-2 border border-gray-300 rounded'
-                            placeholder='VD: 0123456789'
+                            className='mt-1 w-full px-3 py-2 border border-gray-300 rounded'
+                            placeholder='Số điện thoại'
                         />
                     </div>
                 </div>
@@ -95,7 +95,7 @@ const ContactPage = () => {
                         type='text'
                         id='comment'
                         name='comment'
-                        className='w-full px-3 py-2 border border-gray-300 rounded'
+                        className='mt-1 w-full px-3 py-2 border border-gray-300 rounded'
                         placeholder='Để lại tin nhắn của bạn ở đây...'
                     />
                 </div>
@@ -104,7 +104,7 @@ const ContactPage = () => {
                 <div>
                     <button
                         type='submit'
-                        className='w-full text-xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
+                        className='w-full transition duration-300 text-xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
                     >
                         Gửi thông tin
                     </button>
@@ -114,18 +114,18 @@ const ContactPage = () => {
             {/* contact info */}
             <div className='py-3 mt-5 w-[42.5vw] mb-5'>
                 <div>
-                    <p className='text-xl font-sans'>Có thể liên hệ</p>
+                    <p className='text-xl underline'>Thông tin liên hệ trực tiếp:</p>
                 </div>
                 <div className='flex justify-between items-center px-10 text-lg mt-1'>
                     {/* mail and phone */}
                     <div>
                         <div className='flex justify-start items-center'>
                             <MailOutlined className='pr-2' />
-                            <a href='https://www.facebook.com/Duc.Huy2102'>Nhắn tin ngay bây giờ</a>
+                            <a href='https://www.facebook.com/Duc.Huy2102'>Nhắn tin ngay</a>
                         </div>
                         <div className='flex justify-start items-center'>
                             <PhoneOutlined className='pr-2' />
-                            <p>0979657587</p>
+                            <p>0979.657.587</p>
                         </div>
                     </div>
 

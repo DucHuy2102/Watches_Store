@@ -3,15 +3,18 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
     const [error, setError] = useState('');
+    const [userName, setUserName] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmitLogin = (e) => {
         e.preventDefault();
+        console.log(userName, password);
     };
     return (
         <div className='w-full flex items-center justify-center px-20 py-5'>
             {/* form login */}
             <div className='flex flex-col justify-center items-start h-screen w-[80%]'>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmitLogin}>
                     {/* name form */}
                     <h1 className='text-4xl font-bold text-center text-black mb-5'>Đăng nhập</h1>
 
@@ -22,6 +25,8 @@ const LoginPage = () => {
                         </label>
                         <input
                             autoFocus
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value)}
                             type='text'
                             id='username'
                             name='username'
@@ -36,6 +41,8 @@ const LoginPage = () => {
                             Mật khẩu
                         </label>
                         <input
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             type='password'
                             id='password'
                             name='password'

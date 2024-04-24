@@ -1,15 +1,21 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import * as UserService from '../../services/UserService';
+import { useMutationHook } from '../../hooks/useMutationHook';
 
 const LoginPage = () => {
     const [error, setError] = useState('');
-    const [userName, setUserName] = useState('');
+    const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
+
+    const mutation = useMutationHook((data) => UserService.loginUser(data));
+    const { data } = mutation;
 
     const handleSubmitLogin = (e) => {
         e.preventDefault();
-        console.log(userName, password);
+        mutation.mutate({ username, password });
     };
+
     return (
         <div className='w-full flex items-center justify-center px-20 py-5'>
             {/* form login */}
@@ -25,7 +31,7 @@ const LoginPage = () => {
                         </label>
                         <input
                             autoFocus
-                            value={userName}
+                            value={username}
                             onChange={(e) => setUserName(e.target.value)}
                             type='text'
                             id='username'
@@ -60,6 +66,11 @@ const LoginPage = () => {
                             Đăng nhập
                         </button>
                     </div>
+
+                    {/* error message */}
+                    {data?.code !== 200 && (
+                        <p className='text-red-500 text-lg font-medium text-center mt-1'>{data?.message}</p>
+                    )}
                 </form>
 
                 {/* Register */}

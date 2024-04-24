@@ -1,17 +1,22 @@
 import { useState } from 'react';
+import * as UserService from '../../services/UserService';
 import { Link, useNavigate } from 'react-router-dom';
+import { useMutationHook } from '../../hooks/useMutationHook';
 
 const RegisterPage = () => {
     const [error, setError] = useState('');
-    const [userName, setUserName] = useState('');
-    const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const mutation = useMutationHook((data) => UserService.registerUser(data));
+    const { data } = mutation;
+
     const handleSubmitRegister = (e) => {
         e.preventDefault();
-        console.log(userName, phone, email, password, confirmPassword);
+        mutation.mutate({ email, phone, username, password });
     };
 
     return (
@@ -37,7 +42,7 @@ const RegisterPage = () => {
                             Tên người dùng
                         </label>
                         <input
-                            value={userName}
+                            value={username}
                             onChange={(e) => setUserName(e.target.value)}
                             autoFocus
                             type='text'
@@ -112,31 +117,6 @@ const RegisterPage = () => {
                         />
                     </div>
 
-                    {/* gender */}
-                    <div className='mb-5 flex justify-start items-center gap-5'>
-                        <p>Giới tính:</p>
-                        <label className='flex justify-start items-center gap-1'>
-                            <input type='radio' name='gender' value='male' />
-                            Nam
-                        </label>
-                        <label className='flex justify-start items-center gap-1'>
-                            <input type='radio' name='gender' value='female' />
-                            Nữ
-                        </label>
-                        <label className='flex justify-start items-center gap-1'>
-                            <input type='radio' name='gender' value='others' />
-                            Không trả lời
-                        </label>
-                    </div>
-
-                    {/* agree terms */}
-                    <div className='mb-5 flex justify-start items-center gap-5'>
-                        <label className='flex justify-start items-center gap-1'>
-                            <input type='checkbox' name='agree' />I have read and agreed to the
-                            <span className='text-blue-500 font-bold hover:cursor-pointer'>Terms and Conditions</span>
-                        </label>
-                    </div>
-
                     {/* button submit register */}
                     <div>
                         <button
@@ -146,6 +126,11 @@ const RegisterPage = () => {
                             Đăng ký tài khoản
                         </button>
                     </div>
+
+                    {/* error message */}
+                    {data?.code !== 200 && (
+                        <p className='text-red-500 text-lg font-medium text-center mt-1'>{data?.message}</p>
+                    )}
                 </form>
 
                 {/* Register */}

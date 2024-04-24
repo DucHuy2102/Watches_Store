@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as UserService from '../../services/UserService';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useNavigation } from 'react-router-dom';
 import { useMutationHook } from '../../hooks/useMutationHook';
 
 const RegisterPage = () => {
@@ -11,12 +11,15 @@ const RegisterPage = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const navigate = useNavigation();
+
     const mutation = useMutationHook((data) => UserService.registerUser(data));
     const { data } = mutation;
 
     const handleSubmitRegister = (e) => {
         e.preventDefault();
         mutation.mutate({ email, phone, username, password });
+        navigate('/login');
     };
 
     return (

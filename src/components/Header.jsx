@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faRightToBracket, faUser, faUserPlus } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +12,20 @@ const styleButtonPage =
 
 const Header = () => {
     const [clickAccountButton, setClickAccountButton] = useState(false);
+
+    const accountRef = useRef(null);
+    useEffect(() => {
+        const handleClickOutsideFilter = (event) => {
+            if (accountRef.current && !accountRef.current.contains(event.target)) {
+                setClickAccountButton(false);
+            }
+        };
+
+        document.addEventListener('click', handleClickOutsideFilter);
+        return () => {
+            document.removeEventListener('click', handleClickOutsideFilter);
+        };
+    }, []);
 
     return (
         <nav className='w-full h-16 px-10 flex items-center flex-grow shadow-lg'>
@@ -48,7 +62,7 @@ const Header = () => {
             </div>
 
             {/* 3 buttons: login, register & order button */}
-            <div className='flex gap-2'>
+            <div className='flex gap-2' ref={accountRef}>
                 <button
                     onClick={() => setClickAccountButton(!clickAccountButton)}
                     className={`${styleButton} relative`}

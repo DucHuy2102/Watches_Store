@@ -1,15 +1,29 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import * as UserService from '../../services/UserService';
 import { useMutationHook } from '../../hooks/useMutationHook';
+import { jwtDecode } from 'jwt-decode';
 
 const LoginPage = () => {
-    const [error, setError] = useState('');
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
+    const navigate = useNavigate();
+
     const mutation = useMutationHook((data) => UserService.loginUser(data));
     const { data } = mutation;
+
+    useEffect(() => {
+        if (data?.code === 200) {
+            navigate('/');
+            const access_token = data?.data?.token;
+            localStorage.setItem('token', access_token);
+            if (access_token) {
+                const user = jwtDecode(access_token);
+                console.log('user:', user);
+            }
+        }
+    }, [data]);
 
     const handleSubmitLogin = (e) => {
         e.preventDefault();
@@ -69,7 +83,7 @@ const LoginPage = () => {
 
                     {/* error message */}
                     {data?.code !== 200 && (
-                        <p className='text-red-500 text-lg font-medium text-center mt-1'>{data?.message}</p>
+                        <p className='text-red-500 text-lg text-center font-medium mt-1'>{data?.message}</p>
                     )}
                 </form>
 

@@ -4,14 +4,13 @@ import { Link, useNavigate, useNavigation } from 'react-router-dom';
 import { useMutationHook } from '../../hooks/useMutationHook';
 
 const RegisterPage = () => {
-    const [error, setError] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const navigate = useNavigation();
+    const navigate = useNavigate();
 
     const mutation = useMutationHook((data) => UserService.registerUser(data));
     const { data } = mutation;
@@ -47,12 +46,19 @@ const RegisterPage = () => {
                         <input
                             value={username}
                             onChange={(e) => setUserName(e.target.value)}
+                            required
                             autoFocus
                             type='text'
                             id='userName'
                             name='userName'
                             className='w-full px-3 py-2 border border-gray-300 rounded'
                             placeholder='Tên người dùng'
+                            onInvalid={(e) => {
+                                e.target.setCustomValidity('Tên người dùng không được để trống.');
+                                e.target.oninput = () => {
+                                    e.target.setCustomValidity('');
+                                };
+                            }}
                         />
                     </div>
 
@@ -63,12 +69,32 @@ const RegisterPage = () => {
                         </label>
                         <input
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                const isValid = /^\d*$/.test(value);
+                                if (!isValid) {
+                                    if (value.length !== 10) {
+                                        e.target.setCustomValidity('Số điện thoại phải có đúng 10 chữ số.');
+                                    } else {
+                                        e.target.setCustomValidity('Số điện thoại chỉ được chứa số.');
+                                    }
+                                } else {
+                                    e.target.setCustomValidity('');
+                                }
+                                setPhone(value);
+                            }}
+                            required
                             type='text'
                             id='numberPhone'
                             name='numberPhone'
                             className='w-full px-3 py-2 border border-gray-300 rounded'
                             placeholder='Số điện thoại'
+                            onInvalid={(e) => {
+                                e.target.setCustomValidity('Số điện thoại không được để trống.');
+                                e.target.oninput = () => {
+                                    e.target.setCustomValidity('');
+                                };
+                            }}
                         />
                     </div>
 
@@ -79,12 +105,30 @@ const RegisterPage = () => {
                         </label>
                         <input
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                setEmail(value);
+                                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                if (!emailRegex.test(value)) {
+                                    e.target.setCustomValidity('Email không hợp lệ.');
+                                } else {
+                                    e.target.setCustomValidity('');
+                                }
+                            }}
+                            required
                             type='text'
                             id='email'
                             name='email'
                             className='w-full px-3 py-2 border border-gray-300 rounded'
                             placeholder='Email'
+                            onInvalid={(e) => {
+                                if (!e.target.validity.valid) {
+                                    e.target.setCustomValidity('Email không hợp lệ.');
+                                }
+                                e.target.oninput = () => {
+                                    e.target.setCustomValidity('');
+                                };
+                            }}
                         />
                     </div>
 
@@ -96,11 +140,18 @@ const RegisterPage = () => {
                         <input
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            required
                             type='password'
                             id='password'
                             name='password'
                             className='w-full p-2 border border-gray-300 rounded'
                             placeholder='Nhập mật khẩu'
+                            onInvalid={(e) => {
+                                e.target.setCustomValidity('Mật khẩu không được để trống.');
+                                e.target.oninput = () => {
+                                    e.target.setCustomValidity('');
+                                };
+                            }}
                         />
                     </div>
 
@@ -111,12 +162,27 @@ const RegisterPage = () => {
                         </label>
                         <input
                             value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onChange={(e) => {
+                                const valueConfirmPassword = e.target.value;
+                                setConfirmPassword(valueConfirmPassword);
+                                if (valueConfirmPassword !== password) {
+                                    e.target.setCustomValidity('Mật khẩu không khớp.');
+                                } else {
+                                    e.target.setCustomValidity('');
+                                }
+                            }}
+                            required
                             type='password'
                             id='confirmPassword'
                             name='confirmPassword'
                             className='w-full p-2 border border-gray-300 rounded'
                             placeholder='Nhập mật khẩu lần nữa'
+                            onInvalid={(e) => {
+                                e.target.setCustomValidity('Nhập lại mật khẩu không được để trống.');
+                                e.target.oninput = () => {
+                                    e.target.setCustomValidity('');
+                                };
+                            }}
                         />
                     </div>
 

@@ -3,10 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as UserService from '../../services/UserService';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import { jwtDecode } from 'jwt-decode';
+import { useDispatch } from 'react-redux';
+import { updateUser } from '../../redux/slides/userSlide';
 
 const LoginPage = () => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
@@ -14,16 +17,24 @@ const LoginPage = () => {
     const { data } = mutation;
 
     useEffect(() => {
+        const handleGetUserDetail = async (access_token) => {
+            const res = await UserService.getUserDetail(access_token);
+            console.log(res);
+            dispatch(updateUser({ ...res?.data, access_token: access_token }));
+        };
+
         if (data?.code === 200) {
             navigate('/');
             const access_token = data?.data?.token;
             localStorage.setItem('token', access_token);
             if (access_token) {
-                const user = jwtDecode(access_token);
-                console.log('user:', user);
+                const decode = jwtDecode(access_token);
+                if (decode?.sub) {
+                    handleGetUserDetail(access_token);
+                }
             }
         }
-    }, [data]);
+    }, [data, navigate, dispatch]);
 
     const handleSubmitLogin = (e) => {
         e.preventDefault();
@@ -44,6 +55,7 @@ const LoginPage = () => {
                             Tên đăng nhập
                         </label>
                         <input
+                            required
                             autoFocus
                             value={username}
                             onChange={(e) => setUserName(e.target.value)}
@@ -52,6 +64,12 @@ const LoginPage = () => {
                             name='username'
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
                             placeholder='Tên đăng nhập'
+                            onInvalid={(e) => {
+                                e.target.setCustomValidity('Tên đăng nhập không được để trống.');
+                                e.target.oninput = () => {
+                                    e.target.setCustomValidity('');
+                                };
+                            }}
                         />
                     </div>
 
@@ -61,6 +79,7 @@ const LoginPage = () => {
                             Mật khẩu
                         </label>
                         <input
+                            required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             type='password'
@@ -68,8 +87,19 @@ const LoginPage = () => {
                             name='password'
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
                             placeholder='Mật khẩu'
+                            onInvalid={(e) => {
+                                e.target.setCustomValidity('Mật khẩu không được để trống.');
+                                e.target.oninput = () => {
+                                    e.target.setCustomValidity('');
+                                };
+                            }}
                         />
                     </div>
+
+                    {/* error message */}
+                    {data?.code !== 200 && (
+                        <p className='text-red-500 text-lg text-center font-medium mt-1 mb-2'>{data?.message}</p>
+                    )}
 
                     {/* button submit login */}
                     <div>
@@ -80,11 +110,6 @@ const LoginPage = () => {
                             Đăng nhập
                         </button>
                     </div>
-
-                    {/* error message */}
-                    {data?.code !== 200 && (
-                        <p className='text-red-500 text-lg text-center font-medium mt-1'>{data?.message}</p>
-                    )}
                 </form>
 
                 {/* Register */}

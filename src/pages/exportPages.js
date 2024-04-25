@@ -23,3 +23,6 @@ export { default as LoginPage } from './AccountPage/LoginPage';
 export { default as RegisterPage } from './AccountPage/RegisterPage';
 export { default as ForgotPasswordPage } from './AccountPage/ForgotPasswordPage';
 export { default as ResetPasswordPage } from './AccountPage/ResetPasswordPage';
+
+// profile
+export { default as ProfilePage } from './ProfilePage/ProfilePage';

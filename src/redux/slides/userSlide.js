@@ -1,20 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    name: '',
+    username: '',
     email: '',
-    phone: '',
-    token: '',
+    access_token: '',
 };
 
 export const userSlide = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        initialUser: (state, action) => {},
+        updateUser: (state, action) => {
+            const { username, email, access_token } = action.payload;
+            state.username = username;
+            state.email = email;
+            state.access_token = access_token;
+        },
     },
 });
 
-export const { initialUser } = userSlide.actions;
+export const { updateUser } = userSlide.actions;
 
 export default userSlide.reducer;

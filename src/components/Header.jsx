@@ -1,8 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faRightToBracket, faUser, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+    faCartShopping,
+    faCircleArrowLeft,
+    faRightToBracket,
+    faUser,
+    faUserGear,
+    faUserPlus,
+} from '@fortawesome/free-solid-svg-icons';
 import { Badge } from 'antd';
+import { useSelector } from 'react-redux';
 
 // style
 const styleButton =
@@ -11,19 +19,29 @@ const styleButtonPage =
     'transition-all duration-300 hover:rounded-lg hover:py-1 hover:text-white hover:px-3 ease-in-out hover:bg-black text-gray-400 text-xl';
 
 const Header = () => {
-    const [clickAccountButton, setClickAccountButton] = useState(false);
+    const [clickButtonWithoutAccount, setClickButtonWithoutAccount] = useState(false);
+    const [clickButtonAccount, setClickButtonAccount] = useState(false);
+
+    const dataUSer = useSelector((state) => state.user);
 
     const accountRef = useRef(null);
     useEffect(() => {
-        const handleClickOutsideFilter = (event) => {
+        const handleClickOutButtonAccout = (event) => {
             if (accountRef.current && !accountRef.current.contains(event.target)) {
-                setClickAccountButton(false);
+                setClickButtonAccount(false);
+            }
+        };
+        const handleClickoutButtonWithoutAccount = (event) => {
+            if (accountRef.current && !accountRef.current.contains(event.target)) {
+                setClickButtonWithoutAccount(false);
             }
         };
 
-        document.addEventListener('click', handleClickOutsideFilter);
+        document.addEventListener('click', handleClickOutButtonAccout);
+        document.addEventListener('click', handleClickoutButtonWithoutAccount);
         return () => {
-            document.removeEventListener('click', handleClickOutsideFilter);
+            document.removeEventListener('click', handleClickOutButtonAccout);
+            document.removeEventListener('click', handleClickoutButtonWithoutAccount);
         };
     }, []);
 
@@ -53,43 +71,82 @@ const Header = () => {
             </div>
 
             {/* search */}
-            <div className='w-[10rem] flex-grow mr-5'>
+            <div className='w-[10rem] flex-grow'>
                 <input
                     type='text'
                     placeholder='Tìm kiếm...'
-                    className='h-9 border text-xl border-gray-400 px-3 py-1 rounded-lg w-full'
+                    className='h-9 border text-xl border-gray-400 px-3 py-1 rounded-lg w-[95%]'
                 />
             </div>
 
             {/* 3 buttons: login, register & order button */}
             <div className='flex gap-2' ref={accountRef}>
-                <button
-                    onClick={() => setClickAccountButton(!clickAccountButton)}
-                    className={`${styleButton} relative`}
-                >
-                    <FontAwesomeIcon icon={faUser} className='mr-2' />
-                    Tài khoản
-                </button>
+                {dataUSer?.username ? (
+                    <>
+                        <button
+                            onClick={() => setClickButtonAccount(!clickButtonAccount)}
+                            className={`${styleButton} hover:cursor-pointer mr-2 w-[10rem] rounded-lg flex justify-center items-center text-lg gap-1`}
+                        >
+                            Chào: <span className='text-blue-500 hover:text-white'>{dataUSer?.username}</span>
+                        </button>
 
-                {clickAccountButton && (
-                    <div className='absolute bg-white rounded-lg top-14 z-10 h-[80px] flex flex-col justify-center items-center gap-1'>
-                        <Link
-                            to='/login'
-                            onClick={() => setClickAccountButton(false)}
-                            className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
+                        {clickButtonAccount && (
+                            <div className='absolute bg-white rounded-lg top-14 z-10 h-[80px] flex flex-col justify-center items-center gap-1'>
+                                <button>
+                                    <Link
+                                        to='/profile'
+                                        onClick={() => setClickButtonAccount(false)}
+                                        className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
+                                    >
+                                        <FontAwesomeIcon icon={faUserGear} className='mr-2' />
+                                        Tài khoản
+                                    </Link>
+                                </button>
+                                <button
+                                    onClick={() => setClickButtonAccount(false)}
+                                    className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
+                                >
+                                    <FontAwesomeIcon icon={faCircleArrowLeft} className='mr-2' />
+                                    Đăng xuất
+                                </button>
+                            </div>
+                        )}
+                    </>
+                ) : (
+                    <>
+                        <button
+                            onClick={() => setClickButtonWithoutAccount(!clickButtonWithoutAccount)}
+                            className={`${styleButton} relative`}
                         >
-                            <FontAwesomeIcon icon={faRightToBracket} className='mr-2' />
-                            Đăng nhập
-                        </Link>
-                        <Link
-                            to='/register'
-                            onClick={() => setClickAccountButton(false)}
-                            className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
-                        >
-                            <FontAwesomeIcon icon={faUserPlus} className='mr-2' />
-                            Đăng ký
-                        </Link>
-                    </div>
+                            <FontAwesomeIcon icon={faUser} className='mr-2' />
+                            Tài khoản
+                        </button>
+
+                        {clickButtonWithoutAccount && (
+                            <div className='absolute bg-white rounded-lg top-14 z-10 h-[80px] flex flex-col justify-center items-center gap-1'>
+                                <button>
+                                    <Link
+                                        to='/login'
+                                        onClick={() => setClickButtonWithoutAccount(false)}
+                                        className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
+                                    >
+                                        <FontAwesomeIcon icon={faRightToBracket} className='mr-2' />
+                                        Đăng nhập
+                                    </Link>
+                                </button>
+                                <button>
+                                    <Link
+                                        to='/register'
+                                        onClick={() => setClickButtonWithoutAccount(false)}
+                                        className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
+                                    >
+                                        <FontAwesomeIcon icon={faUserPlus} className='mr-2' />
+                                        Đăng ký
+                                    </Link>
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
 
                 <Badge count={5}>

@@ -12,6 +12,7 @@ import {
     BlogPage,
     CheckoutPage,
     ProductDetail,
+    ProfilePage,
 } from '../pages/exportPages';
 
 export const routes = [
@@ -73,6 +74,11 @@ export const routes = [
     {
         path: '/products/:id',
         component: ProductDetail,
+        isShowHeader: true,
+    },
+    {
+        path: '/profile',
+        component: ProfilePage,
         isShowHeader: true,
     },
 

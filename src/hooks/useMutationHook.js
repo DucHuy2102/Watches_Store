@@ -6,3 +6,4 @@ export const useMutationHook = (fnCallback) => {
     });
     return mutation;
 };
+    

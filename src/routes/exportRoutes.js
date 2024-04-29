@@ -16,19 +16,10 @@ import {
 } from '../pages/exportPages';
 
 export const routes = [
+    // pages
     {
         path: '/',
         component: HomePage,
-        isShowHeader: true,
-    },
-    {
-        path: '/order',
-        component: OrderPage,
-        isShowHeader: true,
-    },
-    {
-        path: '/products',
-        component: ProductPage,
         isShowHeader: true,
     },
     {
@@ -41,6 +32,30 @@ export const routes = [
         component: ContactPage,
         isShowHeader: true,
     },
+    {
+        path: '/blogs',
+        component: BlogPage,
+        isShowHeader: true,
+    },
+
+    // product
+    {
+        path: '/order',
+        component: OrderPage,
+        isShowHeader: true,
+    },
+    {
+        path: '/products',
+        component: ProductPage,
+        isShowHeader: true,
+    },
+    {
+        path: '/products/:id',
+        component: ProductDetail,
+        isShowHeader: true,
+    },
+
+    // auth
     {
         path: '/login',
         component: LoginPage,
@@ -61,21 +76,15 @@ export const routes = [
         component: ResetPasswordPage,
         isShowHeader: true,
     },
-    {
-        path: '/blogs',
-        component: BlogPage,
-        isShowHeader: true,
-    },
+
+    // checkout
     {
         path: '/checkout',
         component: CheckoutPage,
         isShowHeader: true,
     },
-    {
-        path: '/products/:id',
-        component: ProductDetail,
-        isShowHeader: true,
-    },
+
+    // profile
     {
         path: '/profile',
         component: ProfilePage,

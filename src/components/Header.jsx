@@ -133,7 +133,7 @@ const Header = () => {
                                 className={`${styleButton} relative`}
                             >
                                 <FontAwesomeIcon icon={faUser} className='mr-2' />
-                                Tài khoản
+                                Đăng nhập
                             </Link>
                         </button>
 

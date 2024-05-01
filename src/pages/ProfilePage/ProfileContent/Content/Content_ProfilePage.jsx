@@ -1,13 +1,15 @@
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
-
 import AccountSettings from './AccountSettings';
 import Actions from './Actions';
 import CompanySettings from './CompanySettings';
 import Notifications from './Notifications';
+import { useSelector } from 'react-redux';
+
+const tabs = ['Tài khoản cá nhân', 'Thông tin việc làm', 'Thông báo'];
 
 const Content_ProfilePage = () => {
-    const tabs = ['Tài khoản cá nhân', 'Thông tin việc làm', 'Thông báo'];
-
+    const user = useSelector((state) => state.user);
+    console.log('user:', user);
     return (
         <Box
             as='main'

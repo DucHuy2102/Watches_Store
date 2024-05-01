@@ -12,8 +12,8 @@ const ReadMoreToBlogs = () => {
 
             {/* text */}
             <div className='absolute text-white left-36'>
-                <p className='text-left font-medium text-3xl'>Tin hot quanh ta</p>
-                <p className='text-left text-xl'>Khám phá câu chuyện xung quanh đồng hồ</p>
+                <p className='text-left font-medium text-3xl'>Tin hot thế giới quanh ta</p>
+                <p className='text-left text-xl'>Khám phá những câu chuyện xung quanh những chiếc đồng hồ</p>
             </div>
 
             {/* read more: click to blogs */}

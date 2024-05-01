@@ -1,4 +1,4 @@
-import { Carousel, ReadMoreToBlogs, ShopNow } from '../components/exportComponents';
+import { Carousel, ReadMoreToBlogs, ShopNow } from '../../components/exportComponents';
 
 const HomePage = () => {
     return (

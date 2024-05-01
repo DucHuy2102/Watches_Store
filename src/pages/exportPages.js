@@ -1,5 +1,6 @@
-export { default as HomePage } from './HomePage';
-export { default as NotFoundPage } from './NotFoundPage';
+// main page
+export { default as HomePage } from './MainPage/HomePage';
+export { default as NotFoundPage } from './MainPage/NotFoundPage';
 
 // order
 export { default as OrderPage } from './OrderPage/OrderPage';

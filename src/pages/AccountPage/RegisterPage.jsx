@@ -107,13 +107,13 @@ const RegisterPage = () => {
                             value={email}
                             onChange={(e) => {
                                 const value = e.target.value;
-                                setEmail(value);
                                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                                 if (!emailRegex.test(value)) {
                                     e.target.setCustomValidity('Email không hợp lệ.');
                                 } else {
                                     e.target.setCustomValidity('');
                                 }
+                                setEmail(value);
                             }}
                             required
                             type='text'

@@ -23,7 +23,6 @@ const Header = () => {
     const [clickButtonAccount, setClickButtonAccount] = useState(false);
 
     const dataUSer = useSelector((state) => state.user);
-
     const accountRef = useRef(null);
     useEffect(() => {
         const handleClickOutButtonAccout = (event) => {
@@ -103,7 +102,7 @@ const Header = () => {
                             <div className='absolute bg-white rounded-lg top-14 z-10 h-[80px] flex flex-col justify-center items-center gap-1'>
                                 {/* Quản lý tài khoản */}
                                 <Link
-                                    to='/profile'
+                                    to={`/profile/${dataUSer?.id}`}
                                     onClick={() => setClickButtonAccount(false)}
                                     className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
                                 >

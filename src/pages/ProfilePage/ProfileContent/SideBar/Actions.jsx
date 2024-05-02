@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Button, Input, InputGroup, InputRightAddon, useClipboard, VStack } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 export default function Actions() {
     const value = 'https://DucHuy.github.io';
@@ -16,9 +17,12 @@ export default function Actions() {
 
     return (
         <VStack py={8} px={5} spacing={3}>
-            <Button w='full' variant='outline'>
-                View Public Profile
-            </Button>
+            <Link
+                to={'/listProductUser'}
+                className='w-[18vw] text-center hover:border-none border border-gray-300 font-medium px-3 py-2 rounded-lg hover:bg-[#e2e8f0] hover:text-black transition-colors duration-300 ease-in-out'
+            >
+                Xem danh sách sản phẩm
+            </Link>
             <InputGroup>
                 <Input
                     ref={profileUrl}

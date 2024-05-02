@@ -3,13 +3,10 @@ import AccountSettings from './AccountSettings';
 import Actions from './Actions';
 import CompanySettings from './CompanySettings';
 import Notifications from './Notifications';
-import { useSelector } from 'react-redux';
 
-const tabs = ['Tài khoản cá nhân', 'Thông tin việc làm', 'Thông báo'];
+const tabs = ['Tài khoản cá nhân', 'Thông báo'];
 
 const Content_ProfilePage = () => {
-    const user = useSelector((state) => state.user);
-    console.log('user:', user);
     return (
         <Box
             as='main'
@@ -44,12 +41,17 @@ const Content_ProfilePage = () => {
                 </TabList>
 
                 <TabPanels px={3} mt={5}>
+                    {/* account */}
                     <TabPanel>
                         <AccountSettings />
                     </TabPanel>
-                    <TabPanel>
+
+                    {/* company */}
+                    {/* <TabPanel>
                         <CompanySettings />
-                    </TabPanel>
+                    </TabPanel> */}
+
+                    {/* notification */}
                     <TabPanel>
                         <Notifications />
                     </TabPanel>

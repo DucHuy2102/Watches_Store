@@ -21,16 +21,16 @@ export const getUserDetail = async (access_token) => {
     });
     return res.data;
 };
+
 // update user info
 export const updateInfoUser = async (access_token, data) => {
-    const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/user/editDetail`,
-        {
-            headers: {
-                Authorization: `Bearer ${access_token}`,
-            },
+    // console.log(data, 'data');
+
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/editDetail`, data, {
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+            'Content-Type': 'application/json',
         },
-        data
-    );
+    });
     return res.data;
 };

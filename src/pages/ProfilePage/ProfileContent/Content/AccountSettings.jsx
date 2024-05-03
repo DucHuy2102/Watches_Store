@@ -5,20 +5,19 @@ import { updateUser } from '../../../../redux/slides/userSlide';
 import { regexPhoneNumber, validateEmail } from '../../../../helpers/checkIndex';
 
 function AccountSettings() {
-    const dataAccountSetting = useSelector((state) => state.user);
-    console.log('dataAccountSetting:', dataAccountSetting);
+    const data_From_Redux = useSelector((state) => state.user);
 
-    const [username, setUsername] = useState(dataAccountSetting.username ?? '');
-    const [phone, setNumberPhone] = useState(dataAccountSetting.phone ?? '');
-    const [firstname, setFirstName] = useState(dataAccountSetting.firstname ?? '');
-    const [lastname, setLastName] = useState(dataAccountSetting.lastname ?? '');
-    const [email, setEmail] = useState(dataAccountSetting.email ?? '');
-    const [address, setAddress] = useState(dataAccountSetting.address ?? '');
+    const [username, setUsername] = useState(data_From_Redux.username ?? '');
+    const [phone, setNumberPhone] = useState(data_From_Redux.phone ?? '');
+    const [firstname, setFirstName] = useState(data_From_Redux.firstname ?? '');
+    const [lastname, setLastName] = useState(data_From_Redux.lastname ?? '');
+    const [email, setEmail] = useState(data_From_Redux.email ?? '');
+    const [address, setAddress] = useState(data_From_Redux.address ?? '');
 
     const dispatch = useDispatch();
     useEffect(() => {
-        const saveUserInfo = () => {
-            const userInfo = {
+        const saveInfoUser_To_Redux = () => {
+            const userInfoDispatch = {
                 username,
                 phone,
                 firstname,
@@ -26,10 +25,10 @@ function AccountSettings() {
                 email,
                 address,
             };
-            dispatch(updateUser(userInfo));
+            dispatch(updateUser(userInfoDispatch));
         };
-        saveUserInfo();
-    }, [username, firstname, lastname, email, address, dispatch, phone]);
+        saveInfoUser_To_Redux();
+    }, [username, firstname, lastname, email, address, phone, dispatch]);
 
     return (
         <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }} gap={6}>
@@ -41,13 +40,6 @@ function AccountSettings() {
                     placeholder='Tim'
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    required
-                    onInvalid={(e) => {
-                        e.target.setCustomValidity('Tên người dùng không được để trống.');
-                        e.target.oninput = () => {
-                            e.target.setCustomValidity('');
-                        };
-                    }}
                 />
             </FormControl>
             <FormControl id='phoneNumber'>
@@ -88,15 +80,6 @@ function AccountSettings() {
                     placeholder='Tim'
                     value={firstname}
                     onChange={(e) => setFirstName(e.target.value)}
-                    required
-                    onInvalid={(e) => {
-                        if (!e.target.validity.valid) {
-                            e.target.setCustomValidity('Email không hợp lệ.');
-                        }
-                        e.target.oninput = () => {
-                            e.target.setCustomValidity('');
-                        };
-                    }}
                 />
             </FormControl>
             <FormControl id='lastName'>
@@ -107,13 +90,6 @@ function AccountSettings() {
                     placeholder='Cook'
                     value={lastname}
                     onChange={(e) => setLastName(e.target.value)}
-                    required
-                    onInvalid={(e) => {
-                        e.target.setCustomValidity('Tên người dùng không được để trống.');
-                        e.target.oninput = () => {
-                            e.target.setCustomValidity('');
-                        };
-                    }}
                 />
             </FormControl>
             <FormControl id='emailAddress'>
@@ -132,13 +108,6 @@ function AccountSettings() {
                             e.target.setCustomValidity('');
                         }
                         setEmail(value);
-                    }}
-                    required
-                    onInvalid={(e) => {
-                        e.target.setCustomValidity('Địa chỉ email không được để trống.');
-                        e.target.oninput = () => {
-                            e.target.setCustomValidity('');
-                        };
                     }}
                 />
             </FormControl>

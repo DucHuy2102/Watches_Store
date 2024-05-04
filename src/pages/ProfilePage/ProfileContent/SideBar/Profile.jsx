@@ -20,13 +20,15 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import Axios from 'axios';
 import { updateUser } from '../../../../redux/slides/userSlide';
+import { useMutationHook } from '../../../../hooks/useMutationHook';
+import * as UserService from '../../../../services/UserService';
 
 function Profile() {
     // get user profile from redux
     const userProfile_From_Redux = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
-    const [avatarImg, setAvatarImage] = useState(userProfile_From_Redux.avatar ?? '');
+    const [avatarImg, setAvatarImage] = useState(userProfile_From_Redux.avatarImg ?? '');
     const { isOpen, onOpen, onClose } = useDisclosure();
     const profileImage = useRef(null);
 
@@ -34,26 +36,31 @@ function Profile() {
         profileImage.current.click();
     };
 
-    useEffect(() => {
-        const saveAvatarImage_To_Redux = () => {
-            dispatch(updateUser(avatarImg));
-        };
-        saveAvatarImage_To_Redux();
-    }, [avatarImg, dispatch]);
+    const mutation = useMutationHook(({ getToken, userInfo_From_Redux }) => {
+        UserService.updateInfoUser(getToken, userInfo_From_Redux);
+    });
+    const getToken = localStorage.getItem('token');
 
-    const handleUpdateAvatar = (e) => {
+    const handleUpdateAvatar = async (e) => {
+        e.preventDefault();
         const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
         const selected = e.target.files[0];
+        let reader = new FileReader();
+        reader.onloadend = () => setAvatarImage(reader.result);
+        reader.readAsDataURL(selected);
+
         if (selected && ALLOWED_TYPES.includes(selected.type)) {
             const formData = new FormData();
             formData.append('file', selected);
-            formData.append('upload_preset', 'gioeqwaa');
+            formData.append('upload_preset', 'jatrym96');
 
-            Axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData)
-                .then((res) => res.data)
-                .then((data) => {
-                    setAvatarImage(data.url);
-                });
+            const res = await Axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData);
+            const response = res.data;
+            dispatch(updateUser({ ...userProfile_From_Redux, avatarImg: response.secure_url }));
+            mutation.mutate({
+                getToken,
+                userInfo_From_Redux: { ...userProfile_From_Redux, avatarImg: response.secure_url },
+            });
         } else {
             onOpen();
         }

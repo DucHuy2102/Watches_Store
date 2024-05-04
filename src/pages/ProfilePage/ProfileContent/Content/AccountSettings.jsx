@@ -16,25 +16,15 @@ function AccountSettings() {
 
     const dispatch = useDispatch();
     useEffect(() => {
-        const saveInfoUser_To_Redux = () => {
-            const userInfoDispatch = {
-                username,
-                phone,
-                firstname,
-                lastname,
-                email,
-                address,
-            };
-            dispatch(updateUser(userInfoDispatch));
-        };
-        saveInfoUser_To_Redux();
-    }, [username, firstname, lastname, email, address, phone, dispatch]);
+        dispatch(updateUser({ ...data_From_Redux, username, phone, firstname, lastname, email, address }));
+    }, [username, firstname, lastname, email, address, phone, dispatch, data_From_Redux]);
 
     return (
         <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }} gap={6}>
             <FormControl id='username'>
                 <FormLabel>Tên người dùng</FormLabel>
                 <Input
+                    disabled
                     focusBorderColor='brand.blue'
                     type='text'
                     placeholder='Tim'
@@ -83,7 +73,7 @@ function AccountSettings() {
                 />
             </FormControl>
             <FormControl id='lastName'>
-                <FormLabel>Tên người dùng</FormLabel>
+                <FormLabel>Tên</FormLabel>
                 <Input
                     focusBorderColor='brand.blue'
                     type='text'
@@ -95,6 +85,7 @@ function AccountSettings() {
             <FormControl id='emailAddress'>
                 <FormLabel>Email liên hệ</FormLabel>
                 <Input
+                    disabled
                     focusBorderColor='brand.blue'
                     type='email'
                     placeholder='email@gmail.com'

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import {
     Badge,
     Box,
@@ -18,6 +18,8 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../redux/slides/userSlide';
 import Axios from 'axios';
+import * as UserService from '../../services/UserService';
+import { useMutationHook } from '../../hooks/useMutationHook';
 
 const CoverImg_ProfileUser = () => {
     const userProfile_From_Redux = useSelector((state) => state.user);
@@ -31,11 +33,13 @@ const CoverImg_ProfileUser = () => {
         inputRef.current.click();
     };
 
-    useEffect(() => {
-        dispatch(updateUser(backgroundImg));
-    }, [backgroundImg, dispatch]);
+    const mutation = useMutationHook(({ getToken, userInfo_From_Redux }) => {
+        UserService.updateInfoUser(getToken, userInfo_From_Redux);
+    });
+    const getToken = localStorage.getItem('token');
 
     const handleChangeBackgroundImage = async (event) => {
+        event.preventDefault();
         const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
         const selected = event.target.files[0];
         let reader = new FileReader();
@@ -47,12 +51,13 @@ const CoverImg_ProfileUser = () => {
             formData.append('file', selected);
             formData.append('upload_preset', 'gioeqwaa');
 
-            await Axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData)
-                .then((res) => res.data)
-                .then((data) => {
-                    dispatch(updateUser({ backgroundImg: data.url }));
-                });
-            console.log('userProfile_From_Redux_backgroundImg', userProfile_From_Redux);
+            const res = await Axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData);
+            const response = res.data;
+            dispatch(updateUser({ ...userProfile_From_Redux, backgroundImg: response.secure_url }));
+            mutation.mutate({
+                getToken,
+                userInfo_From_Redux: { ...userProfile_From_Redux, backgroundImg: response.secure_url },
+            });
         } else {
             onOpen();
         }

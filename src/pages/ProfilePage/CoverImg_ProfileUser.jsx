@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
     Badge,
     Box,
@@ -15,9 +15,15 @@ import {
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUser } from '../../redux/slides/userSlide';
+import Axios from 'axios';
 
 const CoverImg_ProfileUser = () => {
-    const [coverImage, setCoverImage] = useState(null);
+    const userProfile_From_Redux = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
+    const [backgroundImg, setBackgroundImg] = useState(userProfile_From_Redux.backgroundImg ?? '/assets/cover.jpg');
     const inputRef = useRef(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -25,17 +31,31 @@ const CoverImg_ProfileUser = () => {
         inputRef.current.click();
     };
 
-    const handleChangeCover = (event) => {
+    useEffect(() => {
+        dispatch(updateUser(backgroundImg));
+    }, [backgroundImg, dispatch]);
+
+    const handleChangeBackgroundImage = async (event) => {
         const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
         const selected = event.target.files[0];
+        let reader = new FileReader();
+        reader.onloadend = () => setBackgroundImg(reader.result);
+        reader.readAsDataURL(selected);
 
         if (selected && ALLOWED_TYPES.includes(selected.type)) {
-            let reader = new FileReader();
-            reader.onloadend = () => setCoverImage(reader.result);
-            return reader.readAsDataURL(selected);
-        }
+            const formData = new FormData();
+            formData.append('file', selected);
+            formData.append('upload_preset', 'gioeqwaa');
 
-        onOpen();
+            await Axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData)
+                .then((res) => res.data)
+                .then((data) => {
+                    dispatch(updateUser({ backgroundImg: data.url }));
+                });
+            console.log('userProfile_From_Redux_backgroundImg', userProfile_From_Redux);
+        } else {
+            onOpen();
+        }
     };
 
     return (
@@ -45,7 +65,7 @@ const CoverImg_ProfileUser = () => {
                 w='full'
                 h='full'
                 objectFit='cover'
-                src={coverImage ? coverImage : '/assets/cover.jpg'}
+                src={backgroundImg ? backgroundImg : '/assets/cover.jpg'}
                 alt='Cover'
             />
 
@@ -59,7 +79,7 @@ const CoverImg_ProfileUser = () => {
                     />
                 </svg>
                 <Text ml={2}>Cập nhật ảnh nền</Text>
-                <input ref={inputRef} type='file' onChange={handleChangeCover} hidden />
+                <input ref={inputRef} type='file' onChange={handleChangeBackgroundImage} hidden />
             </Button>
 
             {/* modal: file not supported */}

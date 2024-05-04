@@ -24,8 +24,6 @@ export const getUserDetail = async (access_token) => {
 
 // update user info
 export const updateInfoUser = async (access_token, data) => {
-    // console.log(data, 'data');
-
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/editDetail`, data, {
         headers: {
             Authorization: `Bearer ${access_token}`,

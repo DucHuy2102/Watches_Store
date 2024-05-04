@@ -2,8 +2,9 @@ import { useEffect, useRef } from 'react';
 import { Button, Input, InputGroup, InputRightAddon, useClipboard, VStack } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
+const value = 'https://DucHuy.github.io';
+
 export default function Actions() {
-    const value = 'https://DucHuy.github.io';
     const { hasCopied, onCopy } = useClipboard(value);
 
     const profileUrl = useRef(null);

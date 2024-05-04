@@ -14,12 +14,10 @@ const LoginPage = () => {
 
     const mutation = useMutationHook((data) => UserService.loginUser(data));
     const { data } = mutation;
-    console.log('dataLogin:', data);
 
     useEffect(() => {
         const handleGetUserDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
-            // console.log(res);
             dispatch(updateUser({ ...res?.data, access_token: access_token }));
         };
 

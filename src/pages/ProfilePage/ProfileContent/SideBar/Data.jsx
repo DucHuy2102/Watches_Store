@@ -3,7 +3,7 @@ import { Box, Text, VStack } from '@chakra-ui/react';
 const list = [
     {
         id: 1,
-        name: 'Số lượng đơn hàng',
+        name: 'Tổng đơn hàng của bạn',
         value: 32,
         color: 'yellow',
     },

@@ -11,7 +11,6 @@ const ProductPage = () => {
     };
 
     const query = useQuery({ queryKey: ['todos'], queryFn: fetchAPI });
-    console.log(query);
 
     // useEffect(() => {
     //     fetchAPI();

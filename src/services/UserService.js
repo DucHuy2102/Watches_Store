@@ -32,3 +32,13 @@ export const updateInfoUser = async (access_token, data) => {
     });
     return res.data;
 };
+
+// get address user
+export const getAddressUser = async (access_token) => {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/address`, {
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+        },
+    });
+    return res.data;
+};

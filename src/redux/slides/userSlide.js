@@ -6,9 +6,9 @@ const initialState = {
     phone: '',
     firstname: '',
     lastname: '',
-    address: '',
     backgroundImg: '',
     avatarImg: '',
+    address: '',
     access_token: '',
 };
 
@@ -23,9 +23,9 @@ export const userSlide = createSlice({
                 phone = '',
                 firstname = '',
                 lastname = '',
-                address = '',
                 backgroundImg = '',
                 avatarImg = '',
+                address = '',
                 access_token = '',
             } = action.payload;
             state.username = username;
@@ -33,9 +33,9 @@ export const userSlide = createSlice({
             state.phone = phone;
             state.firstname = firstname;
             state.lastname = lastname;
-            state.address = address;
             state.backgroundImg = backgroundImg;
             state.avatarImg = avatarImg;
+            state.address = address;
             state.access_token = access_token;
         },
         resetUser: (state) => {
@@ -44,9 +44,9 @@ export const userSlide = createSlice({
             state.phone = '';
             state.firstname = '';
             state.lastname = '';
-            state.address = '';
             state.backgroundImg = '';
             state.avatarImg = '';
+            state.address = '';
             state.access_token = '';
         },
     },

@@ -2,10 +2,10 @@ import { FormControl, FormLabel, Grid, Input } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../../../redux/slides/userSlide';
-import { regexPhoneNumber, validateEmail } from '../../../../helpers/checkIndex';
 
 function AccountSettings() {
     const data_From_Redux = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
     const [username, setUsername] = useState(data_From_Redux.username ?? '');
     const [phone, setNumberPhone] = useState(data_From_Redux.phone ?? '');
@@ -14,13 +14,13 @@ function AccountSettings() {
     const [email, setEmail] = useState(data_From_Redux.email ?? '');
     const [address, setAddress] = useState(data_From_Redux.address ?? '');
 
-    const dispatch = useDispatch();
     useEffect(() => {
         dispatch(updateUser({ ...data_From_Redux, username, phone, firstname, lastname, email, address }));
-    }, [username, firstname, lastname, email, address, phone, dispatch, data_From_Redux]);
+    }, [username, firstname, lastname, email, phone, dispatch, data_From_Redux, address]);
 
     return (
         <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }} gap={6}>
+            {/* username */}
             <FormControl id='username'>
                 <FormLabel>Tên người dùng</FormLabel>
                 <Input
@@ -32,6 +32,54 @@ function AccountSettings() {
                     onChange={(e) => setUsername(e.target.value)}
                 />
             </FormControl>
+
+            {/* email */}
+            <FormControl id='emailAddress'>
+                <FormLabel>Email liên hệ</FormLabel>
+                <Input
+                    disabled
+                    focusBorderColor='brand.blue'
+                    type='email'
+                    placeholder='email@gmail.com'
+                    value={email}
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(value)) {
+                            e.target.setCustomValidity('Email không hợp lệ.');
+                        } else {
+                            e.target.setCustomValidity('');
+                        }
+                        setEmail(value);
+                    }}
+                />
+            </FormControl>
+
+            {/* first name */}
+            <FormControl id='firstName'>
+                <FormLabel>Họ và chữ lót</FormLabel>
+                <Input
+                    focusBorderColor='brand.blue'
+                    type='text'
+                    placeholder='Nguyễn Văn'
+                    value={firstname}
+                    onChange={(e) => setFirstName(e.target.value)}
+                />
+            </FormControl>
+
+            {/* last name */}
+            <FormControl id='lastName'>
+                <FormLabel>Tên</FormLabel>
+                <Input
+                    focusBorderColor='brand.blue'
+                    type='text'
+                    placeholder='A'
+                    value={lastname}
+                    onChange={(e) => setLastName(e.target.value)}
+                />
+            </FormControl>
+
+            {/* phone number */}
             <FormControl id='phoneNumber'>
                 <FormLabel>Số điện thoại</FormLabel>
                 <Input
@@ -62,52 +110,14 @@ function AccountSettings() {
                     }}
                 />
             </FormControl>
-            <FormControl id='firstName'>
-                <FormLabel>Họ và chữ lót</FormLabel>
-                <Input
-                    focusBorderColor='brand.blue'
-                    type='text'
-                    placeholder='Tim'
-                    value={firstname}
-                    onChange={(e) => setFirstName(e.target.value)}
-                />
-            </FormControl>
-            <FormControl id='lastName'>
-                <FormLabel>Tên</FormLabel>
-                <Input
-                    focusBorderColor='brand.blue'
-                    type='text'
-                    placeholder='Cook'
-                    value={lastname}
-                    onChange={(e) => setLastName(e.target.value)}
-                />
-            </FormControl>
-            <FormControl id='emailAddress'>
-                <FormLabel>Email liên hệ</FormLabel>
-                <Input
-                    disabled
-                    focusBorderColor='brand.blue'
-                    type='email'
-                    placeholder='email@gmail.com'
-                    value={email}
-                    onChange={(e) => {
-                        const value = e.target.value;
-                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        if (!emailRegex.test(value)) {
-                            e.target.setCustomValidity('Email không hợp lệ.');
-                        } else {
-                            e.target.setCustomValidity('');
-                        }
-                        setEmail(value);
-                    }}
-                />
-            </FormControl>
+
+            {/* address */}
             <FormControl id='address'>
                 <FormLabel>Địa chỉ</FormLabel>
                 <Input
                     focusBorderColor='brand.blue'
-                    type='email'
-                    placeholder='Số 117, Đường Võ Văn Ngân, Thành phố Hồ Chí Minh'
+                    type='text'
+                    placeholder='Số 117, Đường Võ Văn Ngân, Thủ Đức, TP.HCM'
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     required

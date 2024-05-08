@@ -99,7 +99,6 @@ const Sort_Filter = () => {
                                     <FontAwesomeIcon icon={faPerson} className='mr-2' />
                                     Đồng hồ nam
                                 </li>
-                                {/* Thêm các tùy chọn lọc khác tại đây */}
                                 <li
                                     className='pl-7 flex items-center px-2 py-2 hover:bg-black hover:text-white cursor-pointer'
                                     onClick={() => handleFilterClick('Đồng hồ nữ')}

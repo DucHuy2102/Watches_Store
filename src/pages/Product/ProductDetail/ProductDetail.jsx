@@ -1,74 +1,110 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import ProductCard from '../ProductCard';
-
-const specifications = [
-    {
-        id: 1,
-        title: 'Thương Hiệu',
-        value: 'Casio',
-    },
-    {
-        id: 2,
-        title: 'Xuất xứ',
-        value: 'Đồng hồ Nhật Bản',
-    },
-    {
-        id: 3,
-        title: 'Độ dầy',
-        value: '8.5mm',
-    },
-    {
-        id: 4,
-        title: 'Size mặt',
-        value: '38.2 x 33.2 mm',
-    },
-    {
-        id: 5,
-        title: 'Chất liệu dây',
-        value: 'Dây Nhựa',
-    },
-    {
-        id: 6,
-        title: 'Chất liệu vỏ',
-        value: 'Vỏ nhựa',
-    },
-    {
-        id: 7,
-        title: 'Phong cách',
-        value: 'Trẻ trung, cá tính, Thể thao',
-    },
-    {
-        id: 8,
-        title: 'Tính năng',
-        value: 'Lịch ngày, Lịch thứ, Đồng hồ bấm giờ, Báo thức',
-    },
-    {
-        id: 9,
-        title: 'Hình dạng',
-        value: 'Mặt vuông',
-    },
-    {
-        id: 10,
-        title: 'Tình trạng',
-        value: 'Hàng mới về',
-    },
-    {
-        id: 11,
-        title: 'Trọng lượng',
-        value: '21g',
-    },
-    {
-        id: 12,
-        title: 'Đối tượng sử dụng',
-        value: 'Unisex',
-    },
-];
+import { useQuery } from '@tanstack/react-query';
+import * as ProductService from '../../../services/ProductService';
 
 const ProductDetail = () => {
+    // get all products
+    const getProduct = async () => {
+        const res = await ProductService.getProductById('6626517e99c1759ec99f5c39');
+        return res;
+    };
+
+    const { data } = useQuery({ queryKey: ['products'], queryFn: getProduct });
+    console.log('ProductByID:', data);
+    const {
+        brand,
+        color,
+        condition,
+        description,
+        feature,
+        genderUser,
+        height,
+        img,
+        origin,
+        price,
+        productName,
+        shape,
+        shellMaterial,
+        size,
+        state,
+        style,
+        thickness,
+        wireMaterial,
+    } = data.data;
+
+    const specifications = [
+        {
+            id: 1,
+            title: 'Thương Hiệu',
+            value: 'Casio',
+        },
+        {
+            id: 2,
+            title: 'Xuất xứ',
+            value: 'Đồng hồ Nhật Bản',
+        },
+        {
+            id: 3,
+            title: 'Độ dầy',
+            value: '8.5mm',
+        },
+        {
+            id: 4,
+            title: 'Size mặt',
+            value: '38.2 x 33.2 mm',
+        },
+        {
+            id: 5,
+            title: 'Chất liệu dây',
+            value: 'Dây Nhựa',
+        },
+        {
+            id: 6,
+            title: 'Chất liệu vỏ',
+            value: 'Vỏ nhựa',
+        },
+        {
+            id: 7,
+            title: 'Phong cách',
+            value: 'Trẻ trung, cá tính, Thể thao',
+        },
+        {
+            id: 8,
+            title: 'Tính năng',
+            value: 'Lịch ngày, Lịch thứ, Đồng hồ bấm giờ, Báo thức',
+        },
+        {
+            id: 9,
+            title: 'Hình dạng',
+            value: 'Mặt vuông',
+        },
+        {
+            id: 10,
+            title: 'Tình trạng',
+            value: 'Hàng mới về',
+        },
+        {
+            id: 11,
+            title: 'Trọng lượng',
+            value: '21g',
+        },
+        {
+            id: 12,
+            title: 'Đối tượng sử dụng',
+            value: 'Unisex',
+        },
+    ];
+
+    const priceFormat = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+    const discountPrice = 1506000;
+    const discountPriceFormat = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+        discountPrice
+    );
+
     return (
-        <div className='font-[sans-serif] bg-white'>
+        <div className='font-Lato bg-white'>
             <div className='p-6 lg:max-w-7xl max-w-4xl mx-auto'>
                 {/* top */}
                 <div className='grid items-start grid-cols-1 lg:grid-cols-5 gap-12 shadow-md p-6'>
@@ -82,25 +118,19 @@ const ProductDetail = () => {
                             className='w-[500px] h-[500px] rounded-xl relative'
                         >
                             <SwiperSlide>
-                                <img
-                                    src='https://timex.com/cdn/shop/files/TW2W51700.png?v=1711407784&width=400'
-                                    alt='Image'
-                                    className='w-full h-full object-cover'
-                                />
+                                <img src={img[0]} alt='Image' className='w-full h-full object-cover' />
                             </SwiperSlide>
                             <SwiperSlide>
-                                <img
-                                    src='https://timex.com/cdn/shop/files/TW2W51700_J.jpg?v=1711983260&width=400'
-                                    alt='Image'
-                                    className='w-full h-full object-cover'
-                                />
+                                <img src={img[1]} alt='Image' className='w-full h-full object-cover' />
                             </SwiperSlide>
                             <SwiperSlide>
-                                <img
-                                    src='https://timex.com/cdn/shop/files/TW2W51700_B.png?v=1711983260&width=400'
-                                    alt='Image'
-                                    className='w-full h-full object-cover'
-                                />
+                                <img src={img[2]} alt='Image' className='w-full h-full object-cover' />
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <img src={img[3]} alt='Image' className='w-full h-full object-cover' />
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <img src={img[4]} alt='Image' className='w-full h-full object-cover' />
                             </SwiperSlide>
                         </Swiper>
                     </div>
@@ -108,14 +138,14 @@ const ProductDetail = () => {
                     {/* info product */}
                     <div className='lg:col-span-2'>
                         {/* name product */}
-                        <h2 className='text-2xl font-extrabold text-black'>Casio - Nam AE-1200WHD-1AVDF</h2>
+                        <h2 className='text-2xl font-extrabold text-black'>{productName}</h2>
 
                         {/* price product */}
                         <div className='flex flex-wrap justify-start items-center gap-4 mt-2'>
-                            <p className='text-blue-500 text-4xl font-bold'>1.120.000₫</p>
+                            <p className='text-blue-500 text-4xl font-bold'>{priceFormat}</p>
                             <p className='text-gray-400 text-xl flex justify-start items-center'>
-                                <strike>1.506.000₫</strike>
-                                <span className='text-sm bg-red-500 text-white px-2 py-1 rounded-lg ml-3'>-26%</span>
+                                <strike>{discountPriceFormat}₫</strike>
+                                <span className='text-sm bg-red-500 text-white px-2 py-1 rounded-lg ml-3'>-27%</span>
                             </p>
                         </div>
 
@@ -168,13 +198,13 @@ const ProductDetail = () => {
                         {/* brand */}
                         <div className='flex items-center mt-2'>
                             <p className='text-lg text-black'>Thương hiệu:</p>
-                            <p className='text-lg text-blue-500 font-bold ml-2'>Casio</p>
+                            <p className='text-lg text-blue-500 font-bold ml-2'>{brand}</p>
                         </div>
 
                         {/* in stock */}
                         <div className='flex justify-start items-center mt-2'>
                             <p className='text-lg text-black'>Tình trạng:</p>
-                            <p className='text-lg text-blue-500 font-bold ml-2'>Còn hàng</p>
+                            <p className='text-lg text-blue-500 font-bold ml-2'>{condition}</p>
                         </div>
 
                         <div className='bg-yellow-100 rounded-lg mt-2'>
@@ -195,7 +225,7 @@ const ProductDetail = () => {
 
                         {/* contact to buy */}
                         <div className='flex flex-col justify-center items-center mt-2'>
-                            <p className='text-sm text-black'>Đặt hàng/tư vấn (8h00 - 22h00)</p>
+                            <p className='text-md text-black'>Đặt hàng/tư vấn (8h00 - 22h00)</p>
                             <p className='text-md text-blue-500 font-bold ml-2 hover:cursor-pointer'>
                                 0979.117.117 - 0979.217.217 - 0979.317.317
                             </p>
@@ -211,7 +241,7 @@ const ProductDetail = () => {
                             </button>
                             <button
                                 type='button'
-                                className='min-w-[200px] px-3 py-2.5 border border-black bg-transparent hover:bg-gray-500 hover:border-none hover:text-white text-black text-lg font-bold rounded'
+                                className='min-w-[200px] px-3 py-2.5 border border-black bg-transparent hover:bg-black hover:border-none hover:text-white text-black text-lg font-bold rounded'
                             >
                                 Thêm vào giỏ hàng
                             </button>
@@ -224,21 +254,7 @@ const ProductDetail = () => {
                     <h3 className='text-lg font-bold text-black'>Mô tả sản phẩm</h3>
 
                     {/* description */}
-                    <p className='mt-2 px-5 text-black'>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista
-                        probare, quae sunt a te dicta? Refert tamen, quo modo. Quae cum dixisset, finem ille. Duo Reges:
-                        constructio interrete. Quae cum essent dicta, discessimus. Quae cum essent dicta, discessimus.
-                        Quae cum dixisset, finem ille. Duo Reges: constructio interrete. Quae cum dixisset, finem ille.
-                        Duo Reges: constructio interrete. Quae cum essent dicta, discessimus. Quae cum essent dicta,
-                        discessimus. Quae cum dixisset, finem ille. Duo Reges: constructio interrete. Quae cum dixisset,
-                        finem ille. Duo Reges: constructio interrete. Quae cum essent dicta, discessimus. Quae cum
-                        essent dicta, discessimus. Quae cum dixisset, finem ille. Duo Reges: constructio interrete. Quae
-                        cum dixisset, finem ille. Duo Reges: constructio interrete. Quae cum essent dicta, discessimus.
-                        Quae cum essent dicta, discessimus. Quae cum dixisset, finem ille. Duo Reges: constructio
-                        interrete. Quae cum dixisset, finem ille. Duo Reges: constructio interrete. Quae cum essent
-                        dicta, discessimus. Quae cum essent dicta, discessimus. Quae cum dixisset, finem ille. Duo
-                        Reges: constructio interrete.
-                    </p>
+                    <p className='mt-2 px-5 text-black'>{description}</p>
                     <h3 className='mt-5 text-lg font-bold text-black'>Thông số chi tiết sản phẩm</h3>
 
                     {/* specifications */}

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const ReadMoreToBlogs = () => {
     return (
-        <div className='h-44 flex justify-center items-center'>
+        <div className='h-44 flex justify-center items-center font-PlayfairDisplay'>
             {/* image */}
             <img
                 src='https://timex.com/cdn/shop/files/3831_TC23_blog_banner_desktop.jpg?v=1698135652&width=1440'

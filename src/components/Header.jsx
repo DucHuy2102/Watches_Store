@@ -55,13 +55,13 @@ const Header = () => {
         <nav className='w-full h-16 px-10 flex items-center flex-grow shadow-lg'>
             {/* name website */}
             <div>
-                <Link to='/' className='text-3xl font-bold'>
+                <Link to='/' className='text-3xl font-bold font-PlayfairDisplay'>
                     Watc<span className='text-yellow-400 text-4xl'>H</span>es
                 </Link>
             </div>
 
             {/* pages */}
-            <div className='w-[25rem] flex items-center justify-center gap-4'>
+            <div className='w-[25rem] flex items-center justify-center gap-4 font-PlayfairDisplay'>
                 <Link to='/' className={styleButtonPage}>
                     Trang chủ
                 </Link>
@@ -81,21 +81,22 @@ const Header = () => {
                 <input
                     type='text'
                     placeholder='Tìm kiếm...'
-                    className='h-9 border text-xl border-gray-400 px-3 py-1 rounded-lg w-[95%]'
+                    className='h-9 border text-xl border-gray-400 px-3 py-1 rounded-lg w-[95%] font-PlayfairDisplay'
                 />
             </div>
 
             {/* 3 buttons: login, register & order button */}
-            <div className='flex gap-2' ref={accountRef}>
+            <div className='flex gap-2 font-PlayfairDisplay' ref={accountRef}>
                 {dataUSer?.username ? (
                     // login success
                     <>
-                        <button
+                        <div
                             onClick={() => setClickButtonAccount(!clickButtonAccount)}
                             className={`${styleButton} hover:cursor-pointer mr-2 w-[10rem] rounded-lg flex justify-center items-center text-lg gap-1`}
                         >
-                            Chào: <span className='text-blue-500 hover:text-white'>{dataUSer?.username}</span>
-                        </button>
+                            Chào:
+                            <span className='text-blue-500 font-medium hover:text-white'>{dataUSer?.username}</span>
+                        </div>
 
                         {/* click vào button */}
                         {clickButtonAccount && (
@@ -165,7 +166,7 @@ const Header = () => {
 
                 {/* shopping cart */}
                 <Badge count={5}>
-                    <Link to='/order' className={styleButton}>
+                    <Link to='/order' className={`${styleButton} font-PlayfairDisplay`}>
                         <FontAwesomeIcon icon={faCartShopping} className='mr-2' />
                         Giỏ hàng
                     </Link>

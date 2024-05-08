@@ -2,11 +2,11 @@ import { MailOutlined, PhoneOutlined, ClockCircleOutlined } from '@ant-design/ic
 
 const ContactPage = () => {
     return (
-        <div className='flex flex-col justify-center items-center mt-10 mb-10'>
+        <div className='flex flex-col justify-center items-center mt-10 mb-10 font-PlayfairDisplay'>
             {/* name page */}
             <h1 className='text-center text-4xl font-bold mb-10'>Liên hệ với chúng tôi</h1>
 
-            <form className='font-sans'>
+            <form className=''>
                 {/* name */}
                 <div className='flex justify-center gap-10'>
                     {/* firstName */}
@@ -104,7 +104,7 @@ const ContactPage = () => {
                 <div>
                     <button
                         type='submit'
-                        className='w-full transition duration-300 text-xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
+                        className='text-2xl w-full transition duration-300 p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
                     >
                         Gửi thông tin
                     </button>
@@ -112,9 +112,9 @@ const ContactPage = () => {
             </form>
 
             {/* contact info */}
-            <div className='py-3 mt-5 w-[42.5vw] mb-5'>
+            <div className='py-3 mt-5 w-[42.5vw] mb-5 font-Lato'>
                 <div>
-                    <p className='text-xl underline'>Thông tin liên hệ trực tiếp:</p>
+                    <p className='text-lg font-bold'>Thông tin liên hệ trực tiếp:</p>
                 </div>
                 <div className='flex justify-between items-center px-10 text-lg mt-1'>
                     {/* mail and phone */}

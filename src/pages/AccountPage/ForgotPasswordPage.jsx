@@ -10,14 +10,16 @@ const ForgotPasswordPage = () => {
     return (
         <div className='w-full flex items-center justify-center px-20 py-5'>
             {/* form login */}
-            <div className='flex flex-col justify-center items-start h-screen w-[80%] font-serif'>
+            <div className='flex flex-col justify-center items-start h-screen w-[80%] font-Lato'>
                 <form onSubmit={handleSubmit}>
                     {/* name form */}
-                    <h1 className='text-4xl font-bold text-center text-black mb-5'>Quên mật khẩu</h1>
+                    <h1 className='text-4xl font-bold text-center text-black mb-5 font-PlayfairDisplay'>
+                        Quên mật khẩu
+                    </h1>
 
                     {/* email */}
                     <div className='mb-5 w-[45vw]'>
-                        <label htmlFor='email' className='block text-black'>
+                        <label htmlFor='email' className='block text-black text-xl'>
                             Email
                         </label>
                         <input
@@ -33,7 +35,7 @@ const ForgotPasswordPage = () => {
                     <div>
                         <button
                             type='submit'
-                            className='w-full text-xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
+                            className='w-full font-PlayfairDisplay text-2xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
                         >
                             Gửi thông tin
                         </button>
@@ -41,8 +43,13 @@ const ForgotPasswordPage = () => {
                 </form>
 
                 {/* comeback to login page */}
-                <div className='mt-4 text-lg hover:underline'>
-                    <Link to='/login'>Quay lại Trang đăng nhập</Link>
+                <div className='mt-4 text-lg'>
+                    Quay lại
+                    <Link to='/login'>
+                        <span className='hover:underline pl-1 font-PlayfairDisplay text-xl hover:font-bold'>
+                            Trang đăng nhập
+                        </span>
+                    </Link>
                 </div>
             </div>
 

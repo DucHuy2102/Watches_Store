@@ -6,7 +6,7 @@ const OrderPage = () => {
     return (
         <div className='bg-gray-100 h-screen py-8'>
             <div className='container mx-auto px-4'>
-                <h1 className='text-3xl text-center font-bold mb-4'>Giỏ hàng của bạn</h1>
+                <h1 className='text-4xl text-center font-bold mb-4 font-PlayfairDisplay'>Giỏ hàng của bạn</h1>
                 <div className='flex flex-col md:flex-row gap-4'>
                     <div className='md:w-3/4'>
                         <div className='bg-white rounded-lg shadow-md p-6 mb-4'>

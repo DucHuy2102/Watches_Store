@@ -40,12 +40,12 @@ const LoginPage = () => {
     };
 
     return (
-        <div className='w-full flex items-center justify-center px-20'>
+        <div className='w-full flex items-center justify-center px-20 font-Lato'>
             {/* form login */}
             <div className='flex flex-col justify-center items-start h-screen w-[80%]'>
                 <form onSubmit={handleSubmitLogin}>
                     {/* name form */}
-                    <h1 className='text-4xl font-bold text-center text-black mb-5'>Đăng nhập</h1>
+                    <h1 className='text-4xl font-bold text-center text-black mb-5 font-PlayfairDisplay'>Đăng nhập</h1>
 
                     {/* userName */}
                     <div className='mb-5 w-[45vw]'>
@@ -103,7 +103,7 @@ const LoginPage = () => {
                     <div>
                         <button
                             type='submit'
-                            className='w-full text-xl p-2 border bg-black text-white rounded hover:bg-white transition duration-300 hover:text-black hover:border-black'
+                            className='w-full font-PlayfairDisplay text-2xl p-2 border bg-black text-white rounded hover:bg-white transition duration-300 hover:text-black hover:border-black'
                         >
                             Đăng nhập
                         </button>
@@ -113,13 +113,16 @@ const LoginPage = () => {
                 {/* Register */}
                 <div className='mt-5 text-lg flex'>
                     <p>Bạn chưa có tài khoản để đăng nhập?</p>
-                    <Link to='/register' className='pl-2 text-gray-500 hover:text-black hover:underline'>
+                    <Link
+                        to='/register'
+                        className='font-PlayfairDisplay text-xl pl-2 text-gray-500 hover:text-black hover:font-bold hover:underline'
+                    >
                         Đăng ký ở đây
                     </Link>
                 </div>
 
                 {/* forgot password */}
-                <div className='mt-1 text-lg hover:underline'>
+                <div className='mt-1 text-lg font-PlayfairDisplay text-gray-700 hover:text-black hover:font-bold hover:underline'>
                     <Link to='/forgotPassword'>Quên mật khẩu?</Link>
                 </div>
             </div>

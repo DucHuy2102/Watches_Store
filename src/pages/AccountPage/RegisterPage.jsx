@@ -33,10 +33,12 @@ const RegisterPage = () => {
             </div>
 
             {/* form register */}
-            <div className='flex flex-col justify-center items-end h-screen w-[80%]'>
+            <div className='flex flex-col justify-center items-end h-screen w-[80%] font-Lato'>
                 <form onSubmit={handleSubmitRegister}>
                     {/* name form */}
-                    <h1 className='text-4xl font-bold text-center text-black'>Đăng ký tài khoản</h1>
+                    <h1 className='text-4xl font-bold text-center text-black font-PlayfairDisplay'>
+                        Đăng ký tài khoản
+                    </h1>
 
                     {/* userName */}
                     <div className='mb-5 w-[45vw]'>
@@ -190,7 +192,7 @@ const RegisterPage = () => {
                     <div>
                         <button
                             type='submit'
-                            className='w-full text-xl p-2 border bg-black text-white rounded transition duration-300 hover:bg-white hover:text-black hover:border-black'
+                            className='font-PlayfairDisplay w-full text-2xl p-2 border bg-black text-white rounded transition duration-300 hover:bg-white hover:text-black hover:border-black'
                         >
                             Đăng ký tài khoản
                         </button>
@@ -203,9 +205,9 @@ const RegisterPage = () => {
                 </form>
 
                 {/* Register */}
-                <div className='mt-2 text-lg flex'>
+                <div className='mt-2 text-lg flex font-PlayfairDisplay'>
                     <p>Bạn đã có tài khoản?</p>
-                    <Link to='/login' className='pl-2 text-gray-500 hover:text-black hover:underline'>
+                    <Link to='/login' className='pl-2 text-gray-500 hover:text-black hover:font-bold hover:underline'>
                         Đăng nhập
                     </Link>
                 </div>

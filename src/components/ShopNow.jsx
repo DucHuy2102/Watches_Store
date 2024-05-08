@@ -2,7 +2,7 @@ import React from 'react';
 
 const ShopNow = () => {
     return (
-        <div className='px-10'>
+        <div className='px-10 font-PlayfairDisplay'>
             <div className='flex justify-center items-center gap-5'>
                 {/* men */}
                 <div className='relative w-[50%] cursor-pointer'>

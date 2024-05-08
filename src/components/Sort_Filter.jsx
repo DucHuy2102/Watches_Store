@@ -67,7 +67,7 @@ const Sort_Filter = () => {
     }, []);
 
     return (
-        <div className='mt-1 h-10 text-md w-full px-10 flex justify-between items-center'>
+        <div className='mt-1 h-10 font-medium w-full px-10 flex justify-between items-center font-PlayfairDisplay'>
             {/* link to page */}
             <div className='justify-start'>
                 <p>Home / All Products /</p>

@@ -2,9 +2,14 @@
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     theme: {
-        extend: {},
-        fontFamily: {
-            myFont: ['Poppins', 'sans-serif'],
+        extend: {
+            fontFamily: {
+                Oswald: ['Oswald', 'sans-serif'],
+                Lato: ['Lato', 'sans-serif'],
+                PlayfairDisplay: ['Playfair Display', 'serif'],
+                Montserrat: ['Montserrat', 'sans-serif'],
+                Rubik: ['Rubik', 'sans-serif'],
+            },
         },
     },
     plugins: [],

@@ -26,7 +26,7 @@ const SITEMAP = [
 const currentYear = new Date().getFullYear();
 const Footer = () => {
     return (
-        <footer className='bg-gray-200 mb-0 w-full border-t'>
+        <footer className='bg-gray-200 mb-0 w-full border-t font-PlayfairDisplay'>
             <div className='mx-auto w-full max-w-7xl px-8'>
                 {/* top footer */}
                 <div className='mx-auto grid w-full grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-4'>

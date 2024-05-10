@@ -1,5 +1,6 @@
 // Admin
-export { default as AdminPage } from './Admin/AdminPage';
+export { default as AdminPage } from './Admin/Main_AdminPage';
+export { default as LoginAdminPage } from './Admin/Login_AdminPage';
 
 // main page
 export { default as HomePage } from './MainPage/HomePage';

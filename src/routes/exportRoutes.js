@@ -14,6 +14,7 @@ import {
     ProductDetail,
     ProfilePage,
     AdminPage,
+    LoginAdminPage,
 } from '../pages/exportPages';
 
 export const routes = [
@@ -21,6 +22,12 @@ export const routes = [
     {
         path: '/admin',
         component: AdminPage,
+        isShowHeader: false,
+        isPrivate: true,
+    },
+    {
+        path: '/admin/login',
+        component: LoginAdminPage,
         isShowHeader: false,
         isPrivate: true,
     },

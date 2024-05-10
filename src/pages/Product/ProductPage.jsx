@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import * as ProductService from '../../services/ProductService';
 
 const ProductPage = () => {
-    // get all products
     const getAllProduct = async () => {
         const res = await ProductService.getAllProduct();
         return res;
@@ -19,7 +18,7 @@ const ProductPage = () => {
             <Sort_Filter />
 
             {/* products */}
-            <div className='mt-7 mb-3 grid grid-cols-3 gap-5'>
+            <div className='mt-7 mb-3 grid grid-cols-3 gap-10'>
                 {data?.data?.map((product) => (
                     <ProductCard key={product.id} product={product} />
                 ))}

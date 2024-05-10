@@ -3,7 +3,7 @@ import Content_Admin from './Content_Admin';
 
 const MainContent_AdminPage = () => {
     return (
-        <div>
+        <div className='flex w-full'>
             <Sidebar_Admin />
             <Content_Admin />
         </div>

@@ -26,17 +26,17 @@ const SITEMAP = [
 const currentYear = new Date().getFullYear();
 const Footer = () => {
     return (
-        <footer className='bg-gray-200 mb-0 w-full border-t font-PlayfairDisplay'>
+        <footer className='bg-gray-200 mb-0 w-full border-t'>
             <div className='mx-auto w-full max-w-7xl px-8'>
                 {/* top footer */}
-                <div className='mx-auto grid w-full grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-4'>
+                <div className='mx-auto grid w-full grid-cols-1 py-10 md:grid-cols-2 lg:grid-cols-4'>
                     {SITEMAP.map(({ title, links }, key) => (
                         <div key={key} className='w-full'>
                             {/* title */}
                             <Typography
                                 variant='small'
                                 color='blue-gray'
-                                className='mb-4 font-bold uppercase opacity-50'
+                                className='mb-4 font-bold uppercase opacity-50 font-PlayfairDisplay'
                             >
                                 {title}
                             </Typography>
@@ -44,10 +44,10 @@ const Footer = () => {
                             {/* links */}
                             <ul className='space-y-1'>
                                 {links.map((link, key) => (
-                                    <Typography key={key} as='li' color='blue-gray' className='font-normal'>
+                                    <Typography key={key} as='li' color='blue-gray' className=''>
                                         <a
                                             href='#'
-                                            className='inline-block py-1 pr-2 transition-transform hover:scale-105'
+                                            className='font-Montserrat inline-block py-1 pr-2 transition-transform hover:scale-105'
                                         >
                                             {link}
                                         </a>
@@ -62,12 +62,15 @@ const Footer = () => {
                 <div className='flex w-full flex-col items-center justify-center border-t border-white py-4 md:flex-row md:justify-between'>
                     <Typography
                         variant='paragraph'
-                        className='mb-4 flex flex-col text-center font-normal text-blue-gray-900 md:mb-0'
+                        className='mb-4 flex flex-col text-center text-blue-gray-900 md:mb-0'
                     >
-                        <span className='font-bold'>Trường Đại học Sư phạm Kỹ thuật</span>
-                        <span className='font-bold'>Thành phố Hồ Chí Minh</span>
+                        <span className='font-PlayfairDisplay font-bold'>Trường Đại học Sư phạm Kỹ thuật</span>
+                        <span className='font-PlayfairDisplay font-bold'>Thành phố Hồ Chí Minh</span>
                     </Typography>
-                    <Typography variant='paragraph' className='mb-4 text-center font-normal text-blue-gray-900 md:mb-0'>
+                    <Typography
+                        variant='paragraph'
+                        className='font-PlayfairDisplay mb-4 text-center text-blue-gray-900 md:mb-0'
+                    >
                         &copy; {currentYear} <a href='https://material-tailwind.com/'>Nguyễn Đức Huy</a> -{' '}
                         <a href='https://www.facebook.com/profile.php?id=100011281114118'>Huỳnh Lê Huy</a>
                     </Typography>

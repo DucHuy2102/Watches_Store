@@ -70,12 +70,12 @@ const Sort_Filter = () => {
         <div className='mt-1 h-10 font-medium w-full px-10 flex justify-between items-center font-PlayfairDisplay'>
             {/* link to page */}
             <div className='justify-start'>
-                <p>Home / All Products /</p>
+                <p>Trang chủ / Tất cả sản phẩm /</p>
             </div>
 
             {/* name page */}
             <div className='justify-center ml-20'>
-                <p className='font-bold text-xl'>{selectedFilter === 'Bộ lọc' ? 'All Products' : selectedFilter}</p>
+                <p className='font-bold text-xl'>{selectedFilter === 'Bộ lọc' ? 'Tất cả sản phẩm' : selectedFilter}</p>
             </div>
 
             {/* sort and filter */}

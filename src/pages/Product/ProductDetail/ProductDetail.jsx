@@ -7,7 +7,7 @@ import * as ProductService from '../../../services/ProductService';
 const ProductDetail = () => {
     // get all products
     const getProduct = async () => {
-        const res = await ProductService.getProductById('6626517e99c1759ec99f5c39');
+        const res = await ProductService.getProductById('6626517e99c1759ec99f5c3b');
         return res;
     };
 

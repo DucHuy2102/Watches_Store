@@ -1,3 +1,6 @@
+// Admin
+export { default as AdminPage } from './Admin/AdminPage';
+
 // main page
 export { default as HomePage } from './MainPage/HomePage';
 export { default as NotFoundPage } from './MainPage/NotFoundPage';

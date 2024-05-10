@@ -7,34 +7,14 @@ import { useQuery } from '@tanstack/react-query';
 const styleImage = 'h-full w-full object-cover';
 
 const ProductCard = (props) => {
-    const {
-        id,
-        band,
-        color,
-        condition,
-        description,
-        feature,
-        genderUser,
-        height,
-        img,
-        origin,
-        price,
-        productName,
-        shape,
-        shellMaterial,
-        size,
-        state,
-        style,
-        thickness,
-        wireMaterial,
-    } = props.product;
+    const { id, genderUser, img, price, productName, size } = props.product;
 
     return (
         <div className='h-[625px] w-[466px] font-Lato hover:scale-105 transition-transform duration-300 hover:cursor-pointer'>
             {/* image watches  */}
             <div className='w-[466px] h-[466px] flex items-center justify-center bg-gray-100'>
                 {/* image  */}
-                <Swiper className='h-[326px] w-[326px]' loop={true} spaceBetween={0}>
+                <Swiper className='h-[430px] w-[430px] bg-black' loop={true} spaceBetween={0}>
                     <SwiperSlide>
                         <img src={img[0]} className={styleImage} />
                     </SwiperSlide>

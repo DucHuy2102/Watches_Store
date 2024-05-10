@@ -46,7 +46,7 @@ export const userSlide = createSlice({
             state.lastname = '';
             state.backgroundImg = '';
             state.avatarImg = '';
-            state.address = '';
+            state.address = ''; 
             state.access_token = '';
         },
     },

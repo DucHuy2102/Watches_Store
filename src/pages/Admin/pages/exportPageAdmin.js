@@ -1,0 +1,13 @@
+export { default as AddProduct } from './AddProduct';
+export { default as EditProduct } from './EditProduct';
+export { default as Admin_LoginPage } from './Admin_LoginPage';
+export { default as AddCategory } from './AddCategory';
+export { default as EditCategory } from './EditCategory';
+export { default as AddUser } from './AddUser';
+export { default as EditUser } from './EditUser';
+// export { default as ProductList } from './ProductList';
+// export { default as UserList } from './UserList';
+// export { default as OrderList } from './OrderList';
+// export { default as OrderDetail } from './OrderDetail';
+// export { default as UserDetail } from './UserDetail';
+// export { default as CategoryList } from './CategoryList';

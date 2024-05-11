@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { TagsOutlined, ProductOutlined, UserOutlined, FileTextOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { Link } from 'react-router-dom';
+import Header_Admin from '../components/Header_Admin';
+import { AddCategory, AddProduct, AddUser, EditCategory, EditProduct, EditUser } from './exportPageAdmin';
 
 const items = [
     {
@@ -17,14 +19,6 @@ const items = [
                 key: '12',
                 label: 'Chỉnh sửa sản phẩm',
             },
-            // {
-            //     key: '13',
-            //     label: 'Option 3',
-            // },
-            // {
-            //     key: '14',
-            //     label: 'Option 4',
-            // },
         ],
     },
     {
@@ -40,42 +34,6 @@ const items = [
                 key: '22',
                 label: 'Chỉnh sửa danh mục',
             },
-            // {
-            //     key: '23',
-            //     label: 'Submenu',
-            //     children: [
-            //         {
-            //             key: '231',
-            //             label: 'Option 1',
-            //         },
-            //         {
-            //             key: '232',
-            //             label: 'Option 2',
-            //         },
-            //         {
-            //             key: '233',
-            //             label: 'Option 3',
-            //         },
-            //     ],
-            // },
-            // {
-            //     key: '24',
-            //     label: 'Submenu 2',
-            //     children: [
-            //         {
-            //             key: '241',
-            //             label: 'Option 1',
-            //         },
-            //         {
-            //             key: '242',
-            //             label: 'Option 2',
-            //         },
-            //         {
-            //             key: '243',
-            //             label: 'Option 3',
-            //         },
-            //     ],
-            // },
         ],
     },
     {
@@ -125,7 +83,7 @@ const getLevelKeys = (items1) => {
     return key;
 };
 const levelKeys = getLevelKeys(items);
-const Sidebar_Admin = () => {
+const Admin_MainPage = () => {
     const [stateOpenKeys, setStateOpenKeys] = useState(['2', '23']);
     const onOpenChange = (openKeys) => {
         const currentOpenKey = openKeys.find((key) => stateOpenKeys.indexOf(key) === -1);
@@ -146,30 +104,56 @@ const Sidebar_Admin = () => {
             setStateOpenKeys(openKeys);
         }
     };
+
+    const [stateSelectedKeys, setStateSelectedKeys] = useState('');
+    const handleClick = ({ key }) => {
+        setStateSelectedKeys(key);
+    };
+    console.log(stateSelectedKeys);
+
     return (
-        <div className='bg-gray-200 flex flex-col justify-center items-center h-[93vh] font-Lato'>
-            <Menu
-                mode='inline'
-                defaultSelectedKeys={['231']}
-                openKeys={stateOpenKeys}
-                onOpenChange={onOpenChange}
-                style={{
-                    width: 256,
-                }}
-                items={items}
-            />
-            <div className='mt-auto py-1 bg-white flex flex-col justify-center items-center w-full border border-gray-200'>
-                <Link to='' className='hover:bg-gray-200 rounded-md py-2 w-full text-center'>
-                    Cài đặt tài khoản
-                </Link>
-                <Link to='' className='hover:bg-gray-200 rounded-md py-2 w-full text-center'>
-                    Cài đặt hệ thống
-                </Link>
-                <Link to='/admin/login' className='hover:bg-red-500 rounded-md py-2 w-full text-center'>
-                    Đăng xuất
-                </Link>
+        <>
+            {/* header */}
+            <Header_Admin />
+
+            {/* sidebar */}
+            <div className='flex'>
+                <div className='bg-gray-200 flex flex-col justify-center items-center h-[93vh] font-Lato'>
+                    <Menu
+                        onClick={handleClick}
+                        mode='inline'
+                        defaultSelectedKeys={['231']}
+                        openKeys={stateOpenKeys}
+                        onOpenChange={onOpenChange}
+                        style={{
+                            width: 256,
+                        }}
+                        items={items}
+                    />
+                    <div className='mt-auto py-1 bg-white flex flex-col justify-center items-center w-full border border-gray-200'>
+                        <Link to='' className='hover:bg-gray-200 rounded-md py-2 w-full text-center'>
+                            Cài đặt tài khoản
+                        </Link>
+                        <Link to='' className='hover:bg-gray-200 rounded-md py-2 w-full text-center'>
+                            Cài đặt hệ thống
+                        </Link>
+                        <Link to='/admin/login' className='hover:bg-red-500 rounded-md py-2 w-full text-center'>
+                            Đăng xuất
+                        </Link>
+                    </div>
+                </div>
+
+                {/* content */}
+                <div className='w-full'>
+                    {stateSelectedKeys === '11' && <AddProduct />}
+                    {stateSelectedKeys === '12' && <EditProduct />}
+                    {stateSelectedKeys === '21' && <AddCategory />}
+                    {stateSelectedKeys === '22' && <EditCategory />}
+                    {stateSelectedKeys === '31' && <AddUser />}
+                    {stateSelectedKeys === '32' && <EditUser />}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
-export default Sidebar_Admin;
+export default Admin_MainPage;

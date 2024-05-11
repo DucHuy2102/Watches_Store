@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input } from 'antd';
 import { Link } from 'react-router-dom';
 
-const Login_AdminPage = () => (
+const Admin_LoginPage = () => (
     <div className='bg-gray-200 w-screen h-screen flex flex-col justify-center items-center'>
         <h1 className='text-3xl mb-2 font-bold'>Chào mừng đến với trang</h1>
         <h1 className='h-14 text-4xl mb-5 font-bold text-transparent bg-gradient-to-r from-sky-500 to-red-500 bg-clip-text'>
@@ -55,4 +55,4 @@ const Login_AdminPage = () => (
         </Form>
     </div>
 );
-export default Login_AdminPage;
+export default Admin_LoginPage;

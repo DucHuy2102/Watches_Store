@@ -13,21 +13,21 @@ import {
     CheckoutPage,
     ProductDetail,
     ProfilePage,
-    AdminPage,
-    Login_AdminPage,
+    Admin_MainPage,
+    Admin_LoginPage,
 } from '../pages/exportPages';
 
 export const routes = [
     // Admin
     {
         path: '/admin',
-        component: Login_AdminPage,
+        component: Admin_LoginPage,
         isShowHeader: false,
         isPrivate: true,
     },
     {
         path: '/admin/dashboard',
-        component: AdminPage,
+        component: Admin_MainPage,
         isShowHeader: false,
         isPrivate: true,
     },

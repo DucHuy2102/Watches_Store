@@ -30,12 +30,13 @@ const App = () => {
                     {routes.map((route) => {
                         const Page = route.component;
                         // const checkAdmin = !route.isPrivate || user.isAdmin;
+                        // console.log(route.path, ' <--> ', checkAdmin);
                         const Layout = route.isShowHeader ? DefaultComponent : Fragment;
                         return (
                             <Route
                                 key={route.path}
                                 path={route.path}
-                                // path={checkAdmin && route.path}
+                                // path={checkAdmin ? route.path : null}
                                 element={
                                     <Layout>
                                         <Page />

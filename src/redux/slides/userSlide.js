@@ -9,7 +9,7 @@ const initialState = {
     backgroundImg: '',
     avatarImg: '',
     address: '',
-    isAdmin: '',
+    isAdmin: false,
     access_token: '',
 };
 
@@ -28,7 +28,7 @@ export const userSlide = createSlice({
                 avatarImg = '',
                 address = '',
                 access_token = '',
-                idAdmin = '',
+                idAdmin,
             } = action.payload;
             state.username = username;
             state.email = email;

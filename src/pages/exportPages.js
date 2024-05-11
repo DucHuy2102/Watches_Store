@@ -1,6 +1,6 @@
 // admin
-export { default as AdminPage } from './Admin/components/DefaultPage';
-export { default as Login_AdminPage } from './Admin/pages/Login_AdminPage';
+export { default as Admin_MainPage } from './Admin/pages/Admin_MainPage';
+export { default as Admin_LoginPage } from './Admin/pages/Admin_LoginPage';
 
 // main page
 export { default as HomePage } from './MainPage/HomePage';

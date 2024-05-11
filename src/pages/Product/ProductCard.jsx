@@ -1,13 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import * as ProductService from '../../services/ProductService';
-import { useQuery } from '@tanstack/react-query';
 
 const styleImage = 'h-full w-full object-cover';
 
 const ProductCard = (props) => {
     const { id, genderUser, img, price, productName, size } = props.product;
+
+    const navigate = useNavigate();
+    const go_ProductDetail_Page = (id) => {
+        navigate(`/product_detail/${id}`);
+    };
 
     return (
         <div className='h-[625px] w-[466px] font-Lato hover:scale-105 transition-transform duration-300 hover:cursor-pointer'>
@@ -28,7 +31,7 @@ const ProductCard = (props) => {
             </div>
 
             {/* name and price  */}
-            <Link to={`/product/${id}`} className='mt-3 mb-3 pl-3 pr-3'>
+            <div onClick={() => go_ProductDetail_Page(id)} className='mt-3 mb-3 pl-3 pr-3'>
                 {/* name */}
                 <div>{productName}</div>
 
@@ -39,7 +42,7 @@ const ProductCard = (props) => {
 
                 {/* price */}
                 <div className='font-bold'>{price}₫</div>
-            </Link>
+            </div>
 
             {/* button buy  */}
             <div className='border text-lg text-center py-2 border-gray-200 hover:border-black hover:font-bold hover:cursor-pointer'>

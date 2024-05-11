@@ -6,7 +6,7 @@ const Header_Admin = () => {
             <div className='w-full h-14 flex items-center justify-center px-20 py-7'>
                 {/* name website */}
                 <div className='w-[20%] flex justify-start'>
-                    <Link to='/' className='text-3xl font-bold text-white'>
+                    <Link to='/admin' className='text-3xl font-bold text-white'>
                         Watc<span className='text-yellow-400 text-4xl'>H</span>es
                     </Link>
                 </div>

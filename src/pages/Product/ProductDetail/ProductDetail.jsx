@@ -10,8 +10,7 @@ const ProductDetail = () => {
         const res = await ProductService.getProductById('6626517e99c1759ec99f5c3b');
         return res;
     };
-
-    const { data } = useQuery({ queryKey: ['products'], queryFn: getProduct });
+    const { data } = useQuery({ queryKey: ['product_detail'], queryFn: getProduct, keepPreviousData: true });
     console.log('ProductByID:', data);
     const {
         brand,
@@ -118,19 +117,19 @@ const ProductDetail = () => {
                             className='w-[500px] h-[500px] rounded-xl relative'
                         >
                             <SwiperSlide>
-                                <img src={img[0]} alt='Image' className='w-full h-full object-cover' />
+                                {img[0] && <img src={img[0]} alt='Image' className='w-full h-full object-cover' />}
                             </SwiperSlide>
                             <SwiperSlide>
-                                <img src={img[1]} alt='Image' className='w-full h-full object-cover' />
+                                {img[1] && <img src={img[1]} alt='Image' className='w-full h-full object-cover' />}
                             </SwiperSlide>
                             <SwiperSlide>
-                                <img src={img[2]} alt='Image' className='w-full h-full object-cover' />
+                                {img[2] && <img src={img[2]} alt='Image' className='w-full h-full object-cover' />}
                             </SwiperSlide>
                             <SwiperSlide>
-                                <img src={img[3]} alt='Image' className='w-full h-full object-cover' />
+                                {img[3] && <img src={img[3]} alt='Image' className='w-full h-full object-cover' />}
                             </SwiperSlide>
                             <SwiperSlide>
-                                <img src={img[4]} alt='Image' className='w-full h-full object-cover' />
+                                {img[4] && <img src={img[4]} alt='Image' className='w-full h-full object-cover' />}
                             </SwiperSlide>
                         </Swiper>
                     </div>

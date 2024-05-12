@@ -5,6 +5,7 @@ export { default as AddCategory } from './AddCategory';
 export { default as EditCategory } from './EditCategory';
 export { default as AddUser } from './AddUser';
 export { default as EditUser } from './EditUser';
+export { default as ListProduct } from './ListProduct';
 // export { default as ProductList } from './ProductList';
 // export { default as UserList } from './UserList';
 // export { default as OrderList } from './OrderList';

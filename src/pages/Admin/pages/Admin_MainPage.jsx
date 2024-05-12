@@ -3,7 +3,7 @@ import { TagsOutlined, ProductOutlined, UserOutlined, FileTextOutlined } from '@
 import { Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import Header_Admin from '../components/Header_Admin';
-import { AddCategory, AddProduct, AddUser, EditCategory, EditProduct, EditUser } from './exportPageAdmin';
+import { AddCategory, AddProduct, AddUser, EditCategory, EditUser, ListProduct } from './exportPageAdmin';
 
 const items = [
     {
@@ -109,7 +109,6 @@ const Admin_MainPage = () => {
     const handleClick = ({ key }) => {
         setStateSelectedKeys(key);
     };
-    console.log(stateSelectedKeys);
 
     return (
         <>
@@ -146,7 +145,7 @@ const Admin_MainPage = () => {
                 {/* content */}
                 <div className='w-full'>
                     {stateSelectedKeys === '11' && <AddProduct />}
-                    {stateSelectedKeys === '12' && <EditProduct />}
+                    {stateSelectedKeys === '12' && <ListProduct />}
                     {stateSelectedKeys === '21' && <AddCategory />}
                     {stateSelectedKeys === '22' && <EditCategory />}
                     {stateSelectedKeys === '31' && <AddUser />}

@@ -8,7 +8,7 @@ const ShopNow = () => {
                 <div className='relative w-[50%] cursor-pointer'>
                     <div className='overflow-hidden'>
                         <img
-                            src='https://timex.com/cdn/shop/files/4967_TX_TC24_collection_mod_TW2W51600_wrist.jpg?v=1712583036'
+                            src='https://timex.com/cdn/shop/files/4967_TX_TC24_collection_mod_TW2W51600_dd9b2b52-2099-4a6e-9e76-f3cb0449ba06.jpg?v=1714968502'
                             alt=''
                             className='w-full h-full object-cover transform transition-transform duration-300 hover:scale-105'
                         />
@@ -37,7 +37,7 @@ const ShopNow = () => {
                 <div className='relative w-[50%] cursor-pointer'>
                     <div className='overflow-hidden'>
                         <img
-                            src='https://timex.com/cdn/shop/files/TW2W32200_CollectionMod.jpg?v=1711979408'
+                            src='https://timex.com/cdn/shop/files/TW2W32200_CollectionMod.jpg?v=1711979408  '
                             className='w-full h-full object-cover transform transition-transform duration-300 hover:scale-105'
                             alt=''
                         />

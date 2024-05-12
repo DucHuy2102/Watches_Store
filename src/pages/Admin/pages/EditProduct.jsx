@@ -1,21 +1,5 @@
-import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import {
-    Button,
-    Cascader,
-    Checkbox,
-    ColorPicker,
-    DatePicker,
-    Form,
-    Input,
-    InputNumber,
-    Radio,
-    Select,
-    Slider,
-    Switch,
-    TreeSelect,
-    Upload,
-} from 'antd';
+import { Form, Input, Radio, Upload } from 'antd';
 const { TextArea } = Input;
 const normFile = (e) => {
     if (Array.isArray(e)) {

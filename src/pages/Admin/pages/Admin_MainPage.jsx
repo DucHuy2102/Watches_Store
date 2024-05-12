@@ -3,7 +3,15 @@ import { TagsOutlined, ProductOutlined, UserOutlined, FileTextOutlined } from '@
 import { Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import Header_Admin from '../components/Header_Admin';
-import { AddCategory, AddProduct, AddUser, EditCategory, EditUser, ListProduct } from './exportPageAdmin';
+import {
+    AddCategory,
+    AddProduct,
+    AddUser,
+    Admin_DashboardPage,
+    EditCategory,
+    EditUser,
+    ListProduct,
+} from './exportPageAdmin';
 
 const items = [
     {
@@ -84,7 +92,7 @@ const getLevelKeys = (items1) => {
 };
 const levelKeys = getLevelKeys(items);
 const Admin_MainPage = () => {
-    const [stateOpenKeys, setStateOpenKeys] = useState(['2', '23']);
+    const [stateOpenKeys, setStateOpenKeys] = useState('');
     const onOpenChange = (openKeys) => {
         const currentOpenKey = openKeys.find((key) => stateOpenKeys.indexOf(key) === -1);
         // open
@@ -121,7 +129,7 @@ const Admin_MainPage = () => {
                     <Menu
                         onClick={handleClick}
                         mode='inline'
-                        defaultSelectedKeys={['231']}
+                        // defaultSelectedKeys={['231']}
                         openKeys={stateOpenKeys}
                         onOpenChange={onOpenChange}
                         style={{
@@ -144,7 +152,7 @@ const Admin_MainPage = () => {
 
                 {/* content */}
                 <div className='w-full'>
-                    {stateSelectedKeys === '11' && <AddProduct />}
+                    {!stateSelectedKeys ? <Admin_DashboardPage /> : stateSelectedKeys === '11' && <AddProduct />}
                     {stateSelectedKeys === '12' && <ListProduct />}
                     {stateSelectedKeys === '21' && <AddCategory />}
                     {stateSelectedKeys === '22' && <EditCategory />}

@@ -1,10 +1,14 @@
 import { Modal } from 'antd';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { EditProduct } from './exportPageAdmin';
 
 const title = ['Tên đồng hồ', 'Trạng thái bán', 'Giá', 'Số lượng bán được', 'Số lượng tồn kho', 'Thao tác'];
 
 const ListProduct = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [gotoPage, setGotoPage] = useState(false);
+
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -14,6 +18,11 @@ const ListProduct = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+
+    const handleGotoPage = () => {
+        setGotoPage(true);
+    };
+
     return (
         <div>
             <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>Danh sách đồng hồ</h1>
@@ -67,7 +76,10 @@ const ListProduct = () => {
                             {/* quantity */}
                             <td className='py-4 border border-black'>
                                 <div className='flex flex-col justify-center items-center gap-2'>
-                                    <button className='border border-black rounded-md py-2 px-4 hover:bg-yellow-500 hover:cursor-pointer hover:text-white hover:border-none'>
+                                    <button
+                                        onClick={handleGotoPage}
+                                        className='border border-black rounded-md py-2 px-4 hover:bg-yellow-500 hover:cursor-pointer hover:text-white hover:border-none'
+                                    >
                                         Sửa
                                     </button>
                                     <button
@@ -79,7 +91,7 @@ const ListProduct = () => {
 
                                     <Modal
                                         title='Bạn có chắc chắn muốn xóa không?'
-                                        className='text-center text-red-500'
+                                        className='text-center'
                                         open={isModalOpen}
                                         onOk={handleOk}
                                         onCancel={handleCancel}

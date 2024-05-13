@@ -23,9 +23,8 @@ const ListProduct = () => {
 
     return (
         <div>
-            <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>Danh sách đồng hồ</h1>
             <div className=''>
-                <p className='font-bold text-xl mt-2 pl-14 mb-5'>Hãng Casio</p>
+                <p className='font-bold text-xl pl-14 mb-1'>Hãng Casio</p>
                 <table className='w-full'>
                     <thead>
                         <tr>
@@ -76,13 +75,13 @@ const ListProduct = () => {
                                 <div className='flex flex-col justify-center items-center gap-2'>
                                     <button
                                         onClick={handleGotoPage}
-                                        className='border border-black rounded-md py-2 px-4 hover:bg-yellow-500 hover:cursor-pointer hover:text-white hover:border-none'
+                                        className='bg-gray-300 rounded-md py-2 px-4 hover:bg-yellow-500 hover:cursor-pointer hover:text-white'
                                     >
                                         Sửa
                                     </button>
                                     <button
                                         onClick={showModal}
-                                        className='border border-black rounded-md py-2 px-4 hover:bg-red-500 hover:cursor-pointer hover:text-white hover:border-none'
+                                        className='bg-gray-300 rounded-md py-2 px-4 hover:bg-red-500 hover:cursor-pointer hover:text-white'
                                     >
                                         Xóa
                                     </button>

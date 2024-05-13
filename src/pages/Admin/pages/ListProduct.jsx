@@ -1,7 +1,5 @@
 import { Modal } from 'antd';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { EditProduct } from './exportPageAdmin';
 
 const title = ['Tên đồng hồ', 'Trạng thái bán', 'Giá', 'Số lượng bán được', 'Số lượng tồn kho', 'Thao tác'];
 

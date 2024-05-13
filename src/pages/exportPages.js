@@ -1,6 +1,12 @@
 // admin
 export { default as Admin_MainPage } from './Admin/pages/Admin_MainPage';
 export { default as Admin_LoginPage } from './Admin/pages/Admin_LoginPage';
+export { default as Admin_AddProduct } from './Admin/pages/Admin_AddProduct';
+export { default as Admin_DashboardPage } from './Admin/pages/Admin_DashboardPage';
+export { default as Admin_UserPage } from './Admin/pages/Admin_UserPage';
+export { default as Admin_BillPage } from './Admin/pages/Admin_BillPage';
+export { default as Admin_CategoryPage } from './Admin/pages/Admin_CategoryPage';
+export { default as Admin_ListProduct } from './Admin/pages/Admin_ListProduct';
 
 // main page
 export { default as HomePage } from './MainPage/HomePage';

@@ -14,11 +14,6 @@ import {
     ProductDetail,
     ProfilePage,
     Admin_LoginPage,
-    Admin_ListProduct,
-    Admin_DashboardPage,
-    Admin_CategoryPage,
-    Admin_BillPage,
-    Admin_UserPage,
 } from '../pages/exportPages';
 
 export const routes = [
@@ -27,37 +22,6 @@ export const routes = [
         path: '/admin',
         component: Admin_LoginPage,
         isShowHeader: false,
-        isPrivate: true,
-    },
-    {
-        path: '/admin/dashboard',
-        component: Admin_DashboardPage,
-        isShowHeader: false,
-        isPrivate: true,
-    },
-    {
-        path: '/admin/product',
-        component: Admin_ListProduct,
-        isShowHeader: false,
-        isPrivate: true,
-    },
-    {
-        path: '/admin/category',
-        component: Admin_CategoryPage,
-        isShowHeader: false,
-        isPrivate: true,
-    },
-    {
-        path: '/admin/bill',
-        component: Admin_BillPage,
-        isShowHeader: false,
-        isPrivate: true,
-    },
-    {
-        path: '/admin/user',
-        component: Admin_UserPage,
-        isShowHeader: false,
-        isPrivate: true,
     },
 
     // pages

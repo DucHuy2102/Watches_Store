@@ -5,6 +5,7 @@ import { useMutationHook } from '../../hooks/useMutationHook';
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../../redux/slides/userSlide';
+import { Button, Form, Input } from 'antd';
 
 const LoginPage = () => {
     const [username, setUserName] = useState('');
@@ -34,101 +35,87 @@ const LoginPage = () => {
         }
     }, [data, navigate, dispatch]);
 
-    const handleSubmitLogin = (e) => {
-        e.preventDefault();
+    const handleSubmitLogin = () => {
         mutation.mutate({ username, password });
     };
 
     return (
-        <div className='w-full flex items-center justify-center px-20 font-Lato'>
+        <div className='w-full flex items-center justify-between px-20 font-Lato'>
             {/* form login */}
-            <div className='flex flex-col justify-center items-start h-screen w-[80%]'>
-                <form onSubmit={handleSubmitLogin}>
-                    {/* name form */}
-                    <h1 className='text-4xl font-bold text-center text-black mb-5 font-PlayfairDisplay'>Đăng nhập</h1>
-
-                    {/* userName */}
-                    <div className='mb-5 w-[45vw]'>
-                        <label htmlFor='username' className='text-xl text-black'>
-                            Tên đăng nhập
-                        </label>
-                        <input
-                            required
-                            autoFocus
-                            value={username}
+            <div className='flex flex-col justify-center items-start h-screen'>
+                <h1 className='mx-auto text-3xl font-bold text-black mb-5 font-PlayfairDisplay'>Đăng nhập</h1>
+                <Form
+                    className='mx-auto w-[40vw] text-center'
+                    layout='vertical'
+                    name='basic'
+                    onFinish={handleSubmitLogin}
+                >
+                    {/* username */}
+                    <Form.Item
+                        label={<label className='text-lg'>Tên đăng nhập</label>}
+                        name='username'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Tên đăng nhập không được bỏ trống!',
+                            },
+                        ]}
+                        className='text-red-500 text-start mt-1 mb-10'
+                    >
+                        <Input
                             onChange={(e) => setUserName(e.target.value)}
-                            type='text'
-                            id='username'
-                            name='username'
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
-                            placeholder='Tên đăng nhập'
-                            onInvalid={(e) => {
-                                e.target.setCustomValidity('Tên đăng nhập không được để trống.');
-                                e.target.oninput = () => {
-                                    e.target.setCustomValidity('');
-                                };
-                            }}
                         />
-                    </div>
+                    </Form.Item>
 
                     {/* password */}
-                    <div className='mb-5'>
-                        <label htmlFor='password' className='text-xl block text-black'>
-                            Mật khẩu
-                        </label>
-                        <input
-                            required
-                            value={password}
+                    <Form.Item
+                        label={<label className='text-lg'>Mật khẩu</label>}
+                        name='password'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Mật khẩu không được bỏ trống!',
+                            },
+                        ]}
+                        className='text-red-500 text-start mt-1 mb-10'
+                    >
+                        <Input.Password
                             onChange={(e) => setPassword(e.target.value)}
-                            type='password'
-                            id='password'
-                            name='password'
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
-                            placeholder='Mật khẩu'
-                            onInvalid={(e) => {
-                                e.target.setCustomValidity('Mật khẩu không được để trống.');
-                                e.target.oninput = () => {
-                                    e.target.setCustomValidity('');
-                                };
-                            }}
                         />
-                    </div>
+                    </Form.Item>
 
-                    {/* error message */}
-                    {data?.code !== 200 && (
-                        <p className='text-red-500 text-lg text-center font-medium mt-1 mb-2'>{data?.message}</p>
-                    )}
-
-                    {/* button submit login */}
-                    <div>
-                        <button
-                            type='submit'
-                            className='w-full font-PlayfairDisplay text-2xl p-2 border bg-black text-white rounded hover:bg-white transition duration-300 hover:text-black hover:border-black'
+                    <Form.Item>
+                        <Button
+                            className='w-full h-10 font-PlayfairDisplay text-xl border bg-black text-white rounded hover:bg-white transition duration-300 hover:text-black hover:border-blue-400'
+                            type='primary'
+                            htmlType='submit'
                         >
                             Đăng nhập
-                        </button>
-                    </div>
-                </form>
+                        </Button>
+                    </Form.Item>
+                </Form>
 
                 {/* Register */}
-                <div className='mt-5 text-lg flex'>
-                    <p>Bạn chưa có tài khoản để đăng nhập?</p>
+                <div className='text-lg flex'>
+                    <p className='font-PlayfairDisplay'>Bạn chưa có tài khoản để đăng nhập?</p>
                     <Link
                         to='/register'
-                        className='font-PlayfairDisplay text-xl pl-2 text-gray-500 hover:text-black hover:font-bold hover:underline'
+                        className='font-PlayfairDisplay text-lg pl-2 text-gray-400 hover:text-black font-bold transition duration-200'
                     >
                         Đăng ký ở đây
                     </Link>
                 </div>
 
                 {/* forgot password */}
-                <div className='mt-1 text-lg font-PlayfairDisplay text-gray-700 hover:text-black hover:font-bold hover:underline'>
+                <div className='font-PlayfairDisplay text-lg text-gray-400 hover:text-black font-bold transition duration-200'>
                     <Link to='/forgotPassword'>Quên mật khẩu?</Link>
                 </div>
             </div>
 
             {/* image */}
-            <div className='w-[60%]'>
+            <div className='w-[50%]'>
                 <img
                     src='https://timex.com/cdn/shop/files/02617_WB23_July_alt_lifestyle_featured_image_TW2V49700_5bdba602-5733-4fb1-83ad-8297308ef20b.jpg?v=1689775668&width=990'
                     alt=''

@@ -86,6 +86,7 @@ const LoginPage = () => {
                         />
                     </Form.Item>
 
+                    {/* button login */}
                     <Form.Item>
                         <Button
                             className='w-full h-10 font-PlayfairDisplay text-xl border bg-black text-white rounded hover:bg-white transition duration-300 hover:text-black hover:border-blue-400'

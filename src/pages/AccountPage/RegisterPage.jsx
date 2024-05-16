@@ -4,6 +4,7 @@ import { Link, useNavigate, useNavigation } from 'react-router-dom';
 import { Button, Form, Input } from 'antd';
 import { useMutationHook } from '../../hooks/useMutationHook';
 
+// validate form
 const validateMessages = {
     required: '${label} không được bỏ trống!',
     types: {
@@ -76,6 +77,17 @@ const RegisterPage = () => {
                             {
                                 required: true,
                             },
+                            () => ({
+                                validator(_, value) {
+                                    return new Promise((resolve, reject) => {
+                                        if (isNaN(value)) {
+                                            reject('Số điện thoại phải là một số và không chứa ký tự đặc biệt!');
+                                        } else {
+                                            resolve();
+                                        }
+                                    });
+                                },
+                            }),
                         ]}
                         className='text-red-500 text-start mt-1 mb-5'
                     >
@@ -137,6 +149,7 @@ const RegisterPage = () => {
                         />
                     </Form.Item>
 
+                    {/* button register */}
                     <Form.Item>
                         <Button
                             className='w-full mt-2 h-10 font-PlayfairDisplay text-xl border bg-black text-white rounded hover:bg-white transition duration-300 hover:text-black hover:border-blue-400'

@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Form, Input, InputNumber, Radio, Upload } from 'antd';
+import { Button, Form, Input, InputNumber, Radio, Upload } from 'antd';
 const { TextArea } = Input;
 
 const normFile = (e) => {
@@ -199,10 +199,14 @@ const Admin_EditProduct = () => {
                             </div>
                         </Upload>
                     </Form.Item>
-                    <div className='bg-gray-300 hover:bg-blue-500 transition duration-300 hover:cursor-pointer rounded-md w-28 h-[100px] mb-6 flex flex-col justify-center items-center'>
+                    <Button
+                        type='primary'
+                        htmlType='submit'
+                        className='bg-gray-300 text-black hover:bg-blue-500 transition duration-300 hover:cursor-pointer rounded-md w-28 h-[100px] mb-6 flex flex-col justify-center items-center'
+                    >
                         <PlusOutlined />
-                        <div className='pt-1'>Thêm sản phẩm</div>
-                    </div>
+                        <div className='pt-1'>Lưu thông tin</div>
+                    </Button>
                 </div>
             </Form>
         </>

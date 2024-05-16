@@ -11,7 +11,7 @@ const Admin_ListProduct = () => {
         setIsModalOpen(true);
     };
     const handleOk = () => {
-        setIsModalOpen(false);  
+        setIsModalOpen(false);
     };
     const handleCancel = () => {
         setIsModalOpen(false);

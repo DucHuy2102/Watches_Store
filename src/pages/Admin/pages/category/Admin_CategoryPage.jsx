@@ -29,7 +29,7 @@ const Admin_CategoryPage = () => {
                     onClick={handleNavigation('/admin/products/add')}
                     className='border border-black text-lg rounded-lg hover:bg-blue-500 hover:border-blue-500 hover:text-white transition duration-200 px-2 py-3'
                 >
-                    Thêm sản phẩm mới
+                    Thêm danh mục mới
                 </button>
             </div>
             <div className='w-full'>

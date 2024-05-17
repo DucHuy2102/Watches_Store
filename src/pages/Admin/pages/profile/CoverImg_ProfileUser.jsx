@@ -49,7 +49,7 @@ const CoverImg_ProfileUser = () => {
         if (selected && ALLOWED_TYPES.includes(selected.type)) {
             const formData = new FormData();
             formData.append('file', selected);
-            formData.append('upload_preset', 'gioeqwaa');
+            formData.append('upload_preset', 'backgroundAdmin');
 
             const res = await Axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData);
             const response = res.data;
@@ -75,7 +75,7 @@ const CoverImg_ProfileUser = () => {
             />
 
             {/* button: change cover */}
-            <Button onClick={openChooseFile} position='absolute' top={20} right={4} variant='ghost'>
+            <Button onClick={openChooseFile} position='absolute' top={40} right={4} variant='ghost'>
                 <svg width='1.2em' fill='currentColor' viewBox='0 0 20 20'>
                     <path
                         fillRule='evenodd'

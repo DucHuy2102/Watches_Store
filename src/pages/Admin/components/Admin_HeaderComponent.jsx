@@ -2,8 +2,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const Admin_HeaderComponent = () => {
+    // get data admin from redux
     const dataAdmin_Redux = useSelector((state) => state.admin);
-    console.log(dataAdmin_Redux);
 
     return (
         <div className='w-full h-14 flex items-center justify-center px-20 py-7'>
@@ -21,9 +21,19 @@ const Admin_HeaderComponent = () => {
 
             {/* user */}
             <Link to='/admin/profile' className='w-[20%] flex justify-end'>
-                <div className='flex items-center text-white transition duration-200 border border-white hover:cursor-pointer hover:bg-white hover:text-black px-5 py-1 rounded-lg'>
+                <div
+                    className={
+                        dataAdmin_Redux
+                            ? 'flex items-center text-black transition duration-200 border border-white hover:cursor-pointer hover:bg-white hover:text-black px-5 py-1 rounded-lg bg-white'
+                            : 'flex items-center text-white transition duration-200 border border-white hover:cursor-pointer hover:bg-white hover:text-black px-5 py-1 rounded-lg'
+                    }
+                >
                     <img
-                        src='https://cdn-icons-png.flaticon.com/512/149/149071.png'
+                        src={
+                            dataAdmin_Redux?.avatarImg
+                                ? dataAdmin_Redux?.avatarImg
+                                : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
+                        }
                         alt='user'
                         className='w-8 h-8 rounded-full'
                     />

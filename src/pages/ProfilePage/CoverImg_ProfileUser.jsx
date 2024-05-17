@@ -49,7 +49,7 @@ const CoverImg_ProfileUser = () => {
         if (selected && ALLOWED_TYPES.includes(selected.type)) {
             const formData = new FormData();
             formData.append('file', selected);
-            formData.append('upload_preset', 'gioeqwaa');
+            formData.append('upload_preset', 'backgroundPreset');
 
             const res = await Axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData);
             const response = res.data;

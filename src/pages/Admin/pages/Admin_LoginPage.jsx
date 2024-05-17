@@ -53,9 +53,10 @@ const Admin_LoginPage = () => {
             <h1 className='h-14 text-4xl mb-5 font-bold text-transparent bg-gradient-to-r from-sky-500 to-red-500 bg-clip-text'>
                 Quản lý hệ thống
             </h1>
-            <Form onFinish={handleSubmitLogin} className='bg-gray-100 w-[30vw] h-[48vh] py-10 px-10 rounded-md'>
+            <Form onFinish={handleSubmitLogin} className='bg-gray-100 w-[30vw] py-10 px-10 rounded-md'>
                 {/* username */}
                 <Form.Item
+                    className='mt-5'
                     label='Tên đăng nhập'
                     name='username'
                     rules={[
@@ -113,7 +114,6 @@ const Admin_LoginPage = () => {
                         <Link to='/' className='italic pl-1'>
                             Trang chủ
                         </Link>
-                        .
                     </p>
                 </Form.Item>
             </Form>

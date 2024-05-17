@@ -1,22 +1,22 @@
 import { FormControl, FormLabel, Grid, Input } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUser } from '../../../../redux/slides/userSlide';
+import { updateAdmin } from '../../../../../../redux/slides/adminSlide';
 
 function AccountSettings() {
-    const data_From_Redux = useSelector((state) => state.user);
+    const dataAdmin_Redux = useSelector((state) => state.admin);
     const dispatch = useDispatch();
 
-    const [username, setUsername] = useState(data_From_Redux.username ?? '');
-    const [phone, setNumberPhone] = useState(data_From_Redux.phone ?? '');
-    const [firstname, setFirstName] = useState(data_From_Redux.firstname ?? '');
-    const [lastname, setLastName] = useState(data_From_Redux.lastname ?? '');
-    const [email, setEmail] = useState(data_From_Redux.email ?? '');
-    const [address, setAddress] = useState(data_From_Redux.address ?? '');
+    const [username, setUsername] = useState(dataAdmin_Redux.username ?? '');
+    const [phone, setNumberPhone] = useState(dataAdmin_Redux.phone ?? '');
+    const [firstname, setFirstName] = useState(dataAdmin_Redux.firstname ?? '');
+    const [lastname, setLastName] = useState(dataAdmin_Redux.lastname ?? '');
+    const [email, setEmail] = useState(dataAdmin_Redux.email ?? '');
+    const [address, setAddress] = useState(dataAdmin_Redux.address ?? '');
 
     useEffect(() => {
-        dispatch(updateUser({ ...data_From_Redux, username, phone, firstname, lastname, email, address }));
-    }, [username, firstname, lastname, email, phone, dispatch, data_From_Redux, address]);
+        dispatch(updateAdmin({ ...dataAdmin_Redux, username, phone, firstname, lastname, email, address }));
+    }, [username, firstname, lastname, email, phone, dispatch, dataAdmin_Redux, address]);
 
     return (
         <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }} gap={6}>

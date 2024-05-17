@@ -19,16 +19,16 @@ import {
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import Axios from 'axios';
-import { updateUser } from '../../../../redux/slides/userSlide';
-import { useMutationHook } from '../../../../hooks/useMutationHook';
-import * as UserService from '../../../../services/UserService';
+import { updateAdmin } from '../../../../../../redux/slides/adminSlide';
+import { useMutationHook } from '../../../../../../hooks/useMutationHook';
+import * as UserService from '../../../../../../services/UserService';
 
 function Profile() {
     // get user profile from redux
-    const userProfile_From_Redux = useSelector((state) => state.user);
+    const dataAdmin_Redux = useSelector((state) => state.admin);
     const dispatch = useDispatch();
 
-    const [avatarImg, setAvatarImage] = useState(userProfile_From_Redux.avatarImg ?? '');
+    const [avatarImg, setAvatarImage] = useState(dataAdmin_Redux.avatarImg ?? '');
     const { isOpen, onOpen, onClose } = useDisclosure();
     const profileImage = useRef(null);
 
@@ -39,8 +39,7 @@ function Profile() {
     const mutation = useMutationHook(({ getToken, userInfo_From_Redux }) => {
         UserService.updateInfoUser(getToken, userInfo_From_Redux);
     });
-    const getToken = localStorage.getItem('token');
-
+    const getToken = localStorage.getItem('adminToken');
     const handleUpdateAvatar = async (e) => {
         e.preventDefault();
         const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
@@ -52,14 +51,14 @@ function Profile() {
         if (selected && ALLOWED_TYPES.includes(selected.type)) {
             const formData = new FormData();
             formData.append('file', selected);
-            formData.append('upload_preset', 'jatrym96');
+            formData.append('upload_preset', 'avatarAdmin');
 
             const res = await Axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData);
             const response = res.data;
-            dispatch(updateUser({ ...userProfile_From_Redux, avatarImg: response.secure_url }));
+            dispatch(updateAdmin({ ...dataAdmin_Redux, avatarImg: response.secure_url }));
             mutation.mutate({
                 getToken,
-                userInfo_From_Redux: { ...userProfile_From_Redux, avatarImg: response.secure_url },
+                userInfo_From_Redux: { ...dataAdmin_Redux, avatarImg: response.secure_url },
             });
         } else {
             onOpen();
@@ -121,12 +120,12 @@ function Profile() {
             <VStack spacing={1}>
                 {/* name */}
                 <Heading as='h3' fontSize='xl' color='brand.dark'>
-                    {`${userProfile_From_Redux.firstname} ${userProfile_From_Redux.lastname}`}
+                    {`${dataAdmin_Redux.firstname} ${dataAdmin_Redux.lastname}`}
                 </Heading>
 
                 {/* job */}
                 <Text color='brand.gray' fontSize='md'>
-                    {userProfile_From_Redux.username}
+                    {dataAdmin_Redux.username}
                 </Text>
             </VStack>
         </VStack>

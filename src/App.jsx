@@ -11,6 +11,7 @@ import {
     Admin_DashboardPage,
     Admin_EditProduct,
     Admin_ListProduct,
+    Admin_ProfilePage,
     Admin_UserPage,
 } from './pages/Admin/exportPageAdmin';
 
@@ -42,6 +43,10 @@ const routeAdmin = [
     {
         path: '/categories',
         component: Admin_CategoryPage,
+    },
+    {
+        path: '/profile',
+        component: Admin_ProfilePage,
     },
 ];
 

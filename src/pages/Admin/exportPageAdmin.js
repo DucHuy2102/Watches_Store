@@ -19,3 +19,6 @@ export { default as Admin_BillPage } from './pages/bill/Admin_BillPage';
 
 // category
 export { default as Admin_CategoryPage } from './pages/category/Admin_CategoryPage';
+
+// profile
+export { default as Admin_ProfilePage } from './pages/profile/ProfilePage';

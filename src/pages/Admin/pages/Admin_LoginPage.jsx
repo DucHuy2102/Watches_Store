@@ -1,14 +1,51 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Form, Input } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMutationHook } from '../../../hooks/useMutationHook';
+import * as UserService from '../../../services/UserService';
+import { useDispatch } from 'react-redux';
+import { updateAdmin } from '../../../redux/slides/adminSlide';
+import { jwtDecode } from 'jwt-decode';
 
 const Admin_LoginPage = () => {
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
     const inputTagRef = useRef(null);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    // autoFocus on input tag
     useEffect(() => {
         if (inputTagRef.current) {
             inputTagRef.current.focus();
         }
     }, []);
+
+    // logic login
+    const mutation = useMutationHook((data) => UserService.loginUser(data));
+    const { data, isError } = mutation;
+    useEffect(() => {
+        const handleGetUserDetail = async (access_token) => {
+            const res = await UserService.getUserDetail(access_token);
+            dispatch(updateAdmin({ ...res?.data, access_token: access_token }));
+        };
+
+        if (data?.code === 200) {
+            navigate('/admin/dashboard');
+            const access_token = data?.data?.token;
+            localStorage.setItem('adminToken', access_token);
+            if (access_token) {
+                const decode = jwtDecode(access_token);
+                if (decode?.sub) {
+                    handleGetUserDetail(access_token);
+                }
+            }
+        }
+    }, [data, dispatch, navigate]);
+
+    const handleSubmitLogin = () => {
+        mutation.mutate({ username, password });
+    };
 
     return (
         <div className='bg-gray-200 w-screen h-screen flex flex-col justify-center items-center'>
@@ -16,7 +53,8 @@ const Admin_LoginPage = () => {
             <h1 className='h-14 text-4xl mb-5 font-bold text-transparent bg-gradient-to-r from-sky-500 to-red-500 bg-clip-text'>
                 Quản lý hệ thống
             </h1>
-            <Form className='bg-gray-100 w-[30vw] h-[45vh] py-10 px-10 rounded-md'>
+            <Form onFinish={handleSubmitLogin} className='bg-gray-100 w-[30vw] h-[48vh] py-10 px-10 rounded-md'>
+                {/* username */}
                 <Form.Item
                     label='Tên đăng nhập'
                     name='username'
@@ -27,9 +65,15 @@ const Admin_LoginPage = () => {
                         },
                     ]}
                 >
-                    <Input ref={inputTagRef} />
+                    <Input
+                        ref={inputTagRef}
+                        name='username'
+                        value={username}
+                        onChange={(e) => setUserName(e.target.value)}
+                    />
                 </Form.Item>
 
+                {/* password */}
                 <Form.Item
                     label='Mật khẩu'
                     name='password'
@@ -40,15 +84,26 @@ const Admin_LoginPage = () => {
                         },
                     ]}
                 >
-                    <Input.Password />
+                    <Input.Password name='password' value={password} onChange={(e) => setPassword(e.target.value)} />
                 </Form.Item>
 
+                {/* error */}
+                {isError && (
+                    <div>
+                        <p className='text-red-500 font-bold text-center'>
+                            Tên đăng nhập hoặc mật khẩu không chính xác!
+                        </p>
+                    </div>
+                )}
+
+                {/* button submit */}
                 <Form.Item>
                     <button className='transition duration-300 mt-5 text-xl hover:bg-black hover:text-white border border-black w-full py-2 rounded-md'>
                         Đăng nhập
                     </button>
                 </Form.Item>
 
+                {/* note */}
                 <Form.Item>
                     <p>
                         <span className='font-bold'>Trang chỉ dành cho những thành viên trong Ban quản trị</span>. Vui

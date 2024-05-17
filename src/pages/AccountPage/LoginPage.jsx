@@ -14,7 +14,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const mutation = useMutationHook((data) => UserService.loginUser(data));
-    const { data } = mutation;
+    const { data, isError } = mutation;
 
     useEffect(() => {
         const handleGetUserDetail = async (access_token) => {
@@ -25,7 +25,7 @@ const LoginPage = () => {
         if (data?.code === 200) {
             navigate('/');
             const access_token = data?.data?.token;
-            localStorage.setItem('token', access_token);
+            localStorage.setItem('tokenUSer', access_token);
             if (access_token) {
                 const decode = jwtDecode(access_token);
                 if (decode?.sub) {
@@ -78,13 +78,20 @@ const LoginPage = () => {
                                 message: 'Mật khẩu không được bỏ trống!',
                             },
                         ]}
-                        className='text-red-500 text-start mt-1 mb-10'
+                        className='text-red-500 text-start mt-1'
                     >
                         <Input.Password
                             onChange={(e) => setPassword(e.target.value)}
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
                         />
                     </Form.Item>
+
+                    {/* error */}
+                    {isError && (
+                        <div className='text-red-500 font-bold text-xl text-center mt-1 mb-5'>
+                            <p>Đăng nhập thất bại!</p>
+                        </div>
+                    )}
 
                     {/* button login */}
                     <Form.Item>

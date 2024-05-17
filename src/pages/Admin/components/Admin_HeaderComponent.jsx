@@ -1,6 +1,10 @@
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const Admin_HeaderComponent = () => {
+    const dataAdmin_Redux = useSelector((state) => state.admin);
+    console.log(dataAdmin_Redux);
+
     return (
         <div className='w-full h-14 flex items-center justify-center px-20 py-7'>
             {/* name website */}
@@ -16,7 +20,7 @@ const Admin_HeaderComponent = () => {
             </div>
 
             {/* user */}
-            <div className='w-[20%] flex justify-end'>
+            <Link to='/admin/profile' className='w-[20%] flex justify-end'>
                 <div className='flex items-center text-white transition duration-200 border border-white hover:cursor-pointer hover:bg-white hover:text-black px-5 py-1 rounded-lg'>
                     <img
                         src='https://cdn-icons-png.flaticon.com/512/149/149071.png'
@@ -25,7 +29,7 @@ const Admin_HeaderComponent = () => {
                     />
                     <p className='pl-2'>Admin</p>
                 </div>
-            </div>
+            </Link>
         </div>
     );
 };

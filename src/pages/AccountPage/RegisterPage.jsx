@@ -24,7 +24,7 @@ const RegisterPage = () => {
     const navigate = useNavigate();
 
     const mutation = useMutationHook((data) => UserService.registerUser(data));
-    const { data } = mutation;
+    const { data, isError } = mutation;
 
     const handleSubmitRegister = () => {
         mutation.mutate({ email, phone, username, password });
@@ -81,7 +81,7 @@ const RegisterPage = () => {
                                 validator(_, value) {
                                     return new Promise((resolve, reject) => {
                                         if (isNaN(value)) {
-                                            reject('Số điện thoại phải là một số và không chứa ký tự đặc biệt!');
+                                            reject('Số điện thoại phải là số và không chứa ký tự đặc biệt!');
                                         } else {
                                             resolve();
                                         }
@@ -141,13 +141,20 @@ const RegisterPage = () => {
                                 required: true,
                             },
                         ]}
-                        className='text-red-500 text-start mt-1 mb-5'
+                        className='text-red-500 text-start mt-1'
                     >
                         <Input.Password
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
                         />
                     </Form.Item>
+
+                    {/* error */}
+                    {isError && (
+                        <div className='text-red-500 font-bold text-xl text-center mt-1 mb-5'>
+                            <p>Đăng nhập thất bại!</p>
+                        </div>
+                    )}
 
                     {/* button register */}
                     <Form.Item>

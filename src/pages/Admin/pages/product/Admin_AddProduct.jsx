@@ -1,6 +1,10 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Radio, Upload } from 'antd';
 import { useEffect, useRef, useState } from 'react';
+import * as ProductService from '../../../../services/ProductService';
+import { useMutationHook } from '../../../../hooks/useMutationHook';
+import { Axios } from 'axios';
+
 const { TextArea } = Input;
 
 // normFile: upload image
@@ -31,11 +35,60 @@ const AddProduct = () => {
         color: '',
         state: '',
         description: '',
+        image: [],
     });
+
+    const mutation = useMutationHook(
+        ({
+            productName,
+            price,
+            amount,
+            brand,
+            origin,
+            size,
+            thickness,
+            wireMaterial,
+            shellMaterial,
+            style,
+            feature,
+            shape,
+            weight,
+            genderUser,
+            condition,
+            color,
+            state,
+            description,
+            image,
+        }) => {
+            ProductService.createProduct({
+                productName,
+                price,
+                amount,
+                brand,
+                origin,
+                size,
+                thickness,
+                wireMaterial,
+                shellMaterial,
+                style,
+                feature,
+                shape,
+                weight,
+                genderUser,
+                condition,
+                color,
+                state,
+                description,
+                image,
+            });
+        }
+    );
+    const { data } = mutation;
+    console.log(data);
 
     // add product function
     const handleAddProduct = () => {
-        console.log(stateProduct);
+        mutation.mutate(stateProduct);
     };
 
     // handle input change
@@ -47,6 +100,23 @@ const AddProduct = () => {
     // handle radio change
     const handleRadioChange = (e) => {
         setStateProduct((prev) => ({ ...prev, state: e.target.value }));
+    };
+
+    const handleUpload = async ({ file }) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'product');
+
+        try {
+            const res = await Axios.post('https://api.cloudinary.com/v1_1/your_cloudinary_name/image/upload', formData);
+            const response = res.data;
+            setStateProduct((prev) => ({
+                ...prev,
+                images: [...prev.images, response.secure_url],
+            }));
+        } catch (error) {
+            console.error('Upload failed:', error);
+        }
     };
 
     // autoFocus
@@ -320,7 +390,7 @@ const AddProduct = () => {
                 <div className='flex w-full justify-between items-center'>
                     {/* upload */}
                     <Form.Item label='Upload' valuePropName='fileList' getValueFromEvent={normFile}>
-                        <Upload action='/upload.do' listType='picture-card'>
+                        <Upload action='/upload.do' listType='picture-card' customRequest={handleUpload}>
                             <div>
                                 <PlusOutlined />
                                 <div>Thêm ảnh</div>

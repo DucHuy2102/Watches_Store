@@ -5,63 +5,63 @@ import { AreaChart } from '@tremor/react';
 const chartdata = [
     {
         date: 'Jan 22',
-        SemiAnalysis: 2890,
-        'The Pragmatic Engineer': 2338,
+        'Lượt truy cập': 2890,
+        'Số lượng đơn hàng': 2338,
     },
     {
         date: 'Feb 22',
-        SemiAnalysis: 2756,
-        'The Pragmatic Engineer': 2103,
+        'Lượt truy cập': 2756,
+        'Số lượng đơn hàng': 2103,
     },
     {
         date: 'Mar 22',
-        SemiAnalysis: 3322,
-        'The Pragmatic Engineer': 2194,
+        'Lượt truy cập': 3322,
+        'Số lượng đơn hàng': 2194,
     },
     {
         date: 'Apr 22',
-        SemiAnalysis: 3470,
-        'The Pragmatic Engineer': 2108,
+        'Lượt truy cập': 3470,
+        'Số lượng đơn hàng': 2108,
     },
     {
         date: 'May 22',
-        SemiAnalysis: 3475,
-        'The Pragmatic Engineer': 1812,
+        'Lượt truy cập': 3475,
+        'Số lượng đơn hàng': 1812,
     },
     {
         date: 'Jun 22',
-        SemiAnalysis: 3129,
-        'The Pragmatic Engineer': 1726,
+        'Lượt truy cập': 3129,
+        'Số lượng đơn hàng': 1726,
     },
     {
         date: 'Jul 22',
-        SemiAnalysis: 3490,
-        'The Pragmatic Engineer': 1982,
+        'Lượt truy cập': 3490,
+        'Số lượng đơn hàng': 1982,
     },
     {
         date: 'Aug 22',
-        SemiAnalysis: 2903,
-        'The Pragmatic Engineer': 2012,
+        'Lượt truy cập': 2903,
+        'Số lượng đơn hàng': 2012,
     },
     {
         date: 'Sep 22',
-        SemiAnalysis: 2643,
-        'The Pragmatic Engineer': 2342,
+        'Lượt truy cập': 2643,
+        'Số lượng đơn hàng': 2342,
     },
     {
         date: 'Oct 22',
-        SemiAnalysis: 2837,
-        'The Pragmatic Engineer': 2473,
+        'Lượt truy cập': 2837,
+        'Số lượng đơn hàng': 2473,
     },
     {
         date: 'Nov 22',
-        SemiAnalysis: 2954,
-        'The Pragmatic Engineer': 3848,
+        'Lượt truy cập': 2954,
+        'Số lượng đơn hàng': 3848,
     },
     {
         date: 'Dec 22',
-        SemiAnalysis: 3239,
-        'The Pragmatic Engineer': 3736,
+        'Lượt truy cập': 3239,
+        'Số lượng đơn hàng': 3736,
     },
 ];
 
@@ -74,47 +74,43 @@ const Admin_DashboardPage = () => {
     return (
         <div>
             <h1 className='text-3xl font-PlayfairDisplay font-bold mt-2 text-center'>Trang quản lý hệ thống</h1>
-
             {/* overview */}
             <div className='mt-5 px-16'>
-                <div className='flex items-center justify-between gap-4'>
+                <div className='flex items-center justify-between gap-5'>
                     {/* total user */}
-                    <div className='bg-gray-900 px-10 w-[20vw] rounded-md shadow-tremor-card flex justify-between items-center'>
-                        <FaUser className='text-white text-4xl' />
-                        <div>
-                            <h2 className='text-lg font-PlayfairDisplay font-bold text-gray-200'>Tổng số người dùng</h2>
-                            <p className='text-2xl font-PlayfairDisplay font-bold text-gray-50'>1,234</p>
+                    <div className='bg-gray-900 hover:bg-gray-700 transition duration-300 h-[20vh] px-5 w-[25vw] rounded-md shadow-tremor-card flex justify-between items-center'>
+                        <FaUser className='text-white text-4xl w-[30%] h-[50%]' />
+                        <div className='w-[70%]'>
+                            <h2 className='text-xl font-bold text-gray-200 text-center'>Số người dùng</h2>
+                            <p className='text-2xl font-bold text-gray-50 text-center'>1,234 Người</p>
                         </div>
                     </div>
-
-                    {/* total revenue */}
-                    <div className='bg-gray-900 px-10 w-[20vw] rounded-md shadow-tremor-card flex justify-between items-center'>
-                        <FaUser className='text-white text-4xl' />
-                        <div>
-                            <h2 className='text-lg font-PlayfairDisplay font-bold text-gray-200'>Tổng số người dùng</h2>
-                            <p className='text-2xl font-PlayfairDisplay font-bold text-gray-50'>1,234</p>
+                    {/* total user */}
+                    <div className='bg-gray-900 hover:bg-gray-700 transition duration-300 h-[20vh] px-5 w-[25vw] rounded-md shadow-tremor-card flex justify-between items-center'>
+                        <FaUser className='text-white text-4xl w-[30%] h-[50%]' />
+                        <div className='w-[70%]'>
+                            <h2 className='text-xl font-bold text-gray-200 text-center'>Số lượng đơn hàng</h2>
+                            <p className='text-2xl font-bold text-gray-50 text-center'>123 Đơn/Ngày</p>
                         </div>
                     </div>
-
-                    {/* total comment */}
-                    <div className='bg-gray-900 px-10 w-[20vw] rounded-md shadow-tremor-card flex justify-between items-center'>
-                        <FaUser className='text-white text-4xl' />
-                        <div>
-                            <h2 className='text-lg font-PlayfairDisplay font-bold text-gray-200'>Tổng số người dùng</h2>
-                            <p className='text-2xl font-PlayfairDisplay font-bold text-gray-50'>1,234</p>
+                    {/* total user */}
+                    <div className='bg-gray-900 hover:bg-gray-700 transition duration-300 h-[20vh] px-5 w-[25vw] rounded-md shadow-tremor-card flex justify-between items-center'>
+                        <FaUser className='text-white text-4xl w-[30%] h-[50%]' />
+                        <div className='w-[70%]'>
+                            <h2 className='text-xl font-bold text-gray-200 text-center'>Lượt truy cập</h2>
+                            <p className='text-2xl font-bold text-gray-50 text-center'>12,345 Lượt/Ngày</p>
                         </div>
                     </div>
-
-                    <div className='bg-gray-900 px-10 w-[20vw] rounded-md shadow-tremor-card flex justify-between items-center'>
-                        <FaUser className='text-white text-4xl' />
-                        <div>
-                            <h2 className='text-lg font-PlayfairDisplay font-bold text-gray-200'>Tổng số người dùng</h2>
-                            <p className='text-2xl font-PlayfairDisplay font-bold text-gray-50'>1,234</p>
+                    {/* total user */}
+                    <div className='bg-gray-900 hover:bg-gray-700 transition duration-300 h-[20vh] px-5 w-[25vw] rounded-md shadow-tremor-card flex justify-between items-center'>
+                        <FaUser className='text-white text-4xl w-[30%] h-[50%]' />
+                        <div className='w-[70%]'>
+                            <h2 className='text-xl font-bold text-gray-200 text-center'>Doanh thu quý 1</h2>
+                            <p className='text-2xl font-bold text-gray-50 text-center'>12,345,678 Triệu</p>
                         </div>
                     </div>
                 </div>
             </div>
-
             {/* chart */}
             <div className='mt-2'>
                 <AreaChart
@@ -122,7 +118,7 @@ const Admin_DashboardPage = () => {
                     data={chartdata}
                     index='date'
                     yAxisWidth={65}
-                    categories={['SemiAnalysis', 'The Pragmatic Engineer']}
+                    categories={['Lượt truy cập', 'Số lượng đơn hàng']}
                     colors={['indigo', 'cyan']}
                     valueFormatter={valueFormatter}
                 />

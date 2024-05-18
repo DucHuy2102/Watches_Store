@@ -1,3 +1,4 @@
+import { FaUser } from 'react-icons/fa';
 import { AreaChart } from '@tremor/react';
 
 // data for the chart
@@ -75,19 +76,41 @@ const Admin_DashboardPage = () => {
             <h1 className='text-3xl font-PlayfairDisplay font-bold mt-2 text-center'>Trang quản lý hệ thống</h1>
 
             {/* overview */}
-            <div>
-                <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4'>
-                    <div className='bg-gray-900 p-4 rounded-md shadow-tremor-card'>
-                        <h2 className='text-lg font-PlayfairDisplay font-bold text-gray-200'>Tổng số người dùng</h2>
-                        <p className='text-2xl font-PlayfairDisplay font-bold text-gray-50'>1,234</p>
+            <div className='mt-5 px-16'>
+                <div className='flex items-center justify-between gap-4'>
+                    {/* total user */}
+                    <div className='bg-gray-900 px-10 w-[20vw] rounded-md shadow-tremor-card flex justify-between items-center'>
+                        <FaUser className='text-white text-4xl' />
+                        <div>
+                            <h2 className='text-lg font-PlayfairDisplay font-bold text-gray-200'>Tổng số người dùng</h2>
+                            <p className='text-2xl font-PlayfairDisplay font-bold text-gray-50'>1,234</p>
+                        </div>
                     </div>
-                    <div className='bg-gray-900 p-4 rounded-md shadow-tremor-card'>
-                        <h2 className='text-lg font-PlayfairDisplay font-bold text-gray-200'>Tổng số bài viết</h2>
-                        <p className='text-2xl font-PlayfairDisplay font-bold text-gray-50'>5,678</p>
+
+                    {/* total revenue */}
+                    <div className='bg-gray-900 px-10 w-[20vw] rounded-md shadow-tremor-card flex justify-between items-center'>
+                        <FaUser className='text-white text-4xl' />
+                        <div>
+                            <h2 className='text-lg font-PlayfairDisplay font-bold text-gray-200'>Tổng số người dùng</h2>
+                            <p className='text-2xl font-PlayfairDisplay font-bold text-gray-50'>1,234</p>
+                        </div>
                     </div>
-                    <div className='bg-gray-900 p-4 rounded-md shadow-tremor-card'>
-                        <h2 className='text-lg font-PlayfairDisplay font-bold text-gray-200'>Tổng số bình luận</h2>
-                        <p className='text-2xl font-PlayfairDisplay font-bold text-gray-50'>9,012</p>
+
+                    {/* total comment */}
+                    <div className='bg-gray-900 px-10 w-[20vw] rounded-md shadow-tremor-card flex justify-between items-center'>
+                        <FaUser className='text-white text-4xl' />
+                        <div>
+                            <h2 className='text-lg font-PlayfairDisplay font-bold text-gray-200'>Tổng số người dùng</h2>
+                            <p className='text-2xl font-PlayfairDisplay font-bold text-gray-50'>1,234</p>
+                        </div>
+                    </div>
+
+                    <div className='bg-gray-900 px-10 w-[20vw] rounded-md shadow-tremor-card flex justify-between items-center'>
+                        <FaUser className='text-white text-4xl' />
+                        <div>
+                            <h2 className='text-lg font-PlayfairDisplay font-bold text-gray-200'>Tổng số người dùng</h2>
+                            <p className='text-2xl font-PlayfairDisplay font-bold text-gray-50'>1,234</p>
+                        </div>
                     </div>
                 </div>
             </div>

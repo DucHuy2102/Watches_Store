@@ -26,7 +26,7 @@ const Admin_UserPage = () => {
             <div className='mt-3 px-14 flex justify-between items-center'>
                 <h1 className='font-bold text-2xl mt-2 text-center'>Danh sách người dùng</h1>
                 <button
-                    onClick={handleNavigation('/admin/products/add')}
+                    onClick={handleNavigation('/admin/product/add')}
                     className='border border-black text-lg rounded-lg hover:bg-blue-500 hover:border-blue-500 hover:text-white transition duration-200 px-2 py-3'
                 >
                     Thêm người dùng mới

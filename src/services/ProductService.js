@@ -13,7 +13,12 @@ export const getProductById = async (id) => {
 };
 
 // Create product
-export const createProduct = async (product) => {
-    const res = await axios.post(`${import.meta.env.VITE_API_URL}/product/create`, product);
+export const createProduct = async (token, data) => {
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/product/create`, data, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
     return res.data;
 };

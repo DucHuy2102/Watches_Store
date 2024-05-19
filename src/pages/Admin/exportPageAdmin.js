@@ -5,6 +5,7 @@ export { default as AdminLayout } from './components/AdminLayout';
 // pages
 export { default as Admin_DashboardPage } from './pages/Admin_DashboardPage';
 export { default as Admin_LoginPage } from './pages/Admin_LoginPage';
+export { default as Admin_NotFoundPage } from './pages/Admin_NotFoundPage';
 
 // product
 export { default as Admin_AddProduct } from './pages/product/Admin_AddProduct';

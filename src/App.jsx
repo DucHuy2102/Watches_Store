@@ -11,6 +11,7 @@ import {
     Admin_DashboardPage,
     Admin_EditProduct,
     Admin_ListProduct,
+    Admin_NotFoundPage,
     Admin_ProfilePage,
     Admin_UserPage,
 } from './pages/Admin/exportPageAdmin';
@@ -21,38 +22,43 @@ const routeAdmin = [
         component: Admin_DashboardPage,
     },
     {
-        path: '/bills',
+        path: '/bill',
         component: Admin_BillPage,
     },
     {
-        path: '/users',
+        path: '/user',
         component: Admin_UserPage,
     },
     {
-        path: '/products',
+        path: '/product',
         component: Admin_ListProduct,
     },
     {
-        path: '/products/add',
+        path: '/product/add',
         component: Admin_AddProduct,
     },
     {
-        path: '/products/edit',
+        path: '/product/edit/:id',
         component: Admin_EditProduct,
     },
     {
-        path: '/categories',
+        path: '/category',
         component: Admin_CategoryPage,
     },
     {
         path: '/profile',
         component: Admin_ProfilePage,
     },
+    {
+        path: '*',
+        component: Admin_NotFoundPage,
+    },
 ];
 
 const AdminRoute = ({ element }) => {
     const user = useSelector((state) => state.user);
-    const isUserAdmin = true; // const isUserAdmin = user.isAdmin;
+    // const isUserAdmin = user.admin;
+    const isUserAdmin = true;
     return isUserAdmin ? element : <Navigate to='/login' />;
 };
 

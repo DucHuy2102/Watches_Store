@@ -10,7 +10,7 @@ const ProductPage = () => {
     };
 
     const { data } = useQuery({ queryKey: ['products'], queryFn: getAllProduct });
-    console.log('List_Products:', data);
+    // console.log('List_Products:', data);
 
     return (
         <div className='w-full mb-2 flex flex-col items-center justify-center'>

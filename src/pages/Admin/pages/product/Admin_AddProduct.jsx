@@ -1,9 +1,10 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Radio, Upload } from 'antd';
+import { Button, Form, Input, Radio, Upload, Image, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import * as ProductService from '../../../../services/ProductService';
 import { useMutationHook } from '../../../../hooks/useMutationHook';
-import { Axios } from 'axios';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const { TextArea } = Input;
 
@@ -15,111 +16,127 @@ const normFile = (e) => {
     return e?.fileList;
 };
 
+// getBase64: get base64 image
+const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
+
+// uploadImages: upload image to cloudinary
+const uploadImages = async (fileList) => {
+    const uploadedImages = await Promise.all(
+        fileList.map(async (file) => {
+            if (file.originFileObj) {
+                const formData = new FormData();
+                formData.append('file', file.originFileObj);
+                formData.append('upload_preset', 'product');
+                try {
+                    const res = await axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData);
+                    const response = res.data;
+                    return response.secure_url;
+                } catch (error) {
+                    console.error('Upload failed:', error);
+                    message.error('Không thể thêm hình ảnh này vì kích thước quá lớn! Hãy chọn ảnh khác');
+                    return null;
+                }
+            } else {
+                return file.url;
+            }
+        })
+    );
+    return uploadedImages.filter((url) => url !== null);
+};
+
 const AddProduct = () => {
+    const navigate = useNavigate();
     const [stateProduct, setStateProduct] = useState({
         productName: '',
-        price: 0,
+        img: [],
         amount: 0,
+        price: 0,
         brand: '',
         origin: '',
-        size: '',
         thickness: '',
+        size: '',
         wireMaterial: '',
         shellMaterial: '',
         style: '',
         feature: '',
         shape: '',
-        weight: '',
-        genderUser: '',
         condition: '',
-        color: '',
-        state: '',
+        height: '',
+        genderUser: '',
         description: '',
-        image: [],
+        color: '',
+        category: null,
+        state: '',
     });
 
-    const mutation = useMutationHook(
-        ({
-            productName,
-            price,
-            amount,
-            brand,
-            origin,
-            size,
-            thickness,
-            wireMaterial,
-            shellMaterial,
-            style,
-            feature,
-            shape,
-            weight,
-            genderUser,
-            condition,
-            color,
-            state,
-            description,
-            image,
-        }) => {
-            ProductService.createProduct({
-                productName,
-                price,
-                amount,
-                brand,
-                origin,
-                size,
-                thickness,
-                wireMaterial,
-                shellMaterial,
-                style,
-                feature,
-                shape,
-                weight,
-                genderUser,
-                condition,
-                color,
-                state,
-                description,
-                image,
-            });
-        }
-    );
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [fileList, setFileList] = useState([]);
+
+    // get adminToken from localStorage
+    const adminToken = localStorage.getItem('adminToken');
+
+    const mutation = useMutationHook(({ adminToken, product }) => {
+        return ProductService.createProduct(adminToken, product);
+    });
     const { data } = mutation;
-    console.log(data);
+    if (data?.code === 200) {
+        navigate('/admin/product');
+    }
 
     // add product function
-    const handleAddProduct = () => {
-        mutation.mutate(stateProduct);
+    const handleAddProduct = async () => {
+        const uploadedImages = await uploadImages(fileList);
+        const amountNumber = parseInt(stateProduct.amount);
+        const priceNumber = parseInt(stateProduct.price);
+        const productData = {
+            ...stateProduct,
+            amount: amountNumber,
+            price: priceNumber,
+            img: uploadedImages,
+        };
+        console.log('addProductData:', productData);
+        mutation.mutate({ adminToken, product: productData });
     };
 
-    // handle input change
+    // Handle input change
     const handleOnChange = (e) => {
         const { name, value } = e.target;
         setStateProduct((prev) => ({ ...prev, [name]: value }));
     };
 
-    // handle radio change
+    // Handle radio change
     const handleRadioChange = (e) => {
         setStateProduct((prev) => ({ ...prev, state: e.target.value }));
     };
 
-    const handleUpload = async ({ file }) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'product');
+    // Handle change image
+    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
 
-        try {
-            const res = await Axios.post('https://api.cloudinary.com/v1_1/your_cloudinary_name/image/upload', formData);
-            const response = res.data;
-            setStateProduct((prev) => ({
-                ...prev,
-                images: [...prev.images, response.secure_url],
-            }));
-        } catch (error) {
-            console.error('Upload failed:', error);
+    // Handle preview image
+    const handlePreview = async (file) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
         }
+        setPreviewImage(file.url || file.preview);
+        setPreviewOpen(true);
     };
 
-    // autoFocus
+    // Upload button
+    const uploadButton = (
+        <div>
+            <PlusOutlined />
+            <div>Thêm ảnh</div>
+        </div>
+    );
+
+    // autoFocus: Focus on the first input tag when the page is loaded
     const inputTagRef = useRef(null);
     useEffect(() => {
         if (inputTagRef.current) {
@@ -132,7 +149,6 @@ const AddProduct = () => {
             <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>Thêm thông tin đồng hồ</h1>
             <Form onFinish={handleAddProduct} className='px-14'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                    {/* name */}
                     <Form.Item
                         label='Tên đồng hồ'
                         name='productName'
@@ -148,9 +164,7 @@ const AddProduct = () => {
                         />
                     </Form.Item>
 
-                    {/* price & amount */}
                     <div className='flex items-center justify-between gap-5'>
-                        {/* price */}
                         <Form.Item
                             label='Giá đồng hồ (VNĐ)'
                             name='price'
@@ -173,7 +187,6 @@ const AddProduct = () => {
                             <Input name='price' value={stateProduct.price} onChange={handleOnChange} />
                         </Form.Item>
 
-                        {/* amount */}
                         <Form.Item
                             label='Số lượng'
                             name='amount'
@@ -197,7 +210,6 @@ const AddProduct = () => {
                         </Form.Item>
                     </div>
 
-                    {/* brand */}
                     <Form.Item
                         label='Hãng đồng hồ'
                         name='brand'
@@ -207,7 +219,6 @@ const AddProduct = () => {
                         <Input name='brand' value={stateProduct.brand} onChange={handleOnChange} className='w-full' />
                     </Form.Item>
 
-                    {/* origin */}
                     <Form.Item
                         label='Xuất xứ đồng hồ'
                         name='origin'
@@ -217,7 +228,6 @@ const AddProduct = () => {
                         <Input name='origin' value={stateProduct.origin} onChange={handleOnChange} className='w-full' />
                     </Form.Item>
 
-                    {/* size */}
                     <Form.Item
                         label='Kích thước đồng hồ'
                         name='size'
@@ -227,7 +237,6 @@ const AddProduct = () => {
                         <Input name='size' value={stateProduct.size} onChange={handleOnChange} className='w-full' />
                     </Form.Item>
 
-                    {/* thickness */}
                     <Form.Item
                         label='Độ dày đồng hồ'
                         name='thickness'
@@ -242,7 +251,20 @@ const AddProduct = () => {
                         />
                     </Form.Item>
 
-                    {/* wireMaterial */}
+                    <Form.Item
+                        label='Chiều cao đồng hồ'
+                        name='height'
+                        rules={[{ required: true, message: 'Chiều cao đồng hồ không được bỏ trống!' }]}
+                        className='col-span-2 md:col-span-1'
+                    >
+                        <Input
+                            name='height'
+                            value={stateProduct.thickness}
+                            onChange={handleOnChange}
+                            className='w-full'
+                        />
+                    </Form.Item>
+
                     <Form.Item
                         label='Chất liệu dây đồng hồ'
                         name='wireMaterial'
@@ -257,7 +279,6 @@ const AddProduct = () => {
                         />
                     </Form.Item>
 
-                    {/* shellMaterial */}
                     <Form.Item
                         label='Chất liệu vỏ đồng hồ'
                         name='shellMaterial'
@@ -272,7 +293,6 @@ const AddProduct = () => {
                         />
                     </Form.Item>
 
-                    {/* style */}
                     <Form.Item
                         label='Phong cách đồng hồ'
                         name='style'
@@ -282,7 +302,6 @@ const AddProduct = () => {
                         <Input name='style' value={stateProduct.style} onChange={handleOnChange} className='w-full' />
                     </Form.Item>
 
-                    {/* feature */}
                     <Form.Item
                         label='Tính năng đồng hồ'
                         name='feature'
@@ -297,31 +316,28 @@ const AddProduct = () => {
                         />
                     </Form.Item>
 
-                    {/* shape */}
                     <Form.Item
-                        label='Hình dáng mặt đồng hồ'
+                        label='Hình dáng đồng hồ'
                         name='shape'
-                        rules={[{ required: true, message: 'Hình dáng mặt đồng hồ không được bỏ trống!' }]}
+                        rules={[{ required: true, message: 'Hình dáng đồng hồ không được bỏ trống!' }]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input name='shape' value={stateProduct.shape} onChange={handleOnChange} className='w-full' />
                     </Form.Item>
 
-                    {/* weight */}
                     <Form.Item
-                        label='Khối lượng đồng hồ'
+                        label='Trọng lượng đồng hồ'
                         name='weight'
-                        rules={[{ required: true, message: 'Khối lượng đồng hồ không được bỏ trống!' }]}
+                        rules={[{ required: true, message: 'Trọng lượng đồng hồ không được bỏ trống!' }]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input name='weight' value={stateProduct.weight} onChange={handleOnChange} className='w-full' />
                     </Form.Item>
 
-                    {/* genderUser */}
                     <Form.Item
-                        label='Đối tượng sử dụng đồng hồ'
+                        label='Đối tượng sử dụng'
                         name='genderUser'
-                        rules={[{ required: true, message: 'Đối tượng sử dụng đồng hồ không được bỏ trống!' }]}
+                        rules={[{ required: true, message: 'Đối tượng sử dụng không được bỏ trống!' }]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input
@@ -332,11 +348,10 @@ const AddProduct = () => {
                         />
                     </Form.Item>
 
-                    {/* condition */}
                     <Form.Item
-                        label='Tình trạng đồng hồ'
+                        label='Tình trạng'
                         name='condition'
-                        rules={[{ required: true, message: 'Tình trạng đồng hồ không được bỏ trống!' }]}
+                        rules={[{ required: true, message: 'Tình trạng không được bỏ trống!' }]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input
@@ -347,62 +362,74 @@ const AddProduct = () => {
                         />
                     </Form.Item>
 
-                    {/* color */}
                     <Form.Item
-                        label='Màu sắc đồng hồ'
+                        label='Màu sắc'
                         name='color'
-                        rules={[{ required: true, message: 'Màu sắc đồng hồ không được bỏ trống!' }]}
+                        rules={[{ required: true, message: 'Màu sắc không được bỏ trống!' }]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input name='color' value={stateProduct.color} onChange={handleOnChange} className='w-full' />
                     </Form.Item>
 
-                    {/* state */}
                     <Form.Item
-                        label='Trạng thái đồng hồ'
+                        label='Trạng thái'
                         name='state'
-                        rules={[{ required: true, message: 'Trạng thái đồng hồ không được bỏ trống!' }]}
+                        rules={[{ required: true, message: 'Trạng thái không được bỏ trống!' }]}
                         className='col-span-2 md:col-span-1'
                     >
-                        <Radio.Group value={stateProduct.state} onChange={handleRadioChange} className='w-full'>
-                            <Radio value='new'> Hàng mới về </Radio>
-                            <Radio value='old'> Hàng xả kho </Radio>
+                        <Radio.Group onChange={handleRadioChange} value={stateProduct.state}>
+                            <Radio value='Mới'>Mới</Radio>
+                            <Radio value='Đã sử dụng'>Đã sử dụng</Radio>
                         </Radio.Group>
                     </Form.Item>
-                </div>
 
-                {/* description */}
-                <Form.Item
-                    label='Miêu tả đồng hồ'
-                    name='description'
-                    rules={[{ required: true, message: 'Miêu tả đồng hồ không được bỏ trống!' }]}
-                >
-                    <TextArea
+                    <Form.Item
+                        label='Mô tả'
                         name='description'
-                        value={stateProduct.description}
-                        onChange={handleOnChange}
-                        rows={5}
-                        className='w-full'
-                    />
-                </Form.Item>
-
-                {/* upload & button: addProduct*/}
-                <div className='flex w-full justify-between items-center'>
-                    {/* upload */}
-                    <Form.Item label='Upload' valuePropName='fileList' getValueFromEvent={normFile}>
-                        <Upload action='/upload.do' listType='picture-card' customRequest={handleUpload}>
-                            <div>
-                                <PlusOutlined />
-                                <div>Thêm ảnh</div>
-                            </div>
+                        rules={[{ required: true, message: 'Mô tả không được bỏ trống!' }]}
+                        className='col-span-2 md:col-span-1'
+                    >
+                        <TextArea
+                            rows={4}
+                            name='description'
+                            value={stateProduct.description}
+                            onChange={handleOnChange}
+                        />
+                    </Form.Item>
+                </div>
+                <div className='flex items-center justify-between'>
+                    <Form.Item
+                        label='Ảnh sản phẩm'
+                        name='img'
+                        valuePropName='fileList'
+                        getValueFromEvent={normFile}
+                        className='col-span-2'
+                    >
+                        <Upload
+                            listType='picture-card'
+                            fileList={fileList}
+                            onPreview={handlePreview}
+                            onChange={handleChange}
+                        >
+                            {fileList.length >= 5 ? null : uploadButton}
                         </Upload>
                     </Form.Item>
+                    {previewImage && (
+                        <Image
+                            wrapperStyle={{ display: 'none' }}
+                            preview={{
+                                visible: previewOpen,
+                                onVisibleChange: (visible) => setPreviewOpen(visible),
+                                afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                            }}
+                            src={previewImage}
+                        />
+                    )}
 
-                    {/* button: addProduct */}
                     <Button
                         type='primary'
                         htmlType='submit'
-                        className='bg-gray-300 text-black hover:bg-blue-500 transition duration-300 hover:cursor-pointer rounded-md w-28 h-[100px] mb-6 flex flex-col justify-center items-center'
+                        className='bg-gray-300 mt-1 text-black hover:bg-blue-500 transition duration-300 hover:cursor-pointer rounded-md w-28 h-[102px] mb-6 flex flex-col justify-center items-center'
                     >
                         <PlusOutlined />
                         <div className='pt-1'>Thêm sản phẩm</div>

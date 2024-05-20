@@ -1,17 +1,12 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import { useQuery } from '@tanstack/react-query';
-import * as ProductService from '../../../services/ProductService';
+import { useSelector } from 'react-redux';
 
 const ProductDetail = () => {
-    // get all products
-    const getProduct = async () => {
-        const res = await ProductService.getProductById('6626517e99c1759ec99f5c3b');
-        return res;
-    };
-    const { data } = useQuery({ queryKey: ['product_detail'], queryFn: getProduct, keepPreviousData: true });
-    console.log('ProductByID:', data);
+    const idProduct_Redux = useSelector((state) => state.product);
+
+    // destructuring idProduct_Redux
     const {
         brand,
         color,
@@ -31,68 +26,70 @@ const ProductDetail = () => {
         style,
         thickness,
         wireMaterial,
-    } = data.data;
+        weight,
+    } = idProduct_Redux;
 
+    // specifications of product
     const specifications = [
         {
             id: 1,
             title: 'Thương Hiệu',
-            value: 'Casio',
+            value: brand,
         },
         {
             id: 2,
             title: 'Xuất xứ',
-            value: 'Đồng hồ Nhật Bản',
+            value: origin,
         },
         {
             id: 3,
             title: 'Độ dầy',
-            value: '8.5mm',
+            value: thickness,
         },
         {
             id: 4,
             title: 'Size mặt',
-            value: '38.2 x 33.2 mm',
+            value: size,
         },
         {
             id: 5,
             title: 'Chất liệu dây',
-            value: 'Dây Nhựa',
+            value: wireMaterial,
         },
         {
             id: 6,
             title: 'Chất liệu vỏ',
-            value: 'Vỏ nhựa',
+            value: shellMaterial,
         },
         {
             id: 7,
             title: 'Phong cách',
-            value: 'Trẻ trung, cá tính, Thể thao',
+            value: style,
         },
         {
             id: 8,
             title: 'Tính năng',
-            value: 'Lịch ngày, Lịch thứ, Đồng hồ bấm giờ, Báo thức',
+            value: feature,
         },
         {
             id: 9,
             title: 'Hình dạng',
-            value: 'Mặt vuông',
+            value: shape,
         },
         {
             id: 10,
             title: 'Tình trạng',
-            value: 'Hàng mới về',
+            value: condition,
         },
         {
             id: 11,
             title: 'Trọng lượng',
-            value: '21g',
+            value: weight,
         },
         {
             id: 12,
             title: 'Đối tượng sử dụng',
-            value: 'Unisex',
+            value: genderUser,
         },
     ];
 
@@ -206,6 +203,7 @@ const ProductDetail = () => {
                             <p className='text-lg text-blue-500 font-bold ml-2'>{condition}</p>
                         </div>
 
+                        {/* 5 reasons */}
                         <div className='bg-yellow-100 rounded-lg mt-2'>
                             <p className='font-bold text-md pl-1'>Lý Do Thuyết Phục Khi Mua Tại Watches.vn</p>
                             <div className='flex flex-col items-start justify-center pl-5 gap-1'>
@@ -240,7 +238,7 @@ const ProductDetail = () => {
                             </button>
                             <button
                                 type='button'
-                                className='min-w-[200px] px-3 py-2.5 border border-black bg-transparent hover:bg-black hover:border-none hover:text-white text-black text-lg font-bold rounded'
+                                className='min-w-[200px] px-3 py-2.5 border border-black bg-transparent hover:bg-gray-500 hover:border-gray-500 hover:text-white text-black text-lg font-bold rounded'
                             >
                                 Thêm vào giỏ hàng
                             </button>

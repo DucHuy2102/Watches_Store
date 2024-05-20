@@ -350,20 +350,6 @@ const AddProduct = () => {
                         />
                     </Form.Item>
 
-                    {/* <Form.Item
-                        label='Tình trạng'
-                        name='condition'
-                        rules={[{ required: true, message: 'Tình trạng không được bỏ trống!' }]}
-                        className='col-span-2 md:col-span-1'
-                    >
-                        <Input
-                            name='condition'
-                            value={stateProduct.condition}
-                            onChange={handleOnChange}
-                            className='w-full'
-                        />
-                    </Form.Item> */}
-
                     <Form.Item
                         label='Màu sắc'
                         name='color'
@@ -408,20 +394,20 @@ const AddProduct = () => {
                             onPreview={handlePreview}
                             onChange={handleChange}
                         >
-                            {fileList.length >= 5 ? null : uploadButton}
+                            {fileList.length >= 10 ? null : uploadButton}
                         </Upload>
+                        {previewImage && (
+                            <Image
+                                wrapperStyle={{ display: 'none' }}
+                                preview={{
+                                    visible: previewOpen,
+                                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                }}
+                                src={previewImage}
+                            />
+                        )}
                     </Form.Item>
-                    {previewImage && (
-                        <Image
-                            wrapperStyle={{ display: 'none' }}
-                            preview={{
-                                visible: previewOpen,
-                                onVisibleChange: (visible) => setPreviewOpen(visible),
-                                afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                            }}
-                            src={previewImage}
-                        />
-                    )}
 
                     <Button
                         type='primary'

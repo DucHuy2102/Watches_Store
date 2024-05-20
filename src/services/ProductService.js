@@ -43,5 +43,6 @@ export const editProduct = async (token, data) => {
             'Content-Type': 'application/json',
         },
     });
+    console.log(res.data);
     return res.data;
 };

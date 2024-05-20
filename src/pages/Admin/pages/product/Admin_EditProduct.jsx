@@ -52,26 +52,23 @@ const uploadImages = async (fileList) => {
 };
 
 const Admin_EditProduct = () => {
-    const product_Redux = useSelector((state) => state.product);
-    console.log('product_Redux:', product_Redux.img);
     const navigate = useNavigate();
+    const product_Redux = useSelector((state) => state.product);
     const [stateProduct, setStateProduct] = useState(product_Redux);
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [fileList, setFileList] = useState([]);
 
     useEffect(() => {
         setStateProduct(product_Redux);
-    }, [product_Redux]);
-
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [fileList, setFileList] = useState(
-        stateProduct.img.map((url) => ({
-            uid: `${url}uid`,
-            name: `${url}name`,
+        const initialFileList = product_Redux.img.map((url, index) => ({
+            uid: index.toString(),
+            name: `image-${index}`,
             status: 'done',
             url: url,
-        }))
-    );
-    console.log('fileList:', fileList);
+        }));
+        setFileList(initialFileList);
+    }, [product_Redux]);
 
     // get adminToken from localStorage
     const adminToken = localStorage.getItem('adminToken');
@@ -344,20 +341,6 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
-                    {/* <Form.Item
-                        label='Tình trạng'
-                        name='condition'
-                        rules={[{ required: true, message: 'Tình trạng không được bỏ trống!' }]}
-                        className='col-span-2 md:col-span-1'
-                    >
-                        <Input
-                            name='condition'
-                            value={stateProduct.condition}
-                            onChange={handleOnChange}
-                            className='w-full'
-                        />
-                    </Form.Item> */}
-
                     <Form.Item
                         label='Màu sắc'
                         name='color'
@@ -402,20 +385,20 @@ const Admin_EditProduct = () => {
                             onPreview={handlePreview}
                             onChange={handleChange}
                         >
-                            {fileList.length >= 5 ? null : uploadButton}
+                            {fileList.length >= 10 ? null : uploadButton}
                         </Upload>
+                        {previewImage && (
+                            <Image
+                                wrapperStyle={{ display: 'none' }}
+                                preview={{
+                                    visible: previewOpen,
+                                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                }}
+                                src={previewImage}
+                            />
+                        )}
                     </Form.Item>
-                    {previewImage && (
-                        <Image
-                            wrapperStyle={{ display: 'none' }}
-                            preview={{
-                                visible: previewOpen,
-                                onVisibleChange: (visible) => setPreviewOpen(visible),
-                                afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                            }}
-                            src={previewImage}
-                        />
-                    )}
 
                     <Button
                         type='primary'
@@ -423,7 +406,7 @@ const Admin_EditProduct = () => {
                         className='bg-gray-300 mt-1 text-black hover:bg-blue-500 transition duration-300 hover:cursor-pointer rounded-md w-28 h-[102px] mb-6 flex flex-col justify-center items-center'
                     >
                         <PlusOutlined />
-                        <div className='pt-1'>Thêm sản phẩm</div>
+                        <div className='pt-1'>Lưu thông tin</div>
                     </Button>
                 </div>
             </Form>

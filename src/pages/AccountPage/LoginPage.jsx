@@ -5,7 +5,7 @@ import { useMutationHook } from '../../hooks/useMutationHook';
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../../redux/slides/userSlide';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 
 const LoginPage = () => {
     const [username, setUserName] = useState('');
@@ -36,7 +36,14 @@ const LoginPage = () => {
     }, [data, navigate, dispatch]);
 
     const handleSubmitLogin = () => {
-        mutation.mutate({ username, password });
+        mutation.mutate(
+            { username, password },
+            {
+                onSuccess: () => {
+                    message.success('Đăng nhập thành công! Chuyển hướng về trang chủ');
+                },
+            }
+        );
     };
 
     return (

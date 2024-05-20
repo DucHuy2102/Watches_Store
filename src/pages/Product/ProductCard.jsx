@@ -1,14 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { useDispatch } from 'react-redux';
+import { updateProduct } from '../../redux/slides/productSlide';
 
 const styleImage = 'h-full w-full object-cover';
 
 const ProductCard = (props) => {
     const { id, genderUser, img, price, productName, size } = props.product;
-
+    const dispath = useDispatch();
     const navigate = useNavigate();
     const go_ProductDetail_Page = (id) => {
+        dispath(updateProduct({ ...props.product, id }));
         navigate(`/product_detail/${id}`);
     };
 

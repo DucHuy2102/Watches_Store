@@ -52,47 +52,32 @@ const uploadImages = async (fileList) => {
 };
 
 const Admin_EditProduct = () => {
-    const dataProduct_Redux = useSelector((state) => state.product);
-    console.log(dataProduct_Redux);
-
+    const product_Redux = useSelector((state) => state.product);
+    console.log('product_Redux:', product_Redux.img);
     const navigate = useNavigate();
-    const [stateProduct, setStateProduct] = useState({
-        productName: '',
-        img: [],
-        amount: 0,
-        price: 0,
-        brand: '',
-        origin: '',
-        thickness: '',
-        size: '',
-        wireMaterial: '',
-        shellMaterial: '',
-        style: '',
-        feature: '',
-        shape: '',
-        condition: '',
-        height: '',
-        genderUser: '',
-        description: '',
-        color: '',
-        category: null,
-        state: '',
-    });
+    const [stateProduct, setStateProduct] = useState(product_Redux);
+
+    useEffect(() => {
+        setStateProduct(product_Redux);
+    }, [product_Redux]);
 
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
-    const [fileList, setFileList] = useState([]);
+    const [fileList, setFileList] = useState(
+        stateProduct.img.map((url) => ({
+            uid: `${url}uid`,
+            name: `${url}name`,
+            status: 'done',
+            url: url,
+        }))
+    );
+    console.log('fileList:', fileList);
 
     // get adminToken from localStorage
     const adminToken = localStorage.getItem('adminToken');
-
     const mutation = useMutationHook(({ adminToken, product }) => {
-        return ProductService.createProduct(adminToken, product);
+        return ProductService.editProduct(adminToken, product);
     });
-    const { data } = mutation;
-    if (data?.code === 200) {
-        navigate('/admin/product');
-    }
 
     // add product function
     const handleAddProduct = async () => {
@@ -105,8 +90,15 @@ const Admin_EditProduct = () => {
             price: priceNumber,
             img: uploadedImages,
         };
-        console.log('addProductData:', productData);
-        mutation.mutate({ adminToken, product: productData });
+        mutation.mutate(
+            { adminToken, product: productData },
+            {
+                onSuccess: () => {
+                    message.success('Cập nhật sản phẩm thành công');
+                    navigate('/admin/product');
+                },
+            }
+        );
     };
 
     // Handle input change
@@ -150,8 +142,8 @@ const Admin_EditProduct = () => {
 
     return (
         <>
-            <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>Thêm thông tin đồng hồ</h1>
-            <Form onFinish={handleAddProduct} className='px-14'>
+            <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>Sửa thông tin đồng hồ</h1>
+            <Form initialValues={stateProduct} onFinish={handleAddProduct} className='px-14'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                     <Form.Item
                         label='Tên đồng hồ'
@@ -352,7 +344,7 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
-                    <Form.Item
+                    {/* <Form.Item
                         label='Tình trạng'
                         name='condition'
                         rules={[{ required: true, message: 'Tình trạng không được bỏ trống!' }]}
@@ -364,7 +356,7 @@ const Admin_EditProduct = () => {
                             onChange={handleOnChange}
                             className='w-full'
                         />
-                    </Form.Item>
+                    </Form.Item> */}
 
                     <Form.Item
                         label='Màu sắc'
@@ -377,30 +369,24 @@ const Admin_EditProduct = () => {
 
                     <Form.Item
                         label='Trạng thái'
-                        name='state'
+                        name='condition'
                         rules={[{ required: true, message: 'Trạng thái không được bỏ trống!' }]}
                         className='col-span-2 md:col-span-1'
                     >
-                        <Radio.Group onChange={handleRadioChange} value={stateProduct.state}>
+                        <Radio.Group className='ml-14' onChange={handleRadioChange} value={stateProduct.condition}>
                             <Radio value='Mới'>Mới</Radio>
                             <Radio value='Đã sử dụng'>Đã sử dụng</Radio>
                         </Radio.Group>
                     </Form.Item>
-
-                    <Form.Item
-                        label='Mô tả'
-                        name='description'
-                        rules={[{ required: true, message: 'Mô tả không được bỏ trống!' }]}
-                        className='col-span-2 md:col-span-1'
-                    >
-                        <TextArea
-                            rows={4}
-                            name='description'
-                            value={stateProduct.description}
-                            onChange={handleOnChange}
-                        />
-                    </Form.Item>
                 </div>
+                <Form.Item
+                    label='Mô tả'
+                    name='description'
+                    rules={[{ required: true, message: 'Mô tả không được bỏ trống!' }]}
+                    className='col-span-2 md:col-span-1'
+                >
+                    <TextArea rows={4} name='description' value={stateProduct.description} onChange={handleOnChange} />
+                </Form.Item>
                 <div className='flex items-center justify-between'>
                     <Form.Item
                         label='Ảnh sản phẩm'
@@ -410,6 +396,7 @@ const Admin_EditProduct = () => {
                         className='col-span-2'
                     >
                         <Upload
+                            beforeUpload={() => false}
                             listType='picture-card'
                             fileList={fileList}
                             onPreview={handlePreview}

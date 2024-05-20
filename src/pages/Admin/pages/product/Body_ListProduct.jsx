@@ -1,12 +1,38 @@
 import { useNavigate } from 'react-router-dom';
+import { useMutationHook } from '../../../../hooks/useMutationHook';
+import * as ProductService from '../../../../services/ProductService';
+import { useDispatch } from 'react-redux';
+import { updateProduct } from '../../../../redux/slides/productSlide';
+import { message } from 'antd';
 
 const Body_ListProduct = (props) => {
+    const { id, productName, price, img, amount, state } = props.product;
+    const priceFormat = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
     const navigate = useNavigate();
-    const handleNavigation = (id) => {
-        navigate(`/admin/product/edit/${id}`);
-    };
+    const dispatch = useDispatch();
 
-    const { id, productName, img } = props.product;
+    const mutation = useMutationHook(async (id) => {
+        try {
+            const res = await ProductService.getProductById(id);
+            if (res.code === 200) {
+                dispatch(updateProduct(res.data));
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    const handleNavigation = (id) => {
+        mutation.mutate(id, {
+            onSuccess: () => {
+                message.success('Chuyển đến trang Sửa thông tin sản phẩm');
+                navigate(`/admin/product/edit/${id}`);
+            },
+            onError: () => {
+                console.log('Get product by id failed');
+            },
+        });
+    };
 
     return (
         <tbody className='border border-black'>
@@ -20,27 +46,32 @@ const Body_ListProduct = (props) => {
                         <span className='w-80 font-semibold'>{productName}</span>
                     </div>
                 </td>
+
                 {/* state */}
                 <td className='py-4 text-center border border-black'>
                     <button className='rounded-md py-2 px-4 mr-2 bg-blue-500 text-white hover:cursor-pointer hover:text-white '>
-                        Đang bán
+                        {state ? 'Còn hàng' : 'Hết hàng'}
                     </button>
                 </td>
+
                 {/* price */}
-                <td className='py-4 text-center border border-black'>2.075.000</td>
-                {/* size */}
-                <td className='py-4 text-center border border-black'>10 Cái</td>
-                {/* color */}
-                <td className='py-4 text-center border border-black'>27 Cái</td>
-                {/* quantity */}
+                <td className='py-4 text-center border border-black'>{priceFormat}</td>
+
+                {/* amount */}
+                <td className='py-4 text-center border border-black'>{amount}</td>
+
+                {/* actions: edit or delete */}
                 <td className='py-4 border border-black'>
                     <div className='flex flex-col justify-center items-center gap-2'>
+                        {/* edit button */}
                         <button
                             onClick={() => handleNavigation(id)}
                             className='bg-gray-300 rounded-md py-2 px-4 hover:bg-yellow-500 hover:cursor-pointer hover:text-white'
                         >
                             Sửa
                         </button>
+
+                        {/* delete button */}
                         <button className='bg-gray-300 rounded-md py-2 px-4 hover:bg-red-500 hover:cursor-pointer hover:text-white'>
                             Xóa
                         </button>

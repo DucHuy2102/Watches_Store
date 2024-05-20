@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Form, Input } from 'antd';
+import { Form, Input, message } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutationHook } from '../../../hooks/useMutationHook';
 import * as UserService from '../../../services/UserService';
@@ -23,7 +23,7 @@ const Admin_LoginPage = () => {
 
     // logic login
     const mutation = useMutationHook((data) => UserService.loginUser(data));
-    const { data, isError } = mutation;
+    const { data } = mutation;
     useEffect(() => {
         const handleGetUserDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
@@ -44,7 +44,17 @@ const Admin_LoginPage = () => {
     }, [data, dispatch, navigate]);
 
     const handleSubmitLogin = () => {
-        mutation.mutate({ username, password });
+        mutation.mutate(
+            { username, password },
+            {
+                onError: () => {
+                    message.error('Tên đăng nhập hoặc mật khẩu không chính xác!');
+                },
+                onSuccess: () => {
+                    message.success('Đăng nhập thành công!');
+                },
+            }
+        );
     };
 
     return (
@@ -89,13 +99,13 @@ const Admin_LoginPage = () => {
                 </Form.Item>
 
                 {/* error */}
-                {isError && (
+                {/* {isError && (
                     <div>
                         <p className='text-red-500 font-bold text-center'>
                             Tên đăng nhập hoặc mật khẩu không chính xác!
                         </p>
                     </div>
-                )}
+                )} */}
 
                 {/* button submit */}
                 <Form.Item>

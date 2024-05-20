@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+    id: '',
     productName: '',
     img: [],
     amount: 0,
@@ -19,8 +20,7 @@ const initialState = {
     genderUser: '',
     description: '',
     color: '',
-    category: null,
-    stateProduct: '',
+    weight: '',
 };
 
 export const productSlide = createSlice({
@@ -29,6 +29,7 @@ export const productSlide = createSlice({
     reducers: {
         updateProduct: (state, action) => {
             const {
+                id = '',
                 productName = '',
                 img = [],
                 amount = 0,
@@ -47,9 +48,9 @@ export const productSlide = createSlice({
                 genderUser = '',
                 description = '',
                 color = '',
-                category = null,
-                stateProduct = '',
+                weight = '',
             } = action.payload;
+            state.id = id;
             state.productName = productName;
             state.img = img;
             state.amount = amount;
@@ -68,10 +69,10 @@ export const productSlide = createSlice({
             state.genderUser = genderUser;
             state.description = description;
             state.color = color;
-            state.category = category;
-            state.stateProduct = stateProduct;
+            state.weight = weight;
         },
         resetProduct: (state) => {
+            state.id = '';
             state.productName = '';
             state.img = [];
             state.amount = 0;
@@ -90,8 +91,7 @@ export const productSlide = createSlice({
             state.genderUser = '';
             state.description = '';
             state.color = '';
-            state.category = '';
-            state.stateProduct = '';
+            state.weight = '';
         },
     },
 });

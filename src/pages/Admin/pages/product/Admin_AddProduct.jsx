@@ -71,8 +71,7 @@ const AddProduct = () => {
         genderUser: '',
         description: '',
         color: '',
-        category: null,
-        state: '',
+        weight: '',
     });
 
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -85,10 +84,6 @@ const AddProduct = () => {
     const mutation = useMutationHook(({ adminToken, product }) => {
         return ProductService.createProduct(adminToken, product);
     });
-    const { data } = mutation;
-    if (data?.code === 200) {
-        navigate('/admin/product');
-    }
 
     // add product function
     const handleAddProduct = async () => {
@@ -101,8 +96,15 @@ const AddProduct = () => {
             price: priceNumber,
             img: uploadedImages,
         };
-        console.log('addProductData:', productData);
-        mutation.mutate({ adminToken, product: productData });
+        mutation.mutate(
+            { adminToken, product: productData },
+            {
+                onSuccess: () => {
+                    message.success('Thêm sản phẩm thành công');
+                    navigate('/admin/product');
+                },
+            }
+        );
     };
 
     // Handle input change
@@ -348,7 +350,7 @@ const AddProduct = () => {
                         />
                     </Form.Item>
 
-                    <Form.Item
+                    {/* <Form.Item
                         label='Tình trạng'
                         name='condition'
                         rules={[{ required: true, message: 'Tình trạng không được bỏ trống!' }]}
@@ -360,7 +362,7 @@ const AddProduct = () => {
                             onChange={handleOnChange}
                             className='w-full'
                         />
-                    </Form.Item>
+                    </Form.Item> */}
 
                     <Form.Item
                         label='Màu sắc'
@@ -373,30 +375,24 @@ const AddProduct = () => {
 
                     <Form.Item
                         label='Trạng thái'
-                        name='state'
+                        name='condition'
                         rules={[{ required: true, message: 'Trạng thái không được bỏ trống!' }]}
                         className='col-span-2 md:col-span-1'
                     >
-                        <Radio.Group onChange={handleRadioChange} value={stateProduct.state}>
+                        <Radio.Group className='ml-14' onChange={handleRadioChange} value={stateProduct.condition}>
                             <Radio value='Mới'>Mới</Radio>
                             <Radio value='Đã sử dụng'>Đã sử dụng</Radio>
                         </Radio.Group>
                     </Form.Item>
-
-                    <Form.Item
-                        label='Mô tả'
-                        name='description'
-                        rules={[{ required: true, message: 'Mô tả không được bỏ trống!' }]}
-                        className='col-span-2 md:col-span-1'
-                    >
-                        <TextArea
-                            rows={4}
-                            name='description'
-                            value={stateProduct.description}
-                            onChange={handleOnChange}
-                        />
-                    </Form.Item>
                 </div>
+                <Form.Item
+                    label='Mô tả'
+                    name='description'
+                    rules={[{ required: true, message: 'Mô tả không được bỏ trống!' }]}
+                    className='col-span-2 md:col-span-1'
+                >
+                    <TextArea rows={4} name='description' value={stateProduct.description} onChange={handleOnChange} />
+                </Form.Item>
                 <div className='flex items-center justify-between'>
                     <Form.Item
                         label='Ảnh sản phẩm'
@@ -406,6 +402,7 @@ const AddProduct = () => {
                         className='col-span-2'
                     >
                         <Upload
+                            beforeUpload={() => false}
                             listType='picture-card'
                             fileList={fileList}
                             onPreview={handlePreview}

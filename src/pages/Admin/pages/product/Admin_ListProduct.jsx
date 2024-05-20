@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateProduct } from '../../../../redux/slides/productSlide';
 
-const title = ['Tên đồng hồ', 'Trạng thái', 'Giá', 'Số lượng bán được', 'Số lượng tồn kho', 'Thao tác'];
+const title = ['Tên đồng hồ', 'Trạng thái', 'Giá', 'Số lượng tồn kho', 'Thao tác'];
 
 const Admin_ListProduct = () => {
     const dispatch = useDispatch();
@@ -16,9 +16,9 @@ const Admin_ListProduct = () => {
 
     const getAllProduct = async () => {
         const res = await ProductService.getAllProduct();
-        if (res.status === 200) {
-            dispatch(updateProduct({ res: res.data }));
-        }
+        // if (res.status === 200) {
+        //     dispatch(updateProduct({ res: res.data }));
+        // }
         return res;
     };
 

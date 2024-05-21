@@ -389,7 +389,7 @@ const Admin_EditProduct = () => {
                         </Upload>
                         {previewImage && (
                             <Image
-                                key={previewImage}
+                                key={fileList.find((file) => file.url === previewImage)?.uid || 'preview'}
                                 wrapperStyle={{ display: 'none' }}
                                 preview={{
                                     visible: previewOpen,

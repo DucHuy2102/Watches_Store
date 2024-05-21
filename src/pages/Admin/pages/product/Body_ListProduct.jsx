@@ -7,7 +7,7 @@ import { Modal, message } from 'antd';
 import { useState } from 'react';
 
 const Body_ListProduct = (props) => {
-    const { id, productName, price, img, amount, state, removeProductFromList } = props.product;
+    const { id, productName, price, img, amount, state, refetch } = props.product;
     const priceFormat = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -56,8 +56,12 @@ const Body_ListProduct = (props) => {
                 { token, id },
                 {
                     onSuccess: () => {
-                        message.success('Xóa sản phẩm thành công');
-                        navigate('/admin/product', { replace: true });
+                        message.success('Xóa sản phẩm thành công. Trang sẽ tự động làm mới');
+                    },
+                    onSettled: () => {
+                        if (refetch) {
+                            refetch();
+                        }
                     },
                 }
             );

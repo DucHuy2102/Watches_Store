@@ -18,7 +18,7 @@ const Admin_ListProduct = () => {
         return res;
     };
 
-    const { data } = useQuery({
+    const { data, refetch } = useQuery({
         queryKey: ['products'],
         queryFn: getAllProduct,
         keepPreviousData: true,
@@ -56,7 +56,7 @@ const Admin_ListProduct = () => {
                         {data?.data?.map((product) => (
                             <Body_ListProduct
                                 key={product.id}
-                                product={product}
+                                product={{ ...product, refetch }}
                                 removeProductFromList={removeProductFromList}
                             />
                         ))}

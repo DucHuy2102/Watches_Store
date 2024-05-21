@@ -9,7 +9,6 @@ function Actions() {
     const mutation = useMutationHook(({ getToken, userInfo_From_Redux }) => {
         UserService.updateInfoUser(getToken, userInfo_From_Redux);
     });
-    const { data } = mutation;
 
     const getToken = localStorage.getItem('token');
     const handleUpdateUser = (e) => {

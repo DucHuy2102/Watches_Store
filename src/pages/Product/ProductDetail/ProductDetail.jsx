@@ -14,7 +14,6 @@ const ProductDetail = () => {
         description,
         feature,
         genderUser,
-        height,
         img,
         origin,
         price,
@@ -88,6 +87,11 @@ const ProductDetail = () => {
         },
         {
             id: 12,
+            title: 'Màu sắc',
+            value: color,
+        },
+        {
+            id: 13,
             title: 'Đối tượng sử dụng',
             value: genderUser,
         },
@@ -204,7 +208,7 @@ const ProductDetail = () => {
                         </div>
 
                         {/* 5 reasons */}
-                        <div className='bg-yellow-100 rounded-lg mt-2'>
+                        <div className='bg-yellow-100 px-2 py-2 rounded-lg mt-2'>
                             <p className='font-bold text-md pl-1'>Lý Do Thuyết Phục Khi Mua Tại Watches.vn</p>
                             <div className='flex flex-col items-start justify-center pl-5 gap-1'>
                                 <p>- Bảo hành 5 năm - An tâm sử dụng</p>
@@ -269,7 +273,7 @@ const ProductDetail = () => {
 
                 {/* more products */}
                 <div className='mt-5 shadow-md p-6'>
-                    <h3 className='text-lg font-bold text-black'>Các sản phẩm khác</h3>
+                    <h3 className='text-lg font-bold text-black'>Các sản phẩm khác cùng hãng</h3>
                     <div className='grid grid-cols-2 md:grid-cols-4 gap-6 mt-6'>
                         <div className='flex flex-col items-center justify-center'>
                             <img
@@ -454,7 +458,7 @@ const ProductDetail = () => {
                                 type='button'
                                 className='w-full mt-10 px-4 py-2.5 bg-transparent hover:bg-gray-50 border border-black text-black font-bold rounded'
                             >
-                                Read all reviews
+                                Đọc thêm bình luận
                             </button>
                         </div>
                     </div>

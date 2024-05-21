@@ -389,6 +389,7 @@ const Admin_EditProduct = () => {
                         </Upload>
                         {previewImage && (
                             <Image
+                                key={previewImage}
                                 wrapperStyle={{ display: 'none' }}
                                 preview={{
                                     visible: previewOpen,

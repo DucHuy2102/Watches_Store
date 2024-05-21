@@ -43,6 +43,16 @@ export const editProduct = async (token, data) => {
             'Content-Type': 'application/json',
         },
     });
-    console.log(res.data);
+    return res.data;
+};
+
+// Delete product
+export const deleteProduct = async (token, id) => {
+    const res = await axios.delete(`${import.meta.env.VITE_API_URL}/product/delete/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
     return res.data;
 };

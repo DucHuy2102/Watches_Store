@@ -2,13 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import * as ProductService from '../../../../services/ProductService';
 import Body_ListProduct from './Body_ListProduct';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { updateProduct } from '../../../../redux/slides/productSlide';
+import { useState } from 'react';
 
 const title = ['Tên đồng hồ', 'Trạng thái', 'Giá', 'Số lượng tồn kho', 'Thao tác'];
 
 const Admin_ListProduct = () => {
-    const dispatch = useDispatch();
+    const [products, setProducts] = useState([]);
     const navigate = useNavigate();
     const handleNavigation = (path) => {
         return () => navigate(path);
@@ -16,13 +15,19 @@ const Admin_ListProduct = () => {
 
     const getAllProduct = async () => {
         const res = await ProductService.getAllProduct();
-        // if (res.status === 200) {
-        //     dispatch(updateProduct({ res: res.data }));
-        // }
         return res;
     };
 
-    const { data } = useQuery({ queryKey: ['products'], queryFn: getAllProduct, keepPreviousData: true });
+    const { data } = useQuery({
+        queryKey: ['products'],
+        queryFn: getAllProduct,
+        keepPreviousData: true,
+        onSuccess: (data) => setProducts(data.data),
+    });
+
+    const removeProductFromList = (id) => {
+        setProducts(products.filter((product) => product.id !== id));
+    };
 
     return (
         <div>
@@ -49,7 +54,11 @@ const Admin_ListProduct = () => {
                             </tr>
                         </thead>
                         {data?.data?.map((product) => (
-                            <Body_ListProduct key={product.id} product={product} />
+                            <Body_ListProduct
+                                key={product.id}
+                                product={product}
+                                removeProductFromList={removeProductFromList}
+                            />
                         ))}
                     </table>
                 </div>

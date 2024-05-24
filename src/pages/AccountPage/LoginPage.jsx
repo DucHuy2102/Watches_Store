@@ -25,7 +25,7 @@ const LoginPage = () => {
         if (data?.code === 200) {
             navigate('/');
             const access_token = data?.data?.token;
-            localStorage.setItem('tokenUSer', access_token);
+            localStorage.setItem('tokenUser', access_token);
             if (access_token) {
                 const decode = jwtDecode(access_token);
                 if (decode?.sub) {

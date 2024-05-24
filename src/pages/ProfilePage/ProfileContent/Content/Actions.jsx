@@ -10,7 +10,7 @@ function Actions() {
         UserService.updateInfoUser(getToken, userInfo_From_Redux);
     });
 
-    const getToken = localStorage.getItem('token');
+    const getToken = localStorage.getItem('tokenUser');
     const handleUpdateUser = (e) => {
         e.preventDefault();
         mutation.mutate({ getToken, userInfo_From_Redux });

@@ -28,6 +28,7 @@ export { default as AboutPage } from './MoreInfoPage/AboutPage';
 export { default as ContactPage } from './MoreInfoPage/ContactPage';
 export { default as BlogPage } from './BlogPage/BlogPage';
 export { default as BlogCard } from './BlogPage/BlogCard';
+export { default as BlogDetail } from './BlogPage/BlogDetail';
 
 // account
 export { default as LoginPage } from './AccountPage/LoginPage';

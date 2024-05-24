@@ -6,3 +6,4 @@ export { default as ShopNow } from './ShopNow';
 export { default as ReadMoreToBlogs } from './ReadMoreToBlogs';
 export { default as Sort_Filter } from './Sort_Filter';
 export { default as PaginationComponent } from './PaginationComponent';
+export { default as Comment_Component } from './Comment';

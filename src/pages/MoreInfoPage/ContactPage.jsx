@@ -1,17 +1,26 @@
-import { MailOutlined, PhoneOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import {
+    MailOutlined,
+    PhoneOutlined,
+    ClockCircleOutlined,
+} from '@ant-design/icons';
 
 const ContactPage = () => {
     return (
         <div className='flex flex-col justify-center items-center mt-10 mb-10 font-PlayfairDisplay'>
             {/* name page */}
-            <h1 className='text-center text-4xl font-bold mb-10'>Liên hệ với chúng tôi</h1>
+            <h1 className='text-center text-4xl font-bold mb-10 font-PlayfairDisplay'>
+                Liên hệ với chúng tôi
+            </h1>
 
             <form className=''>
                 {/* name */}
                 <div className='flex justify-center gap-10'>
                     {/* firstName */}
                     <div className='mb-5 w-[20vw]'>
-                        <label htmlFor='firstName' className='text-xl text-black'>
+                        <label
+                            htmlFor='firstName'
+                            className='text-xl text-black'
+                        >
                             Họ và chữ lót
                         </label>
                         <input
@@ -26,7 +35,10 @@ const ContactPage = () => {
 
                     {/* lastName */}
                     <div className='mb-5 w-[20vw]'>
-                        <label htmlFor='lastName' className='text-xl text-black'>
+                        <label
+                            htmlFor='lastName'
+                            className='text-xl text-black'
+                        >
                             Tên
                         </label>
                         <input
@@ -43,7 +55,10 @@ const ContactPage = () => {
                 <div className='flex justify-center gap-10'>
                     {/* email */}
                     <div className='mb-5 w-[20vw]'>
-                        <label htmlFor='emailAddress' className='text-xl text-black'>
+                        <label
+                            htmlFor='emailAddress'
+                            className='text-xl text-black'
+                        >
                             Email
                         </label>
                         <input
@@ -57,7 +72,10 @@ const ContactPage = () => {
 
                     {/* phone */}
                     <div className='mb-5 w-[20vw]'>
-                        <label htmlFor='numberPhone' className='text-xl text-black'>
+                        <label
+                            htmlFor='numberPhone'
+                            className='text-xl text-black'
+                        >
                             Số điện thoại
                         </label>
                         <input
@@ -114,14 +132,18 @@ const ContactPage = () => {
             {/* contact info */}
             <div className='py-3 mt-5 w-[42.5vw] mb-5 font-Lato'>
                 <div>
-                    <p className='text-lg font-bold'>Thông tin liên hệ trực tiếp:</p>
+                    <p className='text-lg font-bold'>
+                        Thông tin liên hệ trực tiếp:
+                    </p>
                 </div>
                 <div className='flex justify-between items-center px-10 text-lg mt-1'>
                     {/* mail and phone */}
                     <div>
                         <div className='flex justify-start items-center'>
                             <MailOutlined className='pr-2' />
-                            <a href='https://www.facebook.com/Duc.Huy2102'>Nhắn tin ngay</a>
+                            <a href='https://www.facebook.com/Duc.Huy2102'>
+                                Nhắn tin ngay
+                            </a>
                         </div>
                         <div className='flex justify-start items-center'>
                             <PhoneOutlined className='pr-2' />
@@ -136,7 +158,9 @@ const ContactPage = () => {
                         </div>
                         <div className='flex justify-center items-center'>
                             <ClockCircleOutlined className='pr-2' />
-                            <p className='font-sans'>Thứ 2 - Thứ 7: 7:00 - 22:00</p>
+                            <p className='font-sans'>
+                                Thứ 2 - Thứ 7: 7:00 - 22:00
+                            </p>
                         </div>
                     </div>
                 </div>

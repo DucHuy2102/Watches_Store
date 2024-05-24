@@ -7,3 +7,5 @@ export { default as ReadMoreToBlogs } from './ReadMoreToBlogs';
 export { default as Sort_Filter } from './Sort_Filter';
 export { default as PaginationComponent } from './PaginationComponent';
 export { default as Comment_Component } from './Comment';
+export { default as PolicyComponent } from './PolicyComponent';
+export { default as SayThanks } from './SayThanks';

@@ -1,60 +1,89 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { Button, Form, Input, message } from 'antd';
+
+// validate form
+const validateMessages = {
+    required: '${label} không được bỏ trống!',
+    types: {
+        email: '${label} không đúng định dạng!',
+        number: '${label} chỉ chứa số!',
+    },
+};
 
 const ForgotPasswordPage = () => {
-    const [error, setError] = useState('');
+    const [email, setEmail] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
     };
+
     return (
-        <div className='w-full flex items-center justify-center px-20 py-5'>
+        <div className='w-full flex items-center justify-between px-20 font-Lato'>
             {/* form login */}
-            <div className='flex flex-col justify-center items-start h-screen w-[80%] font-Lato'>
-                <form onSubmit={handleSubmit}>
-                    {/* name form */}
-                    <h1 className='text-4xl font-bold text-center text-black mb-5 font-PlayfairDisplay'>
-                        Quên mật khẩu
-                    </h1>
-
-                    {/* email */}
-                    <div className='mb-5 w-[45vw]'>
-                        <label htmlFor='email' className='block text-black text-xl'>
-                            Email
-                        </label>
-                        <input
-                            type='email'
-                            id='email'
-                            name='email'
-                            className='w-full p-2 border border-gray-300 rounded'
-                            placeholder='Nhập email liên hệ'
+            <div className='flex flex-col justify-center items-start h-screen'>
+                <h1 className='mx-auto text-3xl font-bold text-black mb-5 font-PlayfairDisplay'>
+                    Quên mật khẩu
+                </h1>
+                <Form
+                    className='mx-auto w-[40vw] text-center'
+                    layout='vertical'
+                    name='basic'
+                    onFinish={handleSubmit}
+                    validateMessages={validateMessages}
+                >
+                    <Form.Item
+                        label={<label className='text-lg'>Email liên hệ</label>}
+                        name='Email liên hệ'
+                        rules={[
+                            {
+                                required: true,
+                                type: 'email',
+                            },
+                        ]}
+                        className='text-red-500 text-start mt-1 mb-5'
+                    >
+                        <Input
+                            onChange={(e) => setEmail(e.target.value)}
+                            className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
                         />
-                    </div>
+                    </Form.Item>
 
-                    {/* button submit forget password */}
-                    <div>
-                        <button
-                            type='submit'
-                            className='w-full font-PlayfairDisplay text-2xl p-2 border bg-black text-white rounded hover:bg-white hover:text-black hover:border-black'
+                    {/* error */}
+                    {/* {isError && (
+                        <div className='text-red-500 font-bold text-xl text-center mt-1 mb-5'>
+                            <p>Hệ thống gửi email thất bại! Vui lòng truy cập sau 30 phút</p>
+                        </div>
+                    )} */}
+
+                    {/* button login */}
+                    <Form.Item>
+                        <Button
+                            className='w-full mt-5 h-10 font-PlayfairDisplay text-xl border bg-black text-white rounded hover:bg-white transition duration-300 hover:text-black hover:border-blue-400'
+                            type='primary'
+                            htmlType='submit'
                         >
                             Gửi thông tin
-                        </button>
-                    </div>
-                </form>
+                        </Button>
+                    </Form.Item>
+                </Form>
 
-                {/* comeback to login page */}
-                <div className='mt-4 text-lg'>
-                    Quay lại
-                    <Link to='/login'>
-                        <span className='hover:underline pl-1 font-PlayfairDisplay text-xl hover:font-bold'>
-                            Trang đăng nhập
-                        </span>
+                {/* Register */}
+                <div className='text-lg flex'>
+                    <p className='font-PlayfairDisplay'>
+                        Bạn muốn quay về trang đăng nhập?
+                    </p>
+                    <Link
+                        to='/register'
+                        className='font-PlayfairDisplay text-lg pl-2 text-gray-400 hover:text-black font-bold transition duration-200'
+                    >
+                        Trang đăng nhập
                     </Link>
                 </div>
             </div>
 
             {/* image */}
-            <div className='w-[60%]'>
+            <div className='w-[50%]'>
                 <img
                     src='https://timex.com/cdn/shop/files/02617_WB23_July_alt_lifestyle_featured_image_TW2V49700_5bdba602-5733-4fb1-83ad-8297308ef20b.jpg?v=1689775668&width=990'
                     alt=''

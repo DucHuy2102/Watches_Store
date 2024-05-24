@@ -12,7 +12,7 @@ const BlogDetail = () => {
                 </div>
 
                 {/* content */}
-                <div className='px-10 mb-5 text-xl flex flex-col justify-center items-center gap-5'>
+                <div className='px-20 mb-5 text-xl flex flex-col justify-center items-center gap-5'>
                     {/* short description */}
                     <div>
                         Trước khi phát minh thiết bị điện tử, con người từng xem
@@ -131,7 +131,7 @@ const BlogDetail = () => {
             </div>
 
             {/* more blog */}
-            <div className='mt-5 mb-5 px-10 font-bold text-2xl'>
+            <div className='mt-5 mb-5 px-20 font-bold text-2xl'>
                 <p>Các bài viết khác</p>
             </div>
             <div className='w-full px-10 mb-10 grid grid-cols-3 gap-5'>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as UserService from '../../services/UserService';
 import { Link, useNavigate, useNavigation } from 'react-router-dom';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { useMutationHook } from '../../hooks/useMutationHook';
 
 // validate form
@@ -24,10 +24,19 @@ const RegisterPage = () => {
     const navigate = useNavigate();
 
     const mutation = useMutationHook((data) => UserService.registerUser(data));
-    const { data, isError } = mutation;
+    const { isError } = mutation;
 
     const handleSubmitRegister = () => {
-        mutation.mutate({ email, phone, username, password });
+        mutation.mutate(
+            { email, phone, username, password },
+            {
+                onSuccess: () => {
+                    message.success(
+                        'Đăng ký tài khoản thành công! Chuyển hướng về trang Đăng nhập'
+                    );
+                },
+            }
+        );
         navigate('/login');
     };
 
@@ -44,7 +53,9 @@ const RegisterPage = () => {
 
             {/* form register */}
             <div className='flex flex-col justify-center items-end h-screen'>
-                <h1 className='mx-auto text-3xl font-bold text-black mb-2 font-PlayfairDisplay'>Đăng ký tài khoản</h1>
+                <h1 className='mx-auto text-3xl font-bold text-black mb-2 font-PlayfairDisplay'>
+                    Đăng ký tài khoản
+                </h1>
                 <Form
                     className='mx-auto w-[40vw] text-center'
                     layout='vertical'
@@ -54,7 +65,9 @@ const RegisterPage = () => {
                 >
                     {/* username */}
                     <Form.Item
-                        label={<label className='text-lg'>Tên người dùng</label>}
+                        label={
+                            <label className='text-lg'>Tên người dùng</label>
+                        }
                         name='Tên người dùng'
                         rules={[
                             {
@@ -81,7 +94,9 @@ const RegisterPage = () => {
                                 validator(_, value) {
                                     return new Promise((resolve, reject) => {
                                         if (isNaN(value)) {
-                                            reject('Số điện thoại phải là số và không chứa ký tự đặc biệt!');
+                                            reject(
+                                                'Số điện thoại phải là số và không chứa ký tự đặc biệt!'
+                                            );
                                         } else {
                                             resolve();
                                         }
@@ -134,7 +149,9 @@ const RegisterPage = () => {
 
                     {/* confirm password */}
                     <Form.Item
-                        label={<label className='text-lg'>Xác thực mật khẩu</label>}
+                        label={
+                            <label className='text-lg'>Xác thực mật khẩu</label>
+                        }
                         name='Xác thực mật khẩu'
                         rules={[
                             {

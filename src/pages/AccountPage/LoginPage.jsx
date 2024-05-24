@@ -40,7 +40,9 @@ const LoginPage = () => {
             { username, password },
             {
                 onSuccess: () => {
-                    message.success('Đăng nhập thành công! Chuyển hướng về trang chủ');
+                    message.success(
+                        'Đăng nhập thành công! Chuyển hướng về trang chủ'
+                    );
                 },
             }
         );
@@ -50,7 +52,9 @@ const LoginPage = () => {
         <div className='w-full flex items-center justify-between px-20 font-Lato'>
             {/* form login */}
             <div className='flex flex-col justify-center items-start h-screen'>
-                <h1 className='mx-auto text-3xl font-bold text-black mb-5 font-PlayfairDisplay'>Đăng nhập</h1>
+                <h1 className='mx-auto text-3xl font-bold text-black mb-5 font-PlayfairDisplay'>
+                    Đăng nhập
+                </h1>
                 <Form
                     className='mx-auto w-[40vw] text-center'
                     layout='vertical'
@@ -67,7 +71,7 @@ const LoginPage = () => {
                                 message: 'Tên đăng nhập không được bỏ trống!',
                             },
                         ]}
-                        className='text-red-500 text-start mt-1 mb-10'
+                        className='text-red-500 text-start mt-1 mb-8'
                     >
                         <Input
                             onChange={(e) => setUserName(e.target.value)}
@@ -85,7 +89,7 @@ const LoginPage = () => {
                                 message: 'Mật khẩu không được bỏ trống!',
                             },
                         ]}
-                        className='text-red-500 text-start mt-1'
+                        className='text-red-500 text-start mt-1 mb-8'
                     >
                         <Input.Password
                             onChange={(e) => setPassword(e.target.value)}
@@ -114,7 +118,9 @@ const LoginPage = () => {
 
                 {/* Register */}
                 <div className='text-lg flex'>
-                    <p className='font-PlayfairDisplay'>Bạn chưa có tài khoản để đăng nhập?</p>
+                    <p className='font-PlayfairDisplay'>
+                        Bạn chưa có tài khoản để đăng nhập?
+                    </p>
                     <Link
                         to='/register'
                         className='font-PlayfairDisplay text-lg pl-2 text-gray-400 hover:text-black font-bold transition duration-200'

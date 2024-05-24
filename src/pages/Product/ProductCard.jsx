@@ -20,7 +20,11 @@ const ProductCard = (props) => {
             {/* image watches  */}
             <div className='w-[466px] h-[466px] flex items-center justify-center bg-gray-100'>
                 {/* image  */}
-                <Swiper className='h-[430px] w-[430px] bg-black' loop={true} spaceBetween={0}>
+                <Swiper
+                    className='h-[430px] w-[430px] bg-black'
+                    loop={true}
+                    spaceBetween={0}
+                >
                     <SwiperSlide>
                         <img src={img[0]} className={styleImage} />
                     </SwiperSlide>
@@ -34,7 +38,10 @@ const ProductCard = (props) => {
             </div>
 
             {/* name and price  */}
-            <div onClick={() => go_ProductDetail_Page(id)} className='mt-3 mb-3 pl-3 pr-3'>
+            <div
+                onClick={() => go_ProductDetail_Page(id)}
+                className='mt-3 mb-3 pl-3 pr-3'
+            >
                 {/* name */}
                 <div>{productName}</div>
 

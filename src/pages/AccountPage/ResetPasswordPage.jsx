@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Form, Input, message } from 'antd';
+import { useMutationHook } from '../../hooks/useMutationHook';
+import * as UserService from '../../services/UserService';
 
 // validate form
 const validateMessages = {
@@ -12,11 +14,33 @@ const validateMessages = {
 };
 
 const ResetPasswordPage = () => {
+    const [codePassword, setCodePassword] = useState('');
     const [newPass, setNewPass] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const mutation = useMutationHook((data) => UserService.resetPassword(data));
+
+    const handleSubmit = () => {
+        if (newPass !== confirmPass) {
+            message.error('Mật khẩu không trùng khớp!');
+            return;
+        } else {
+            mutation.mutate(
+                { token: codePassword, password: newPass },
+                {
+                    onSuccess: () => {
+                        navigate('/login');
+                        message.success(
+                            'Đặt lại mật khẩu thành công! Đang chuyển về trang đăng nhập...'
+                        );
+                    },
+                    onError: () => {
+                        message.error('Đặt lại mật khẩu thất bại!');
+                    },
+                }
+            );
+        }
     };
 
     return (
@@ -42,6 +66,24 @@ const ResetPasswordPage = () => {
                     onFinish={handleSubmit}
                     validateMessages={validateMessages}
                 >
+                    {/* codePassword */}
+                    <Form.Item
+                        label={<label className='text-lg'>Mã code</label>}
+                        name='codePassword'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Mã code không được bỏ trống!',
+                            },
+                        ]}
+                        className='text-red-500 text-start mt-1 mb-8'
+                    >
+                        <Input
+                            onChange={(e) => setCodePassword(e.target.value)}
+                            className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
+                        />
+                    </Form.Item>
+
                     {/* newPass */}
                     <Form.Item
                         label={<label className='text-lg'>Mật khẩu mới</label>}

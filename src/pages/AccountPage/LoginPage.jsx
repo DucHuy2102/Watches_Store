@@ -14,7 +14,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const mutation = useMutationHook((data) => UserService.loginUser(data));
-    const { data, isError } = mutation;
+    const { data } = mutation;
 
     useEffect(() => {
         const handleGetUserDetail = async (access_token) => {
@@ -43,6 +43,9 @@ const LoginPage = () => {
                     message.success(
                         'Đăng nhập thành công! Chuyển hướng về trang chủ'
                     );
+                },
+                onError: () => {
+                    message.error('Đăng nhập thất bại!');
                 },
             }
         );
@@ -96,13 +99,6 @@ const LoginPage = () => {
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
                         />
                     </Form.Item>
-
-                    {/* error */}
-                    {isError && (
-                        <div className='text-red-500 font-bold text-xl text-center mt-1 mb-5'>
-                            <p>Đăng nhập thất bại!</p>
-                        </div>
-                    )}
 
                     {/* button login */}
                     <Form.Item>

@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Form, Input, message } from 'antd';
+import { useMutationHook } from '../../hooks/useMutationHook';
+import * as UserService from '../../services/UserService';
 
 // validate form
 const validateMessages = {
@@ -13,9 +15,30 @@ const validateMessages = {
 
 const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const mutation = useMutationHook((data) =>
+        UserService.forgotPassword(data)
+    );
+
+    const handleSubmit = () => {
+        mutation.mutate(
+            { email },
+            {
+                onSuccess: () => {
+                    message.success(
+                        'Hệ thống đã gửi email đổi mật khẩu! Vui lòng kiểm tra email của bạn'
+                    );
+                    setEmail('');
+                    navigate('/resetPassword');
+                },
+                onError: () => {
+                    message.error(
+                        'Hệ thống gửi email thất bại! Vui lòng truy cập sau 30 phút'
+                    );
+                },
+            }
+        );
     };
 
     return (
@@ -41,7 +64,7 @@ const ForgotPasswordPage = () => {
                                 type: 'email',
                             },
                         ]}
-                        className='text-red-500 text-start mt-1 mb-5'
+                        className='text-black text-start mt-1 mb-5'
                     >
                         <Input
                             onChange={(e) => setEmail(e.target.value)}

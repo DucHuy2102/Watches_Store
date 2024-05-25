@@ -7,8 +7,12 @@ import { Modal, message } from 'antd';
 import { useState } from 'react';
 
 const Body_ListProduct = (props) => {
-    const { id, productName, price, img, amount, state, refetch } = props.product;
-    const priceFormat = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+    const { id, productName, price, img, amount, state, refetch } =
+        props.product;
+    const priceFormat = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    }).format(price);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -56,7 +60,9 @@ const Body_ListProduct = (props) => {
                 { token, id },
                 {
                     onSuccess: () => {
-                        message.success('Xóa sản phẩm thành công. Trang sẽ tự động làm mới');
+                        message.success(
+                            'Xóa sản phẩm thành công. Trang sẽ tự động làm mới'
+                        );
                     },
                     onSettled: () => {
                         if (refetch) {
@@ -82,10 +88,16 @@ const Body_ListProduct = (props) => {
                 <td className='py-4 border border-black'>
                     <div className='flex items-center pl-10'>
                         {/* image */}
-                        <img className='h-20 w-20' src={img[0]} alt='Product image' />
+                        <img
+                            className='h-20 w-20'
+                            src={img[0]}
+                            alt='Product image'
+                        />
 
                         {/* name */}
-                        <span className='w-80 font-semibold'>{productName}</span>
+                        <span className='w-80 font-semibold'>
+                            {productName}
+                        </span>
                     </div>
                 </td>
 
@@ -97,10 +109,14 @@ const Body_ListProduct = (props) => {
                 </td>
 
                 {/* price */}
-                <td className='py-4 text-center border border-black'>{priceFormat}</td>
+                <td className='py-4 text-center border border-black'>
+                    {priceFormat}
+                </td>
 
                 {/* amount */}
-                <td className='py-4 text-center border border-black'>{amount}</td>
+                <td className='py-4 text-center border border-black'>
+                    {amount}
+                </td>
 
                 {/* actions: edit or delete */}
                 <td className='py-4 border border-black'>
@@ -127,13 +143,15 @@ const Body_ListProduct = (props) => {
                             style={{ textAlign: 'center' }}
                             open={isModalOpen}
                             okButtonProps={{
-                                className: 'bg-black text-white hover:bg-red-500 hover:text-white',
+                                className:
+                                    'bg-black text-white hover:bg-red-500 hover:text-white',
                             }}
                             onOk={handleOk}
                             onCancel={handleCancel}
                         >
                             <p className='text-lg'>
-                                Hành động này sẽ xóa sản phẩm khỏi hệ thống và dữ liệu không thể khôi phục!
+                                Hành động này sẽ xóa sản phẩm khỏi hệ thống và
+                                dữ liệu không thể khôi phục!
                             </p>
                         </Modal>
                     </div>

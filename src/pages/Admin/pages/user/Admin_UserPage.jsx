@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
-const title = ['Tên đồng hồ', 'Trạng thái', 'Giá', 'Số lượng bán được', 'Số lượng tồn kho', 'Thao tác'];
+const title = [
+    'Tên người dùng',
+    'Trạng thái',
+    'Giá',
+    'Số lượng bán được',
+    'Số lượng tồn kho',
+    'Thao tác',
+];
 
 const Admin_UserPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +31,9 @@ const Admin_UserPage = () => {
     return (
         <div>
             <div className='mt-3 px-14 flex justify-between items-center'>
-                <h1 className='font-bold text-2xl mt-2 text-center'>Danh sách người dùng</h1>
+                <h1 className='font-bold text-2xl mt-2 text-center'>
+                    Danh sách người dùng
+                </h1>
                 <button
                     onClick={handleNavigation('/admin/product/add')}
                     className='border border-black text-lg rounded-lg hover:bg-blue-500 hover:border-blue-500 hover:text-white transition duration-200 px-2 py-3'
@@ -39,7 +48,10 @@ const Admin_UserPage = () => {
                         <thead>
                             <tr>
                                 {title.map((item, index) => (
-                                    <th key={index} className='text-center border border-black font-semibold'>
+                                    <th
+                                        key={index}
+                                        className='text-center border border-black font-semibold'
+                                    >
                                         {item}
                                     </th>
                                 ))}
@@ -59,7 +71,8 @@ const Admin_UserPage = () => {
 
                                         {/* name */}
                                         <span className='w-80 font-semibold'>
-                                            Q Timex Chronograph 40mm Stainless Steel Bracelet Watch
+                                            Q Timex Chronograph 40mm Stainless
+                                            Steel Bracelet Watch
                                         </span>
                                     </div>
                                 </td>
@@ -72,19 +85,27 @@ const Admin_UserPage = () => {
                                 </td>
 
                                 {/* price */}
-                                <td className='py-4 text-center border border-black'>2.075.000</td>
+                                <td className='py-4 text-center border border-black'>
+                                    2.075.000
+                                </td>
 
                                 {/* size */}
-                                <td className='py-4 text-center border border-black'>10 Cái</td>
+                                <td className='py-4 text-center border border-black'>
+                                    10 Cái
+                                </td>
 
                                 {/* color */}
-                                <td className='py-4 text-center border border-black'>27 Cái</td>
+                                <td className='py-4 text-center border border-black'>
+                                    27 Cái
+                                </td>
 
                                 {/* quantity */}
                                 <td className='py-4 border border-black'>
                                     <div className='flex flex-col justify-center items-center gap-2'>
                                         <button
-                                            onClick={handleNavigation('/admin/products/edit')}
+                                            onClick={handleNavigation(
+                                                '/admin/products/edit'
+                                            )}
                                             className='bg-gray-300 rounded-md py-2 px-4 hover:bg-yellow-500 hover:cursor-pointer hover:text-white'
                                         >
                                             Sửa

@@ -2,13 +2,19 @@ import axios from 'axios';
 
 // login
 export const loginUser = async (data) => {
-    const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, data);
+    const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/login`,
+        data
+    );
     return res.data;
 };
 
 // register
 export const registerUser = async (data) => {
-    const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, data);
+    const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/register`,
+        data
+    );
     return res.data;
 };
 
@@ -24,12 +30,16 @@ export const getUserDetail = async (access_token) => {
 
 // update user info
 export const updateInfoUser = async (access_token, data) => {
-    const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/editDetail`, data, {
-        headers: {
-            Authorization: `Bearer ${access_token}`,
-            'Content-Type': 'application/json',
-        },
-    });
+    const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/user/editDetail`,
+        data,
+        {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+                'Content-Type': 'application/json',
+            },
+        }
+    );
     return res.data;
 };
 
@@ -40,5 +50,23 @@ export const getAddressUser = async (access_token) => {
             Authorization: `Bearer ${access_token}`,
         },
     });
+    return res.data;
+};
+
+// fortgot password
+export const forgotPassword = async (data) => {
+    const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/forgotPassword`,
+        data
+    );
+    return res.data;
+};
+
+// reset password
+export const resetPassword = async (data) => {
+    const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/resetPassword`,
+        data
+    );
     return res.data;
 };

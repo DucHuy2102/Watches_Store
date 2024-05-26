@@ -75,40 +75,58 @@ const valueFormatter = function (number) {
 const Admin_DashboardPage = () => {
     return (
         <div>
-            <h1 className='text-3xl font-PlayfairDisplay font-bold mt-2 text-center'>Trang quản lý hệ thống</h1>
+            <h1 className='text-3xl font-PlayfairDisplay font-bold text-center'>
+                Trang quản lý hệ thống
+            </h1>
             {/* overview */}
-            <div className='mt-5 px-16'>
+            <div className='mt-7 px-16'>
                 <div className='flex items-center justify-between gap-5'>
                     {/* total user */}
                     <div className='bg-gray-900 hover:bg-gray-700 transition duration-300 h-[20vh] px-5 w-[25vw] rounded-md shadow-tremor-card flex justify-between items-center hover:cursor-pointer'>
                         <FaUniversalAccess className='text-white text-4xl w-[30%] h-[50%]' />
                         <div className='w-[70%]'>
-                            <h2 className='text-xl font-bold text-gray-200 text-center'>Lượt truy cập</h2>
-                            <p className='text-2xl font-bold text-gray-50 text-center'>12,345 Lượt/Ngày</p>
+                            <h2 className='text-xl font-bold text-gray-200 text-center'>
+                                Lượt truy cập
+                            </h2>
+                            <p className='text-2xl font-bold text-gray-50 text-center'>
+                                12,345 Lượt/Ngày
+                            </p>
                         </div>
                     </div>
                     {/* total user */}
                     <div className='bg-gray-900 hover:bg-gray-700 transition duration-300 h-[20vh] px-5 w-[25vw] rounded-md shadow-tremor-card flex justify-between items-center hover:cursor-pointer'>
                         <FaUser className='text-white text-4xl w-[30%] h-[50%]' />
                         <div className='w-[70%]'>
-                            <h2 className='text-xl font-bold text-gray-200 text-center'>Số người dùng</h2>
-                            <p className='text-2xl font-bold text-gray-50 text-center'>1,234 Người</p>
+                            <h2 className='text-xl font-bold text-gray-200 text-center'>
+                                Số người dùng
+                            </h2>
+                            <p className='text-2xl font-bold text-gray-50 text-center'>
+                                1,234 Người
+                            </p>
                         </div>
                     </div>
                     {/* total user */}
                     <div className='bg-gray-900 hover:bg-gray-700 transition duration-300 h-[20vh] px-5 w-[25vw] rounded-md shadow-tremor-card flex justify-between items-center hover:cursor-pointer'>
                         <FaCartPlus className='text-white text-4xl w-[30%] h-[50%]' />
                         <div className='w-[70%]'>
-                            <h2 className='text-xl font-bold text-gray-200 text-center'>Số lượng sản phẩm</h2>
-                            <p className='text-2xl font-bold text-gray-50 text-center'>123 sản phẩm</p>
+                            <h2 className='text-xl font-bold text-gray-200 text-center'>
+                                Số lượng sản phẩm
+                            </h2>
+                            <p className='text-2xl font-bold text-gray-50 text-center'>
+                                123 sản phẩm
+                            </p>
                         </div>
                     </div>
                     {/* total user */}
                     <div className='bg-gray-900 hover:bg-gray-700 transition duration-300 h-[20vh] px-5 w-[25vw] rounded-md shadow-tremor-card flex justify-between items-center hover:cursor-pointer'>
                         <MdAttachMoney className='text-white text-4xl w-[30%] h-[50%]' />
                         <div className='w-[70%]'>
-                            <h2 className='text-xl font-bold text-gray-200 text-center'>Doanh thu quý 1</h2>
-                            <p className='text-2xl font-bold text-gray-50 text-center'>12,345,678 Triệu</p>
+                            <h2 className='text-xl font-bold text-gray-200 text-center'>
+                                Doanh thu quý 1
+                            </h2>
+                            <p className='text-2xl font-bold text-gray-50 text-center'>
+                                12,345,678 Triệu
+                            </p>
                         </div>
                     </div>
                 </div>

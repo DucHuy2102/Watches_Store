@@ -15,12 +15,12 @@ const SayThanks = () => {
                     khâu.
                 </li>
                 <li>
-                    Không phải là một hệ thống gì đó quá lớn lao, Hcmwatcn.vn
-                    cam kết dù hình thành từ những gì nhỏ nhất, dù chỉ với một
-                    khách hàng, WatcHes vẫn sẽ cố gắng từng ngày từng ngày xây
-                    dựng đội ngũ hệ thống, mang đến cho khách hàng trải nghiệm
-                    tuyệt vời trọn vẹn nhất ‑ tiếp nối những văn hóa phục vụ
-                    khách hàng tuyệt vời mà các doanh nghiệp lớn MWG, The Coffee
+                    Không phải là một hệ thống gì đó quá lớn lao, WatcHes cam
+                    kết dù hình thành từ những gì nhỏ nhất, dù chỉ với một khách
+                    hàng, WatcHes vẫn sẽ cố gắng từng ngày từng ngày xây dựng
+                    đội ngũ hệ thống, mang đến cho khách hàng trải nghiệm tuyệt
+                    vời trọn vẹn nhất ‑ tiếp nối những văn hóa phục vụ khách
+                    hàng tuyệt vời mà các doanh nghiệp lớn MWG, The Coffee
                     House… đã tạo dựng.
                 </li>
             </ul>

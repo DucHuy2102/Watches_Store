@@ -86,16 +86,17 @@ const ResetPasswordPage = () => {
 
                     {/* newPass */}
                     <Form.Item
-                        label={<label className='text-lg'>Mật khẩu mới</label>}
-                        name='Mật khẩu mới'
+                        label={<label className='text-lg'>Mật khẩu</label>}
+                        name='password'
                         rules={[
                             {
                                 required: true,
+                                message: 'Mật khẩu không được bỏ trống!',
                             },
                         ]}
                         className='text-red-500 text-start mt-1 mb-8'
                     >
-                        <Input
+                        <Input.Password
                             onChange={(e) => setNewPass(e.target.value)}
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
                         />
@@ -106,15 +107,17 @@ const ResetPasswordPage = () => {
                         label={
                             <label className='text-lg'>Xác nhận mật khẩu</label>
                         }
-                        name='Xác nhận mật khẩu'
+                        name='password'
                         rules={[
                             {
                                 required: true,
+                                message:
+                                    'Xác nhận mật khẩu không được bỏ trống!',
                             },
                         ]}
                         className='text-red-500 text-start mt-1 mb-8'
                     >
-                        <Input
+                        <Input.Password
                             onChange={(e) => setConfirmPass(e.target.value)}
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
                         />

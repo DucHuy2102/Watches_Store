@@ -83,7 +83,7 @@ const Body_ListProduct = (props) => {
     };
 
     return (
-        <tbody className='border border-black'>
+        <tbody className='border text-lg border-black'>
             <tr>
                 <td className='py-4 border border-black'>
                     <div className='flex items-center pl-10'>
@@ -95,7 +95,7 @@ const Body_ListProduct = (props) => {
                         />
 
                         {/* name */}
-                        <span className='w-80 font-semibold'>
+                        <span className='w-96 pl-5 font-semibold'>
                             {productName}
                         </span>
                     </div>

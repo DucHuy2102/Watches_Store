@@ -6,17 +6,24 @@ const Admin_HeaderComponent = () => {
     const dataAdmin_Redux = useSelector((state) => state.admin);
 
     return (
-        <div className='w-full h-14 flex items-center justify-center px-20 py-7'>
+        <div className='w-full bg-[#001529] h-[10vh] flex items-center justify-center px-20 py-7'>
             {/* name website */}
             <div className='w-[20%] flex justify-start'>
-                <Link to='/admin/dashboard' className='text-4xl font-bold text-white'>
+                <Link
+                    to='/admin/dashboard'
+                    className='text-4xl font-bold text-white'
+                >
                     Watc<span className='text-yellow-400 text-5xl'>H</span>es
                 </Link>
             </div>
 
             {/* search */}
             <div className='w-[60%] flex-grow justify-center'>
-                <input type='text' placeholder='Search...' className='w-full h-10 px-5 text-lg rounded-md' />
+                <input
+                    type='text'
+                    placeholder='Search...'
+                    className='w-full h-10 px-5 text-lg rounded-md'
+                />
             </div>
 
             {/* user */}

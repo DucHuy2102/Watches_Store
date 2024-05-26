@@ -43,7 +43,7 @@ const Admin_ListProduct = () => {
                 </h1>
                 <button
                     onClick={handleNavigation('/admin/product/add')}
-                    className='border border-black text-lg rounded-lg hover:bg-blue-500 hover:border-blue-500 hover:text-white transition duration-200 px-2 py-3'
+                    className='border border-black text-lg rounded-lg hover:bg-blue-500 hover:border-blue-500 hover:text-white transition duration-200 px-3 py-3'
                 >
                     Thêm sản phẩm mới
                 </button>
@@ -57,7 +57,7 @@ const Admin_ListProduct = () => {
                                 {title.map((item, index) => (
                                     <th
                                         key={index}
-                                        className='text-center border border-black font-semibold'
+                                        className='text-center text-lg border border-black font-semibold'
                                     >
                                         {item}
                                     </th>

@@ -61,6 +61,8 @@ const AdminLayout = ({ children }) => {
         <>
             {/* header */}
             <Admin_HeaderComponent />
+
+            {/* sidebar */}
             <Layout className='min-h-[100vh]'>
                 <Sider
                     width={240}

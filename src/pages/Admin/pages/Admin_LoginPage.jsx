@@ -48,7 +48,9 @@ const Admin_LoginPage = () => {
             { username, password },
             {
                 onError: () => {
-                    message.error('Tên đăng nhập hoặc mật khẩu không chính xác!');
+                    message.error(
+                        'Tên đăng nhập hoặc mật khẩu không chính xác!'
+                    );
                 },
                 onSuccess: () => {
                     message.success('Đăng nhập thành công!');
@@ -63,7 +65,10 @@ const Admin_LoginPage = () => {
             <h1 className='h-14 text-4xl mb-5 font-bold text-transparent bg-gradient-to-r from-sky-500 to-red-500 bg-clip-text'>
                 Quản lý hệ thống
             </h1>
-            <Form onFinish={handleSubmitLogin} className='bg-gray-100 w-[30vw] py-10 px-10 rounded-md'>
+            <Form
+                onFinish={handleSubmitLogin}
+                className='bg-gray-100 w-[30vw] py-10 px-10 rounded-md'
+            >
                 {/* username */}
                 <Form.Item
                     className='mt-5'
@@ -95,17 +100,12 @@ const Admin_LoginPage = () => {
                         },
                     ]}
                 >
-                    <Input.Password name='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <Input.Password
+                        name='password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                 </Form.Item>
-
-                {/* error */}
-                {/* {isError && (
-                    <div>
-                        <p className='text-red-500 font-bold text-center'>
-                            Tên đăng nhập hoặc mật khẩu không chính xác!
-                        </p>
-                    </div>
-                )} */}
 
                 {/* button submit */}
                 <Form.Item>
@@ -117,10 +117,15 @@ const Admin_LoginPage = () => {
                 {/* note */}
                 <Form.Item>
                     <p>
-                        <span className='font-bold'>Trang chỉ dành cho những thành viên trong Ban quản trị</span>. Vui
-                        lòng điền chính xác thông tin để thuận tiện cho việc quản lý và xử lý các tác vụ. Trường hợp
-                        không phải là thành viên trong <span className='font-bold'>Ban quản trị</span>, vui lòng quay
-                        lại
+                        <span className='font-bold'>
+                            Trang chỉ dành cho những thành viên trong Ban quản
+                            trị
+                        </span>
+                        . Vui lòng điền chính xác thông tin để thuận tiện cho
+                        việc quản lý và xử lý các tác vụ. Trường hợp không phải
+                        là thành viên trong{' '}
+                        <span className='font-bold'>Ban quản trị</span>, vui
+                        lòng quay lại
                         <Link to='/' className='italic pl-1'>
                             Trang chủ
                         </Link>

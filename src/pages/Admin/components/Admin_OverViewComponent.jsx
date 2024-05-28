@@ -33,8 +33,8 @@ const overViewValue = [
 
 const Admin_OverViewComponent = () => {
     return (
-        <div className='mt-7 px-16'>
-            <div className='grid grid-cols-2 gap-5'>
+        <div className='mt-7 px-16 w-full flex justify-center gap-x-10'>
+            <div className='grid grid-cols-2 gap-10 w-full max-w-6xl mx-auto'>
                 {overViewValue.map((item, index) => (
                     <div
                         key={index}

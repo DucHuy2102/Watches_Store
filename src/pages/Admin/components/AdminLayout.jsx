@@ -3,11 +3,12 @@ import { UserOutlined } from '@ant-design/icons';
 import { BiCategoryAlt } from 'react-icons/bi';
 import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
 import { RiBillLine } from 'react-icons/ri';
-import { Layout, Menu, theme } from 'antd';
+import { Layout, Menu } from 'antd';
 import Admin_HeaderComponent from './Admin_HeaderComponent';
 import { useNavigate } from 'react-router-dom';
 
 const { Content, Footer, Sider } = Layout;
+
 function getItem(label, key, icon, children) {
     return {
         key,
@@ -17,23 +18,10 @@ function getItem(label, key, icon, children) {
     };
 }
 
-// const items = [
-// more style for menu
-// getItem('Quản lý người dùng', 'sub1', <UserOutlined />, [
-//     getItem('Tom', '3'),
-//     getItem('Bill', '4'),
-//     getItem('Alex', '5'),
-// ]),
-// getItem('Quản lý hóa đơn', 'sub2', <TeamOutlined />, [
-//     getItem('Team 1', '6'),
-//     getItem('Team 2', '8'),
-// ]),
-// getItem('Files', '9', <FileOutlined />),
-// ];
-
 const AdminLayout = ({ children }) => {
     const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate();
+    const [selectedKeys, setSelectedKeys] = useState([]);
 
     const items = [
         getItem('Quản lý sản phẩm', '1', <MdOutlineProductionQuantityLimits />),
@@ -43,6 +31,7 @@ const AdminLayout = ({ children }) => {
     ];
 
     const handleNavigationPage = (key) => {
+        setSelectedKeys([key]);
         switch (key) {
             case '1':
                 return () => navigate('/admin/product');
@@ -75,7 +64,7 @@ const AdminLayout = ({ children }) => {
                         onClick={({ key }) => handleNavigationPage(key)()}
                         className='h-full'
                         theme='dark'
-                        defaultSelectedKeys={['1']}
+                        selectedKeys={selectedKeys}
                         mode='inline'
                         items={items}
                     />
@@ -102,4 +91,5 @@ const AdminLayout = ({ children }) => {
         </>
     );
 };
+
 export default AdminLayout;

@@ -49,7 +49,6 @@ const Body_ListProduct = (props) => {
     // show modal when click delete button
     const showModal = () => {
         setIsModalOpen(true);
-        console.log('id modal', id);
     };
 
     // onClick delete button

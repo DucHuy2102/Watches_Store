@@ -1,40 +1,146 @@
 import { useQuery } from '@tanstack/react-query';
-import * as ProductService from '../../../../services/ProductService';
 // import Body_ListProduct from './Body_ListProduct';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { SiAdblock } from 'react-icons/si';
+import { MdDeleteOutline } from 'react-icons/md';
 import * as UserService from '../../../../services/UserService';
-
-const title = [
-    'Tên đồng hồ',
-    'Trạng thái',
-    'Giá',
-    'Số lượng tồn kho',
-    'Thao tác',
-];
+import { Modal, Space, Table } from 'antd';
+import { useState } from 'react';
+import { useMutationHook } from '../../../../hooks/useMutationHook';
 
 const Admin_UserPage = () => {
-    const [users, setUsers] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
-    const tokenAdmin = localStorage.getItem('adminToken');
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const token = localStorage.getItem('adminToken');
+    const mutationDelete = useMutationHook(({ token, id }) => {
+        return UserService.deleteProduct(token, id);
+    });
+    const handleOk = () => {
+        setIsModalOpen(false);
+        // try {
+        //     mutationDelete.mutate(
+        //         { token, id },
+        //         {
+        //             onSuccess: () => {
+        //                 message.success(
+        //                     'Xóa sản phẩm thành công. Trang sẽ tự động làm mới'
+        //                 );
+        //             },
+        //             onSettled: () => {
+        //                 if (refetch) {
+        //                     refetch();
+        //                 }
+        //             },
+        //         }
+        //     );
+        // } catch (error) {
+        //     console.error('Delete product failed:', error);
+        //     message.error('Lỗi hệ thống! Xóa sản phẩm thất bại');
+        // }
+    };
 
     const handleNavigation = (path) => {
         return () => navigate(path);
     };
 
+    const tokenAdmin = localStorage.getItem('adminToken');
     const getUsers = async () => {
         const res = await UserService.getAllUser(tokenAdmin);
         return res;
     };
 
-    const { data, refetch } = useQuery({
+    const { data } = useQuery({
         queryKey: ['users'],
         queryFn: getUsers,
         keepPreviousData: true,
-        onSuccess: (data) => setUsers(data.data),
     });
 
-    console.log(data?.data);
+    const columns = [
+        {
+            title: 'Họ và tên',
+            dataIndex: 'fullname',
+            key: 'fullname',
+            render: (text) => <p>{text}</p>,
+        },
+        {
+            title: 'Tên người dùng',
+            dataIndex: 'username',
+            key: 'username',
+            render: (text) => <p>{text}</p>,
+        },
+        {
+            title: 'Số điện thoại',
+            dataIndex: 'phone',
+            key: 'phone',
+        },
+        {
+            title: 'Địa chỉ',
+            dataIndex: 'address',
+            key: 'address',
+        },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'stateUser',
+            key: 'stateUser',
+            align: 'center',
+        },
+        {
+            title: 'Thao tác',
+            key: 'action',
+            align: 'center',
+            render: (_, record) => (
+                <Space size='middle'>
+                    <div className='flex justify-center items-center gap-1 hover:cursor-pointer bg-black text-white px-2 py-2 rounded-lg'>
+                        <SiAdblock size={20} />
+                        Chặn
+                    </div>
+                    <div
+                        onClick={showModal}
+                        className='flex justify-center items-center gap-1 hover:cursor-pointer bg-red-500 text-white px-2 py-2 rounded-lg'
+                    >
+                        <MdDeleteOutline size={20} />
+                        Xóa
+                    </div>
+                    <Modal
+                        title='Xác nhận xóa người dùng'
+                        okText='Xác nhận xóa'
+                        cancelText='Hủy bỏ'
+                        style={{ textAlign: 'center' }}
+                        open={isModalOpen}
+                        okButtonProps={{
+                            className:
+                                'bg-black text-white hover:bg-red-500 hover:text-white',
+                        }}
+                        onOk={handleOk}
+                        onCancel={handleCancel}
+                    >
+                        <p className='text-lg'>
+                            Hành động này sẽ xóa người dùng khỏi hệ thống và dữ
+                            liệu không thể khôi phục!
+                        </p>
+                    </Modal>
+                </Space>
+            ),
+        },
+    ];
+
+    const dataTable = data?.data.map((user, indexUser) => ({
+        key: user.id || indexUser,
+        fullname: `${user.firstname} ${user.lastname}`,
+        username: user.username,
+        phone: user.phone,
+        address: user.address,
+        stateUser: user.state,
+    }));
 
     // const removeProductFromList = (id) => {
     //     setProducts(products.filter((product) => product.id !== id));
@@ -42,41 +148,25 @@ const Admin_UserPage = () => {
 
     return (
         <div>
-            <div className='mt-3 px-14 flex justify-between items-center'>
+            <div className='mt-3 px-14 flex justify-center items-center'>
                 <h1 className='font-bold text-2xl mt-2 text-center'>
                     Danh sách người dùng
                 </h1>
-                <button
+                {/* <button
                     onClick={handleNavigation('/admin/product/add')}
                     className='border border-black text-lg rounded-lg hover:bg-blue-500 hover:border-blue-500 hover:text-white transition duration-200 px-3 py-3'
                 >
                     Thêm hãng mới
-                </button>
+                </button> */}
             </div>
             <div className='w-full'>
                 <div className='mt-5'>
-                    {/* <p className='font-bold text-xl pl-14 m b-1'>Hãng Casio</p> */}
-                    <table className='w-full'>
-                        <thead>
-                            <tr>
-                                {title.map((item, index) => (
-                                    <th
-                                        key={index}
-                                        className='text-center text-lg border border-black font-semibold'
-                                    >
-                                        {item}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        {/* {data?.data?.map((product) => (
-                            <Body_ListProduct
-                                key={product.id}
-                                product={{ ...product, refetch }}
-                                removeProductFromList={removeProductFromList}
-                            />
-                        ))} */}
-                    </table>
+                    <Table
+                        className=''
+                        columns={columns}
+                        dataSource={dataTable}
+                        pagination={false}
+                    />
                 </div>
             </div>
         </div>

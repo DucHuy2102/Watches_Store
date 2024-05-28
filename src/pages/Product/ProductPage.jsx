@@ -1,16 +1,41 @@
+import { useEffect, useRef, useState } from 'react';
 import { ProductCard } from '../exportPages';
-import { PaginationComponent, Sort_Filter } from '../../components/exportComponents';
+import {
+    PaginationComponent,
+    Sort_Filter,
+} from '../../components/exportComponents';
 import { useQuery } from '@tanstack/react-query';
 import * as ProductService from '../../services/ProductService';
+import { useSelector } from 'react-redux';
 
 const ProductPage = () => {
+    const [searchResults, setSearchResults] = useState([]);
+    const searchRef = useRef();
+    const dataSearch_Redux = useSelector((state) => state.searchProduct);
+    console.log('dataSearch_Redux -->', dataSearch_Redux);
+
     const getAllProduct = async () => {
         const res = await ProductService.getAllProduct();
         return res;
     };
 
-    const { data } = useQuery({ queryKey: ['products'], queryFn: getAllProduct });
-    // console.log('List_Products:', data);
+    const { data } = useQuery({
+        queryKey: ['products'],
+        queryFn: getAllProduct,
+    });
+    useEffect(() => {
+        if (searchRef.current) {
+            // getAllProduct;
+            console.log('hello');
+        }
+        searchRef.current = true;
+    }, []);
+
+    // useEffect(() => {
+    //     if (searchResults.length === 0) {
+    //         setSearchResults(data?.data || []);
+    //     }
+    // }, [data, searchResults.length]);
 
     return (
         <div className='w-full mb-2 flex flex-col items-center justify-center'>

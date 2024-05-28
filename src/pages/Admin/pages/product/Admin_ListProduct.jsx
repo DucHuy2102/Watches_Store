@@ -3,6 +3,7 @@ import * as ProductService from '../../../../services/ProductService';
 import Body_ListProduct from './Body_ListProduct';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 const title = [
     'Tên đồng hồ',
@@ -38,20 +39,35 @@ const Admin_ListProduct = () => {
     return (
         <div>
             <div className='mt-3 px-14 flex justify-between items-center'>
-                <h1 className='font-bold text-2xl mt-2 text-center'>
+                <h1 className='font-bold font-PlayfairDisplay text-2xl mt-2 text-center'>
                     Danh sách đồng hồ
                 </h1>
-                <button
-                    onClick={handleNavigation('/admin/product/add')}
-                    className='border border-black text-lg rounded-lg hover:bg-blue-500 hover:border-blue-500 hover:text-white transition duration-200 px-3 py-3'
-                >
-                    Thêm sản phẩm mới
-                </button>
+                <div className='flex justify-center items-center gap-5'>
+                    {/* button add new product */}
+                    <button
+                        onClick={handleNavigation('/admin/product/add')}
+                        className='border border-black text-lg rounded-lg hover:bg-blue-500 hover:border-blue-500 hover:text-white transition duration-200 px-3 py-3'
+                    >
+                        Thêm sản phẩm mới
+                    </button>
+
+                    {/* export table to excel file */}
+                    {/* <div title='Tải xuống file danh sách đồng hồ'>
+                        <ReactHTMLTableToExcel
+                            id='table_ProductAdmin'
+                            table='table_ProductAdmin'
+                            filename='tablexls'
+                            sheet='tablexls'
+                            className='border border-black text-lg rounded-lg hover:bg-blue-500 hover:border-blue-500 hover:text-white transition duration-200 px-3 py-3'
+                            buttonText='Tải xuống dữ liệu'
+                        />
+                    </div> */}
+                </div>
             </div>
             <div className='w-full'>
                 <div className='mt-5'>
                     {/* <p className='font-bold text-xl pl-14 m b-1'>Hãng Casio</p> */}
-                    <table className='w-full'>
+                    <table id='table_ProductAdmin' className='w-full'>
                         <thead>
                             <tr>
                                 {title.map((item, index) => (
@@ -64,6 +80,7 @@ const Admin_ListProduct = () => {
                                 ))}
                             </tr>
                         </thead>
+
                         {data?.data?.map((product) => (
                             <Body_ListProduct
                                 key={product.id}

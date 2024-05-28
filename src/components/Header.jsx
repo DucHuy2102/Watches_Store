@@ -4,13 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCartShopping,
     faCircleArrowLeft,
-    faRightToBracket,
     faUser,
     faUserGear,
-    faUserPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { Badge } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { findProductByName } from '../services/ProductService';
 
 // style
 const styleButton =
@@ -25,6 +24,8 @@ const Header = () => {
 
     const dataUSer = useSelector((state) => state.user);
     const accountRef = useRef(null);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         const handleClickOutButtonAccout = (event) => {
             if (
@@ -55,10 +56,31 @@ const Header = () => {
     }, []);
 
     const navigate = useNavigate();
+
+    // logout demo
     const logout = () => {
         localStorage.removeItem('token');
         navigate('/');
         window.location.reload();
+    };
+
+    // search product
+    const [searchProduct, setSearchProduct] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const handleSearchChange = (e) => {
+        setSearchProduct(e.target.value);
+    };
+    const handleKeyPress = async (e) => {
+        if (e.key === 'Enter') {
+            if (searchProduct) {
+                const results = await findProductByName(searchProduct);
+                setSearchResults(results);
+                console.log('results -->', results);
+                dispatch({ type: 'searchProduct', payload: results });
+            } else {
+                setSearchResults([]);
+            }
+        }
     };
 
     return (
@@ -81,21 +103,35 @@ const Header = () => {
                 <Link to='/products' className={styleButtonPage}>
                     Sản phẩm
                 </Link>
-                {/* <Link to='/blogs' className={styleButtonPage}>
-                    Blog
-                </Link> */}
                 <Link to='/contact' className={styleButtonPage}>
                     Liên hệ
                 </Link>
             </div>
 
             {/* search */}
-            <div className='w-[10rem] flex-grow'>
+            <div className='w-[10rem] flex-grow relative'>
                 <input
+                    onChange={handleSearchChange}
+                    onKeyPress={handleKeyPress}
                     type='text'
+                    value={searchProduct}
                     placeholder='Tìm kiếm...'
-                    className='h-9 border text-xl border-gray-400 px-3 py-1 rounded-lg w-[95%] font-PlayfairDisplay'
+                    className='h-9 border text-lg border-gray-400 px-3 py-1 rounded-lg w-[95%] font-PlayfairDisplay'
                 />
+                {searchResults.length > 0 && (
+                    <div className='absolute top-full left-0 bg-white border border-gray-400 rounded-lg w-full mt-1 max-h-60 overflow-auto z-10'>
+                        {searchResults.map((product) => (
+                            <Link
+                                key={product.id}
+                                to={`/product/${product.id}`}
+                                className='block px-3 py-2 hover:bg-gray-200'
+                                onClick={() => setSearchResults([])}
+                            >
+                                {product.name}
+                            </Link>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* 3 buttons: login, register & order button */}

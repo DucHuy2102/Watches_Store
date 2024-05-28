@@ -3,6 +3,7 @@ import * as ProductService from '../../../../services/ProductService';
 // import Body_ListProduct from './Body_ListProduct';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import * as UserService from '../../../../services/UserService';
 
 const title = [
     'Tên đồng hồ',
@@ -13,23 +14,27 @@ const title = [
 ];
 
 const Admin_UserPage = () => {
-    const [products, setProducts] = useState([]);
+    const [users, setUsers] = useState([]);
     const navigate = useNavigate();
+    const tokenAdmin = localStorage.getItem('adminToken');
+
     const handleNavigation = (path) => {
         return () => navigate(path);
     };
 
-    // const getAllProduct = async () => {
-    //     const res = await ProductService.getAllProduct();
-    //     return res;
-    // };
+    const getUsers = async () => {
+        const res = await UserService.getAllUser(tokenAdmin);
+        return res;
+    };
 
-    // const { data, refetch } = useQuery({
-    //     queryKey: ['products'],
-    //     queryFn: getAllProduct,
-    //     keepPreviousData: true,
-    //     onSuccess: (data) => setProducts(data.data),
-    // });
+    const { data, refetch } = useQuery({
+        queryKey: ['users'],
+        queryFn: getUsers,
+        keepPreviousData: true,
+        onSuccess: (data) => setUsers(data.data),
+    });
+
+    console.log(data?.data);
 
     // const removeProductFromList = (id) => {
     //     setProducts(products.filter((product) => product.id !== id));

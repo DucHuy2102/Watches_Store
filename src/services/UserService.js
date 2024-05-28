@@ -70,3 +70,13 @@ export const resetPassword = async (data) => {
     );
     return res.data;
 };
+
+// get all user
+export const getAllUser = async (access_token) => {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/user/getAll`, {
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+        },
+    });
+    return res.data;
+};

@@ -9,10 +9,8 @@ import * as ProductService from '../../services/ProductService';
 import { useSelector } from 'react-redux';
 
 const ProductPage = () => {
-    const [searchResults, setSearchResults] = useState([]);
-    const searchRef = useRef();
-    const dataSearch_Redux = useSelector((state) => state.searchProduct);
-    console.log('dataSearch_Redux -->', dataSearch_Redux);
+    const searchRef = useRef(false);
+    const dataSearch_Redux = useSelector((state) => state.searchProduct.search);
 
     const getAllProduct = async () => {
         const res = await ProductService.getAllProduct();
@@ -22,20 +20,29 @@ const ProductPage = () => {
     const { data } = useQuery({
         queryKey: ['products'],
         queryFn: getAllProduct,
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 10 * 60 * 1000,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        refetchInterval: false,
     });
+
+    const [products, setProducts] = useState([]);
+
     useEffect(() => {
         if (searchRef.current) {
-            // getAllProduct;
             console.log('hello');
         }
         searchRef.current = true;
     }, []);
 
-    // useEffect(() => {
-    //     if (searchResults.length === 0) {
-    //         setSearchResults(data?.data || []);
-    //     }
-    // }, [data, searchResults.length]);
+    useEffect(() => {
+        if (dataSearch_Redux.length > 0) {
+            setProducts(dataSearch_Redux);
+        } else if (data && data.data) {
+            setProducts(data.data);
+        }
+    }, [data, dataSearch_Redux]);
 
     return (
         <div className='w-full mb-2 flex flex-col items-center justify-center'>
@@ -44,7 +51,7 @@ const ProductPage = () => {
 
             {/* products */}
             <div className='mt-7 mb-3 grid grid-cols-3 gap-10'>
-                {data?.data?.map((product) => (
+                {products.map((product) => (
                     <ProductCard key={product.id} product={product} />
                 ))}
             </div>

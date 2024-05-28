@@ -7,9 +7,11 @@ import {
     faUser,
     faUserGear,
 } from '@fortawesome/free-solid-svg-icons';
+import { SearchOutlined } from '@ant-design/icons';
 import { Badge } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { findProductByName } from '../services/ProductService';
+import { searchProduct } from '../redux/slides/findProductSlide';
 
 // style
 const styleButton =
@@ -65,18 +67,17 @@ const Header = () => {
     };
 
     // search product
-    const [searchProduct, setSearchProduct] = useState('');
+    const [searchValue, setSearchValue] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const handleSearchChange = (e) => {
-        setSearchProduct(e.target.value);
+        setSearchValue(e.target.value);
     };
     const handleKeyPress = async (e) => {
         if (e.key === 'Enter') {
-            if (searchProduct) {
-                const results = await findProductByName(searchProduct);
+            if (searchValue) {
+                const results = await findProductByName(searchValue);
                 setSearchResults(results);
-                console.log('results -->', results);
-                dispatch({ type: 'searchProduct', payload: results });
+                dispatch(searchProduct(results));
             } else {
                 setSearchResults([]);
             }
@@ -114,7 +115,7 @@ const Header = () => {
                     onChange={handleSearchChange}
                     onKeyPress={handleKeyPress}
                     type='text'
-                    value={searchProduct}
+                    value={searchValue}
                     placeholder='Tìm kiếm...'
                     className='h-9 border text-lg border-gray-400 px-3 py-1 rounded-lg w-[95%] font-PlayfairDisplay'
                 />

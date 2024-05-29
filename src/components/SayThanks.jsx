@@ -2,7 +2,7 @@ import React from 'react';
 
 const SayThanks = () => {
     return (
-        <div className='w-[60vw] border-2 border-blue-500 rounded-lg border-dashed mx-auto mt-2 mb-8 px-32 py-10 font-sans'>
+        <div className='w-[60vw] border-2 border-blue-500 rounded-lg border-dashed mx-auto mt-5 mb-8 px-32 py-10 font-sans'>
             <p className='font-bold text-blue-500 text-2xl pb-2'>
                 Những điều nhỏ nhoi WatcHes muốn gửi gắm
             </p>

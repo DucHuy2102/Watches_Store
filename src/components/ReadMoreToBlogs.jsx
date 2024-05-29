@@ -12,8 +12,12 @@ const ReadMoreToBlogs = () => {
 
             {/* text */}
             <div className='absolute text-white left-36'>
-                <p className='text-left font-medium text-3xl'>Tin hot thế giới quanh ta</p>
-                <p className='text-left text-xl'>Khám phá những câu chuyện xung quanh những chiếc đồng hồ</p>
+                <p className='text-left font-medium text-3xl'>
+                    Tin hot thế giới quanh ta
+                </p>
+                <p className='text-left text-xl'>
+                    Khám phá những câu chuyện xung quanh những chiếc đồng hồ
+                </p>
             </div>
 
             {/* read more: click to blogs */}
@@ -31,7 +35,11 @@ const ReadMoreToBlogs = () => {
                         stroke='currentColor'
                         strokeWidth='2'
                     >
-                        <path strokeLinecap='round' strokeLinejoin='round' d='M13 7l5 5m0 0l-5 5m5-5H6' />
+                        <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M13 7l5 5m0 0l-5 5m5-5H6'
+                        />
                     </svg>
                 </button>
             </Link>

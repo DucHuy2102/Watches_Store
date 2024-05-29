@@ -7,12 +7,15 @@ import { Modal, message } from 'antd';
 import { useState } from 'react';
 
 const Body_ListProduct = (props) => {
+    // data to display
     const { id, productName, price, img, amount, state, refetch } =
         props.product;
+
     const priceFormat = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
     }).format(price);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 

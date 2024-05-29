@@ -9,3 +9,4 @@ export { default as PaginationComponent } from './PaginationComponent';
 export { default as Comment_Component } from './Comment';
 export { default as PolicyComponent } from './PolicyComponent';
 export { default as SayThanks } from './SayThanks';
+export { default as TheReviews } from './TheReviews';

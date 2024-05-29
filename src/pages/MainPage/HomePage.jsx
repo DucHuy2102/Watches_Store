@@ -4,6 +4,7 @@ import {
     ShopNow,
     ReadMoreToBlogs,
     SayThanks,
+    TheReviews,
 } from '../../components/exportComponents';
 
 const HomePage = () => {
@@ -13,6 +14,7 @@ const HomePage = () => {
             <PolicyComponent />
             <ShopNow />
             <ReadMoreToBlogs />
+            <TheReviews />
             <SayThanks />
         </div>
     );

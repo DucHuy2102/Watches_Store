@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-// import Body_ListProduct from './Body_ListProduct';
 import { useNavigate } from 'react-router-dom';
 import { SiAdblock } from 'react-icons/si';
 import { MdDeleteOutline } from 'react-icons/md';
@@ -92,24 +91,35 @@ const Admin_UserPage = () => {
             dataIndex: 'stateUser',
             key: 'stateUser',
             align: 'center',
+            render: (text) => (
+                <button
+                    className={`hover:cursor-pointer w-24 py-2 rounded-lg uppercase ${
+                        text === 'online'
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-gray-500 text-white'
+                    }`}
+                >
+                    {text}
+                </button>
+            ),
         },
         {
             title: 'Thao tác',
             key: 'action',
             align: 'center',
-            render: (_, record) => (
+            render: () => (
                 <Space size='middle'>
-                    <div className='flex justify-center items-center gap-1 hover:cursor-pointer bg-black text-white px-2 py-2 rounded-lg'>
+                    <button className='flex justify-center items-center gap-1 hover:cursor-pointer bg-black text-white px-2 py-2 rounded-lg'>
                         <SiAdblock size={20} />
                         Chặn
-                    </div>
-                    <div
+                    </button>
+                    <button
                         onClick={showModal}
                         className='flex justify-center items-center gap-1 hover:cursor-pointer bg-red-500 text-white px-2 py-2 rounded-lg'
                     >
                         <MdDeleteOutline size={20} />
                         Xóa
-                    </div>
+                    </button>
                     <Modal
                         title='Xác nhận xóa người dùng'
                         okText='Xác nhận xóa'
@@ -142,14 +152,10 @@ const Admin_UserPage = () => {
         stateUser: user.state,
     }));
 
-    // const removeProductFromList = (id) => {
-    //     setProducts(products.filter((product) => product.id !== id));
-    // };
-
     return (
         <div>
             <div className='mt-3 px-14 flex justify-center items-center'>
-                <h1 className='font-bold text-2xl mt-2 text-center'>
+                <h1 className='font-bold text-3xl mt-2 text-center'>
                     Danh sách người dùng
                 </h1>
                 {/* <button

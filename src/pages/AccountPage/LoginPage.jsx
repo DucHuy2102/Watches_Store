@@ -20,6 +20,7 @@ const LoginPage = () => {
         const handleGetUserDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
             dispatch(updateUser({ ...res?.data, access_token: access_token }));
+            // console.log('data-User-Redux: -->', res?.data);
         };
 
         if (data?.code === 200) {

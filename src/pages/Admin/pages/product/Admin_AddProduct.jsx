@@ -34,12 +34,17 @@ const uploadImages = async (fileList) => {
                 formData.append('file', file.originFileObj);
                 formData.append('upload_preset', 'product');
                 try {
-                    const res = await axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData);
+                    const res = await axios.post(
+                        'https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload',
+                        formData
+                    );
                     const response = res.data;
                     return response.secure_url;
                 } catch (error) {
                     console.error('Upload failed:', error);
-                    message.error('Không thể thêm hình ảnh này vì kích thước quá lớn! Hãy chọn ảnh khác');
+                    message.error(
+                        'Không thể thêm hình ảnh này vì kích thước quá lớn! Hãy chọn ảnh khác'
+                    );
                     return null;
                 }
             } else {
@@ -119,7 +124,8 @@ const AddProduct = () => {
     };
 
     // Handle change image
-    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+    const handleChange = ({ fileList: newFileList }) =>
+        setFileList(newFileList);
 
     // Handle preview image
     const handlePreview = async (file) => {
@@ -148,13 +154,20 @@ const AddProduct = () => {
 
     return (
         <>
-            <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>Thêm thông tin đồng hồ</h1>
+            <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>
+                Thêm thông tin đồng hồ
+            </h1>
             <Form onFinish={handleAddProduct} className='px-14'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                     <Form.Item
                         label='Tên đồng hồ'
                         name='productName'
-                        rules={[{ required: true, message: 'Tên đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Tên đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input
@@ -171,78 +184,136 @@ const AddProduct = () => {
                             label='Giá đồng hồ (VNĐ)'
                             name='price'
                             rules={[
-                                { required: true, message: 'Giá đồng hồ không được bỏ trống!' },
+                                {
+                                    required: true,
+                                    message: 'Giá đồng hồ không được bỏ trống!',
+                                },
                                 () => ({
                                     validator(_, value) {
-                                        return new Promise((resolve, reject) => {
-                                            if (isNaN(value)) {
-                                                reject('Giá đồng hồ phải là một số.');
-                                            } else {
-                                                resolve();
+                                        return new Promise(
+                                            (resolve, reject) => {
+                                                if (isNaN(value)) {
+                                                    reject(
+                                                        'Giá đồng hồ phải là một số.'
+                                                    );
+                                                } else {
+                                                    resolve();
+                                                }
                                             }
-                                        });
+                                        );
                                     },
                                 }),
                             ]}
                             className='col-span-2 md:col-span-1 w-[25vw]'
                         >
-                            <Input name='price' value={stateProduct.price} onChange={handleOnChange} />
+                            <Input
+                                name='price'
+                                value={stateProduct.price}
+                                onChange={handleOnChange}
+                            />
                         </Form.Item>
 
                         <Form.Item
                             label='Số lượng'
                             name='amount'
                             rules={[
-                                { required: true, message: 'Số lượng không được bỏ trống!' },
+                                {
+                                    required: true,
+                                    message: 'Số lượng không được bỏ trống!',
+                                },
                                 () => ({
                                     validator(_, value) {
-                                        return new Promise((resolve, reject) => {
-                                            if (isNaN(value)) {
-                                                reject('Số lượng phải là một số.');
-                                            } else {
-                                                resolve();
+                                        return new Promise(
+                                            (resolve, reject) => {
+                                                if (isNaN(value)) {
+                                                    reject(
+                                                        'Số lượng phải là một số.'
+                                                    );
+                                                } else {
+                                                    resolve();
+                                                }
                                             }
-                                        });
+                                        );
                                     },
                                 }),
                             ]}
                             className='col-span-2 md:col-span-1 w-[20vw]'
                         >
-                            <Input name='amount' value={stateProduct.amount} onChange={handleOnChange} />
+                            <Input
+                                name='amount'
+                                value={stateProduct.amount}
+                                onChange={handleOnChange}
+                            />
                         </Form.Item>
                     </div>
 
                     <Form.Item
                         label='Hãng đồng hồ'
                         name='brand'
-                        rules={[{ required: true, message: 'Hãng đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Hãng đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
-                        <Input name='brand' value={stateProduct.brand} onChange={handleOnChange} className='w-full' />
+                        <Input
+                            name='brand'
+                            value={stateProduct.brand}
+                            onChange={handleOnChange}
+                            className='w-full'
+                        />
                     </Form.Item>
 
                     <Form.Item
                         label='Xuất xứ đồng hồ'
                         name='origin'
-                        rules={[{ required: true, message: 'Xuất xứ đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Xuất xứ đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
-                        <Input name='origin' value={stateProduct.origin} onChange={handleOnChange} className='w-full' />
+                        <Input
+                            name='origin'
+                            value={stateProduct.origin}
+                            onChange={handleOnChange}
+                            className='w-full'
+                        />
                     </Form.Item>
 
                     <Form.Item
                         label='Kích thước đồng hồ'
                         name='size'
-                        rules={[{ required: true, message: 'Kích thước đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Kích thước đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
-                        <Input name='size' value={stateProduct.size} onChange={handleOnChange} className='w-full' />
+                        <Input
+                            name='size'
+                            value={stateProduct.size}
+                            onChange={handleOnChange}
+                            className='w-full'
+                        />
                     </Form.Item>
 
                     <Form.Item
                         label='Độ dày đồng hồ'
                         name='thickness'
-                        rules={[{ required: true, message: 'Độ dày đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Độ dày đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input
@@ -256,12 +327,18 @@ const AddProduct = () => {
                     <Form.Item
                         label='Chiều cao đồng hồ'
                         name='height'
-                        rules={[{ required: true, message: 'Chiều cao đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Chiều cao đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='height'
-                            value={stateProduct.thickness}
+                            value={stateProduct.height}
                             onChange={handleOnChange}
                             className='w-full'
                         />
@@ -270,7 +347,13 @@ const AddProduct = () => {
                     <Form.Item
                         label='Chất liệu dây đồng hồ'
                         name='wireMaterial'
-                        rules={[{ required: true, message: 'Chất liệu dây đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Chất liệu dây đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input
@@ -284,7 +367,13 @@ const AddProduct = () => {
                     <Form.Item
                         label='Chất liệu vỏ đồng hồ'
                         name='shellMaterial'
-                        rules={[{ required: true, message: 'Chất liệu vỏ đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Chất liệu vỏ đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input
@@ -298,16 +387,33 @@ const AddProduct = () => {
                     <Form.Item
                         label='Phong cách đồng hồ'
                         name='style'
-                        rules={[{ required: true, message: 'Phong cách đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Phong cách đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
-                        <Input name='style' value={stateProduct.style} onChange={handleOnChange} className='w-full' />
+                        <Input
+                            name='style'
+                            value={stateProduct.style}
+                            onChange={handleOnChange}
+                            className='w-full'
+                        />
                     </Form.Item>
 
                     <Form.Item
                         label='Tính năng đồng hồ'
                         name='feature'
-                        rules={[{ required: true, message: 'Tính năng đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Tính năng đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input
@@ -321,25 +427,53 @@ const AddProduct = () => {
                     <Form.Item
                         label='Hình dáng đồng hồ'
                         name='shape'
-                        rules={[{ required: true, message: 'Hình dáng đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Hình dáng đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
-                        <Input name='shape' value={stateProduct.shape} onChange={handleOnChange} className='w-full' />
+                        <Input
+                            name='shape'
+                            value={stateProduct.shape}
+                            onChange={handleOnChange}
+                            className='w-full'
+                        />
                     </Form.Item>
 
                     <Form.Item
                         label='Trọng lượng đồng hồ'
                         name='weight'
-                        rules={[{ required: true, message: 'Trọng lượng đồng hồ không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Trọng lượng đồng hồ không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
-                        <Input name='weight' value={stateProduct.weight} onChange={handleOnChange} className='w-full' />
+                        <Input
+                            name='weight'
+                            value={stateProduct.weight}
+                            onChange={handleOnChange}
+                            className='w-full'
+                        />
                     </Form.Item>
 
                     <Form.Item
                         label='Đối tượng sử dụng'
                         name='genderUser'
-                        rules={[{ required: true, message: 'Đối tượng sử dụng không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message:
+                                    'Đối tượng sử dụng không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
                         <Input
@@ -353,19 +487,38 @@ const AddProduct = () => {
                     <Form.Item
                         label='Màu sắc'
                         name='color'
-                        rules={[{ required: true, message: 'Màu sắc không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Màu sắc không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
-                        <Input name='color' value={stateProduct.color} onChange={handleOnChange} className='w-full' />
+                        <Input
+                            name='color'
+                            value={stateProduct.color}
+                            onChange={handleOnChange}
+                            className='w-full'
+                        />
                     </Form.Item>
 
                     <Form.Item
                         label='Trạng thái'
                         name='condition'
-                        rules={[{ required: true, message: 'Trạng thái không được bỏ trống!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Trạng thái không được bỏ trống!',
+                            },
+                        ]}
                         className='col-span-2 md:col-span-1'
                     >
-                        <Radio.Group className='ml-14' onChange={handleRadioChange} value={stateProduct.condition}>
+                        <Radio.Group
+                            className='ml-14'
+                            onChange={handleRadioChange}
+                            value={stateProduct.condition}
+                        >
                             <Radio value='Mới'>Mới</Radio>
                             <Radio value='Đã sử dụng'>Đã sử dụng</Radio>
                         </Radio.Group>
@@ -374,10 +527,20 @@ const AddProduct = () => {
                 <Form.Item
                     label='Mô tả'
                     name='description'
-                    rules={[{ required: true, message: 'Mô tả không được bỏ trống!' }]}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Mô tả không được bỏ trống!',
+                        },
+                    ]}
                     className='col-span-2 md:col-span-1'
                 >
-                    <TextArea rows={4} name='description' value={stateProduct.description} onChange={handleOnChange} />
+                    <TextArea
+                        rows={4}
+                        name='description'
+                        value={stateProduct.description}
+                        onChange={handleOnChange}
+                    />
                 </Form.Item>
                 <div className='flex items-center justify-between'>
                     <Form.Item
@@ -401,22 +564,26 @@ const AddProduct = () => {
                                 wrapperStyle={{ display: 'none' }}
                                 preview={{
                                     visible: previewOpen,
-                                    onVisibleChange: (visible) => setPreviewOpen(visible),
-                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                    onVisibleChange: (visible) =>
+                                        setPreviewOpen(visible),
+                                    afterOpenChange: (visible) =>
+                                        !visible && setPreviewImage(''),
                                 }}
                                 src={previewImage}
                             />
                         )}
                     </Form.Item>
 
-                    <Button
-                        type='primary'
-                        htmlType='submit'
-                        className='bg-gray-300 mt-1 text-black hover:bg-blue-500 transition duration-300 hover:cursor-pointer rounded-md w-28 h-[102px] mb-6 flex flex-col justify-center items-center'
-                    >
-                        <PlusOutlined />
-                        <div className='pt-1'>Thêm sản phẩm</div>
-                    </Button>
+                    <Form.Item>
+                        <Button
+                            type='primary'
+                            htmlType='submit'
+                            className='bg-gray-300 mt-1 text-black hover:bg-blue-500 transition duration-300 hover:cursor-pointer rounded-md w-28 h-[102px] mb-6 flex flex-col justify-center items-center'
+                        >
+                            <PlusOutlined />
+                            <div className='pt-1'>Thêm sản phẩm</div>
+                        </Button>
+                    </Form.Item>
                 </div>
             </Form>
         </>

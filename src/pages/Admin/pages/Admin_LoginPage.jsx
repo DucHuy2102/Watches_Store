@@ -25,7 +25,7 @@ const Admin_LoginPage = () => {
     const mutation = useMutationHook((data) => UserService.loginUser(data));
     const { data } = mutation;
     useEffect(() => {
-        const handleGetUserDetail = async (access_token) => {
+        const handleGetAdminDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
             dispatch(updateAdmin({ ...res?.data, access_token: access_token }));
         };
@@ -37,7 +37,7 @@ const Admin_LoginPage = () => {
             if (access_token) {
                 const decode = jwtDecode(access_token);
                 if (decode?.sub) {
-                    handleGetUserDetail(access_token);
+                    handleGetAdminDetail(access_token);
                 }
             }
         }

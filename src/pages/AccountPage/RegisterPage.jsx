@@ -19,7 +19,6 @@ const RegisterPage = () => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    console.log(email, phone, username, password, confirmPassword);
 
     const navigate = useNavigate();
 
@@ -34,10 +33,10 @@ const RegisterPage = () => {
                     message.success(
                         'Đăng ký tài khoản thành công! Chuyển hướng về trang Đăng nhập'
                     );
+                    navigate('/login');
                 },
             }
         );
-        navigate('/login');
     };
 
     return (

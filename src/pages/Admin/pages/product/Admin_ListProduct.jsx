@@ -78,6 +78,9 @@ const Admin_ListProduct = () => {
                             'Xóa sản phẩm thành công. Trang sẽ tự động làm mới'
                         );
                     },
+                    onError: () => {
+                        message.error('Xóa sản phẩm thất bại');
+                    },
                     onSettled: () => {
                         if (refetch) {
                             refetch();

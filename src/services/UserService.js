@@ -80,3 +80,17 @@ export const getAllUser = async (access_token) => {
     });
     return res.data;
 };
+
+// delete user
+export const deleteUser = async (access_token, id) => {
+    const res = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/user/delete/${id}`,
+        {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+    return res.data;
+};

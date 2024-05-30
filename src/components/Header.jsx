@@ -59,7 +59,7 @@ const Header = () => {
 
     const navigate = useNavigate();
 
-    // logout demo
+    // logout demo function
     const logout = () => {
         localStorage.removeItem('token');
         navigate('/');

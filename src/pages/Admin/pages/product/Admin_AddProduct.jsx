@@ -72,7 +72,6 @@ const AddProduct = () => {
         feature: '',
         shape: '',
         condition: '',
-        height: '',
         genderUser: '',
         description: '',
         color: '',
@@ -319,26 +318,6 @@ const AddProduct = () => {
                         <Input
                             name='thickness'
                             value={stateProduct.thickness}
-                            onChange={handleOnChange}
-                            className='w-full'
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        label='Chiều cao đồng hồ'
-                        name='height'
-                        rules={[
-                            {
-                                required: true,
-                                message:
-                                    'Chiều cao đồng hồ không được bỏ trống!',
-                            },
-                        ]}
-                        className='col-span-2 md:col-span-1'
-                    >
-                        <Input
-                            name='height'
-                            value={stateProduct.height}
                             onChange={handleOnChange}
                             className='w-full'
                         />

@@ -94,3 +94,18 @@ export const deleteUser = async (access_token, id) => {
     );
     return res.data;
 };
+
+// block user
+export const blockUser = async (access_token, id) => {
+    const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/user/blockUser/${id}`,
+        null,
+        {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+    return res.data;
+};

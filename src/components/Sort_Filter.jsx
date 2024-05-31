@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
     faChevronDown,
-    faChevronUp,
     faEye,
     faFilter,
     faPerson,
@@ -9,18 +8,30 @@ import {
     faSort,
     faSortAmountDownAlt,
     faSortAmountUp,
-    faTags,
-    faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMutationHook } from '../hooks/useMutationHook';
+import * as ProductService from '../services/ProductService';
+import { message } from 'antd';
+import { updateProduct } from '../redux/slides/findProductSlide';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Sort_Filter = () => {
+    const dispatch = useDispatch();
+    const dataRedux = useSelector((state) => state?.searchProduct?.search);
+    const numberProduct = dataRedux?.length;
+
     // filter
     const [isOpenFilter, setIsOpenFilter] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('Bộ lọc');
     // sort
     const [isOpenSort, setIsOpenSort] = useState(false);
     const [selectedOption, setSelectedOption] = useState('Sắp xếp theo');
+
+    const mutationFindProduct = useMutationHook((name) =>
+        ProductService.findProductByName(name)
+    );
 
     const toggleMenuFilter = () => {
         if (isOpenFilter) {
@@ -33,9 +44,21 @@ const Sort_Filter = () => {
 
     // Xử lý lựa chọn một tùy chọn lọc
     const handleFilterClick = (filter) => {
+        const filterName = filter === 'Đồng hồ nam' ? 'Nam' : 'Nữ';
         setSelectedFilter(filter);
         setIsOpenSort(false);
-        // Thêm xử lý logic lọc sản phẩm ở đây
+        if (filterName) {
+            mutationFindProduct.mutate(filterName, {
+                onSuccess: (data) => {
+                    const products = data?.data;
+                    dispatch(updateProduct(products));
+                    setIsOpenFilter(false);
+                },
+                onError: () => {
+                    message.error('Không tìm thấy sản phẩm');
+                },
+            });
+        }
     };
 
     // Xử lý lựa chọn một tùy chọn
@@ -49,7 +72,10 @@ const Sort_Filter = () => {
     const sortRef = useRef(null);
     useEffect(() => {
         const handleClickOutsideFilter = (event) => {
-            if (filterRef.current && !filterRef.current.contains(event.target)) {
+            if (
+                filterRef.current &&
+                !filterRef.current.contains(event.target)
+            ) {
                 setIsOpenFilter(false);
             }
         };
@@ -67,15 +93,22 @@ const Sort_Filter = () => {
     }, []);
 
     return (
-        <div className='mt-3 h-10 font-medium w-full px-10 flex justify-between items-center font-PlayfairDisplay'>
+        <div className='mt-3 h-10 font-medium w-full px-10 grid grid-cols-3 items-center font-PlayfairDisplay'>
             {/* link to page */}
-            <div className='justify-start'>
-                <p>Trang chủ / Tất cả sản phẩm /</p>
+            <div className='w-[30vw]'>
+                <Link to='/'>Trang chủ</Link> /{' '}
+                {selectedFilter
+                    ? `Lọc được ${numberProduct} sản phẩm`
+                    : 'Tất cả sản phẩm'}
             </div>
 
             {/* name page */}
-            <div className='justify-center ml-20'>
-                <p className='font-bold text-xl'>{selectedFilter === 'Bộ lọc' ? 'Tất cả sản phẩm' : selectedFilter}</p>
+            <div className='w-full text-center'>
+                <p className='font-bold text-xl'>
+                    {selectedFilter === 'Bộ lọc'
+                        ? 'Tất cả sản phẩm'
+                        : selectedFilter}
+                </p>
             </div>
 
             {/* sort and filter */}
@@ -90,20 +123,30 @@ const Sort_Filter = () => {
                     </button>
                     {/* Menu tùy chọn lọc */}
                     {isOpenFilter && (
-                        <div className='absolute right-0 mt-2 w-44 bg-white rounded shadow-lg z-10'>
+                        <div className='absolute border border-gray-300 right-0 mt-2 w-44 bg-white rounded shadow-lg z-10'>
                             <ul className='text-black'>
                                 <li
                                     className='pl-7 flex items-center px-2 py-2 hover:bg-black hover:text-white cursor-pointer'
-                                    onClick={() => handleFilterClick('Đồng hồ nam')}
+                                    onClick={() =>
+                                        handleFilterClick('Đồng hồ nam')
+                                    }
                                 >
-                                    <FontAwesomeIcon icon={faPerson} className='mr-2' />
+                                    <FontAwesomeIcon
+                                        icon={faPerson}
+                                        className='mr-2'
+                                    />
                                     Đồng hồ nam
                                 </li>
                                 <li
                                     className='pl-7 flex items-center px-2 py-2 hover:bg-black hover:text-white cursor-pointer'
-                                    onClick={() => handleFilterClick('Đồng hồ nữ')}
+                                    onClick={() =>
+                                        handleFilterClick('Đồng hồ nữ')
+                                    }
                                 >
-                                    <FontAwesomeIcon icon={faPersonDress} className='mr-2' />
+                                    <FontAwesomeIcon
+                                        icon={faPersonDress}
+                                        className='mr-2'
+                                    />
                                     Đồng hồ nữ
                                 </li>
                                 {/* Thêm các tùy chọn lọc khác tại đây */}
@@ -119,31 +162,50 @@ const Sort_Filter = () => {
                         onClick={() => setIsOpenSort(!isOpenSort)}
                     >
                         <span className='mr-2'>{selectedOption}</span>
-                        {isOpenSort ? <FontAwesomeIcon icon={faChevronDown} /> : <FontAwesomeIcon icon={faSort} />}
+                        {isOpenSort ? (
+                            <FontAwesomeIcon icon={faChevronDown} />
+                        ) : (
+                            <FontAwesomeIcon icon={faSort} />
+                        )}
                     </button>
                     {/* Menu tùy chọn */}
                     {isOpenSort && (
-                        <div className='absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-10'>
+                        <div className='absolute border border-gray-300 right-0 mt-2 w-48 bg-white rounded shadow-lg z-10'>
                             <ul className='text-gray-800'>
                                 <li
                                     className='flex items-center px-4 py-2 hover:bg-black hover:text-white cursor-pointer'
-                                    onClick={() => handleOptionClick('Được xem nhiều')}
+                                    onClick={() =>
+                                        handleOptionClick('Được xem nhiều')
+                                    }
                                 >
-                                    <FontAwesomeIcon icon={faEye} className='mr-2' />
+                                    <FontAwesomeIcon
+                                        icon={faEye}
+                                        className='mr-2'
+                                    />
                                     Được xem nhiều
                                 </li>
                                 <li
                                     className='flex items-center px-4 py-2 hover:bg-black hover:text-white cursor-pointer'
-                                    onClick={() => handleOptionClick('Giá cao tới thấp')}
+                                    onClick={() =>
+                                        handleOptionClick('Giá cao tới thấp')
+                                    }
                                 >
-                                    <FontAwesomeIcon icon={faSortAmountDownAlt} className='mr-2' />
+                                    <FontAwesomeIcon
+                                        icon={faSortAmountDownAlt}
+                                        className='mr-2'
+                                    />
                                     Giá cao tới thấp
                                 </li>
                                 <li
                                     className='flex items-center px-4 py-2 hover:bg-black hover:text-white cursor-pointer'
-                                    onClick={() => handleOptionClick('Giá thấp tới cao')}
+                                    onClick={() =>
+                                        handleOptionClick('Giá thấp tới cao')
+                                    }
                                 >
-                                    <FontAwesomeIcon icon={faSortAmountUp} className='mr-2' />
+                                    <FontAwesomeIcon
+                                        icon={faSortAmountUp}
+                                        className='mr-2'
+                                    />
                                     Giá thấp tới cao
                                 </li>
                             </ul>

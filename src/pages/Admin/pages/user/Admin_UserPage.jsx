@@ -27,6 +27,7 @@ const Admin_UserPage = () => {
         queryFn: getUsers,
         keepPreviousData: true,
     });
+    console.log('data_users -->', data);
 
     // cancel modal delete user
     const handleCancel_Delete = () => {
@@ -142,8 +143,8 @@ const Admin_UserPage = () => {
         },
         {
             title: 'Trạng thái',
-            dataIndex: 'stateUser',
-            key: 'stateUser',
+            dataIndex: 'state',
+            key: 'state',
             align: 'center',
             render: (text) => (
                 <button
@@ -170,7 +171,7 @@ const Admin_UserPage = () => {
                         <SiAdblock size={20} />
                         Chặn
                     </button>
-                    {item.stateUser === 'blocked' && (
+                    {item.state === 'blocked' && (
                         <button
                             onClick={() => showModal_Delete(item.key)}
                             className='flex justify-center items-center gap-1 hover:cursor-pointer bg-red-500 text-white px-2 py-2 rounded-lg'
@@ -191,7 +192,7 @@ const Admin_UserPage = () => {
         username: user.username,
         phone: user.phone,
         address: user.address,
-        stateUser: user.state,
+        state: user.state,
     }));
 
     return (

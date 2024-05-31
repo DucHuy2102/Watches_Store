@@ -8,12 +8,12 @@ export const findProductSlide = createSlice({
     name: 'searchProduct',
     initialState,
     reducers: {
-        searchProduct: (state, action) => {
-            state.search += action.payload;
+        updateProduct: (state, action) => {
+            state.search = action.payload;
         },
     },
 });
 
-export const { searchProduct } = findProductSlide.actions;
+export const { updateProduct } = findProductSlide.actions;
 
 export default findProductSlide.reducer;

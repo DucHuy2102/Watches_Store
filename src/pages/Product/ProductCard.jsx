@@ -15,13 +15,18 @@ const ProductCard = (props) => {
         navigate(`/product_detail/${id}`);
     };
 
+    const priceFormat = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    }).format(price);
+
     return (
         <div className='h-[625px] w-[466px] font-Lato hover:scale-105 transition-transform duration-300 hover:cursor-pointer'>
             {/* image watches  */}
             <div className='w-[466px] h-[466px] flex items-center justify-center bg-gray-100'>
                 {/* image  */}
                 <Swiper
-                    className='h-[430px] w-[430px] bg-black'
+                    className='h-[430px] w-[430px]'
                     loop={true}
                     spaceBetween={0}
                 >
@@ -51,7 +56,7 @@ const ProductCard = (props) => {
                 </div>
 
                 {/* price */}
-                <div className='font-bold'>{price}₫</div>
+                <div className='font-bold'>{priceFormat}₫</div>
             </div>
 
             {/* button buy  */}

@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 
 const ProductDetail = () => {
     const idProduct_Redux = useSelector((state) => state.product);
-    console.log('idProduct_Redux', idProduct_Redux);
 
     // destructuring idProduct_Redux
     const {

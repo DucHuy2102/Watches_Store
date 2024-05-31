@@ -7,11 +7,11 @@ import {
     faUser,
     faUserGear,
 } from '@fortawesome/free-solid-svg-icons';
-import { SearchOutlined } from '@ant-design/icons';
-import { Badge } from 'antd';
+import { Badge, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { findProductByName } from '../services/ProductService';
-import { searchProduct } from '../redux/slides/findProductSlide';
+import { updateProduct } from '../redux/slides/findProductSlide';
+import { useMutationHook } from '../hooks/useMutationHook';
+import * as ProductService from '../services/ProductService';
 
 // style
 const styleButton =
@@ -23,10 +23,11 @@ const Header = () => {
     const [clickButtonWithoutAccount, setClickButtonWithoutAccount] =
         useState(false);
     const [clickButtonAccount, setClickButtonAccount] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const accountRef = useRef(null);
 
     const dataUSer = useSelector((state) => state.user);
-    const accountRef = useRef(null);
-    const dispatch = useDispatch();
 
     useEffect(() => {
         const handleClickOutButtonAccout = (event) => {
@@ -57,8 +58,6 @@ const Header = () => {
         };
     }, []);
 
-    const navigate = useNavigate();
-
     // logout demo function
     const logout = () => {
         localStorage.removeItem('token');
@@ -69,15 +68,33 @@ const Header = () => {
     // search product
     const [searchValue, setSearchValue] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    const handleSearchChange = (e) => {
-        setSearchValue(e.target.value);
+    const capitalizeFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     };
+    const handleSearchChange = (e) => {
+        const capitalizedValue = capitalizeFirstLetter(e.target.value);
+        setSearchValue(capitalizedValue);
+    };
+    const mutationFindProduct = useMutationHook((name) =>
+        ProductService.findProductByName(name)
+    );
+
     const handleKeyPress = async (e) => {
         if (e.key === 'Enter') {
             if (searchValue) {
-                const results = await findProductByName(searchValue);
-                setSearchResults(results);
-                dispatch(searchProduct(results));
+                mutationFindProduct.mutate(searchValue, {
+                    onSuccess: (data) => {
+                        const products = data?.data;
+                        setSearchValue('');
+                        setSearchResults(products);
+                        dispatch(updateProduct(products));
+                        navigate('/products');
+                    },
+                    onError: () => {
+                        setSearchValue('');
+                        message.error('Không tìm thấy sản phẩm');
+                    },
+                });
             } else {
                 setSearchResults([]);
             }
@@ -116,23 +133,9 @@ const Header = () => {
                     onKeyPress={handleKeyPress}
                     type='text'
                     value={searchValue}
-                    placeholder='Tìm kiếm...'
+                    placeholder='Tên đồng hồ...'
                     className='h-9 border text-lg border-gray-400 px-3 py-1 rounded-lg w-[95%] font-PlayfairDisplay'
                 />
-                {searchResults.length > 0 && (
-                    <div className='absolute top-full left-0 bg-white border border-gray-400 rounded-lg w-full mt-1 max-h-60 overflow-auto z-10'>
-                        {searchResults.map((product) => (
-                            <Link
-                                key={product.id}
-                                to={`/product/${product.id}`}
-                                className='block px-3 py-2 hover:bg-gray-200'
-                                onClick={() => setSearchResults([])}
-                            >
-                                {product.name}
-                            </Link>
-                        ))}
-                    </div>
-                )}
             </div>
 
             {/* 3 buttons: login, register & order button */}

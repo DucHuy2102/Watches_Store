@@ -10,7 +10,12 @@ import { useSelector } from 'react-redux';
 
 const ProductPage = () => {
     const searchRef = useRef(false);
-    const dataSearch_Redux = useSelector((state) => state.searchProduct.search);
+    const dataSearch_Redux = useSelector(
+        (state) => state?.searchProduct?.search
+    );
+
+    const [products, setProducts] = useState([]);
+    const [allProducts, setAllProducts] = useState([]);
 
     const getAllProduct = async () => {
         const res = await ProductService.getAllProduct();
@@ -20,29 +25,29 @@ const ProductPage = () => {
     const { data } = useQuery({
         queryKey: ['products'],
         queryFn: getAllProduct,
-        staleTime: 5 * 60 * 1000,
-        cacheTime: 10 * 60 * 1000,
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
-        refetchInterval: false,
+        keepPreviousData: true,
     });
 
-    const [products, setProducts] = useState([]);
+    useEffect(() => {
+        if (data && data.data) {
+            setAllProducts(data.data);
+            if (!searchRef.current) {
+                setProducts(data.data);
+            }
+        }
+    }, [data]);
 
     useEffect(() => {
         if (searchRef.current) {
-            console.log('hello');
+            if (dataSearch_Redux && dataSearch_Redux.length > 0) {
+                setProducts(dataSearch_Redux);
+            } else {
+                setProducts(allProducts);
+            }
+        } else {
+            searchRef.current = true;
         }
-        searchRef.current = true;
-    }, []);
-
-    useEffect(() => {
-        if (dataSearch_Redux.length > 0) {
-            setProducts(dataSearch_Redux);
-        } else if (data && data.data) {
-            setProducts(data.data);
-        }
-    }, [data, dataSearch_Redux]);
+    }, [dataSearch_Redux, allProducts]);
 
     return (
         <div className='w-full mb-2 flex flex-col items-center justify-center'>

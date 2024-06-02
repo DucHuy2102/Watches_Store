@@ -1,13 +1,22 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import * as ProductService from '../../../services/ProductService';
+import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { updateProduct } from '../../../redux/slides/productSlide';
+import { useEffect } from 'react';
 
 const ProductDetail = () => {
-    const idProduct_Redux = useSelector((state) => state.product);
+    // get product from redux
+    const product_Redux = useSelector((state) => state.product);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    // destructuring idProduct_Redux
+    // destructuring product_Redux
     const {
+        id,
         brand,
         color,
         condition,
@@ -21,12 +30,26 @@ const ProductDetail = () => {
         shape,
         shellMaterial,
         size,
-        state,
         style,
         thickness,
         wireMaterial,
         weight,
-    } = idProduct_Redux;
+        category,
+    } = product_Redux;
+
+    // useEffect(() => {
+    //     const fetchProductDetails = async () => {
+    //         try {
+    //             const productDetails = await ProductService.getProductById(id);
+    //             dispatch(updateProduct(productDetails.data));
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     };
+    //     if (id) {
+    //         fetchProductDetails();
+    //     }
+    // }, [id, dispatch]);
 
     // specifications of product
     const specifications = [
@@ -97,23 +120,60 @@ const ProductDetail = () => {
         },
     ];
 
+    // format price
     const priceFormat = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
     }).format(price);
+
+    // format discount price
     const discountPrice = 1506000;
     const discountPriceFormat = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
     }).format(discountPrice);
 
+    // get products by category
+    const getProducts_Category = async () => {
+        const res = await ProductService.getProductByCategory(category);
+        return res;
+    };
+    const { data } = useQuery({
+        queryKey: ['products'],
+        queryFn: getProducts_Category,
+        keepPreviousData: true,
+    });
+    const moreProduct = data?.data.product;
+
+    // Split products into groups of 4
+    const chunkArray = (array, chunkSize) => {
+        let result = [];
+        for (let i = 0; i < array.length; i += chunkSize) {
+            result.push(array.slice(i, i + chunkSize));
+        }
+        return result;
+    };
+    const productChunks = moreProduct ? chunkArray(moreProduct, 4) : [];
+
+    // go to product detail page
+    const go_ProductDetail_Page = (id, product) => {
+        // console.log('id product --> ', id);
+        dispatch(updateProduct({ ...product, id }));
+        navigate(`/product_detail/${id}`);
+        window.scrollTo(0, 0);
+    };
+
+    // useEffect(() => {
+    //     refetch();
+    // }, [product_Redux, refetch]);
+
     return (
         <div className='font-Lato bg-white'>
             <div className='p-6 lg:max-w-7xl max-w-4xl mx-auto'>
                 {/* top */}
                 <div className='grid items-start grid-cols-1 lg:grid-cols-5 gap-12 shadow-md p-6'>
+                    {/* image product */}
                     <div className='lg:col-span-3 w-full lg:sticky top-0 text-center'>
-                        {/* image product */}
                         <Swiper
                             loop={true}
                             spaceBetween={0}
@@ -121,51 +181,15 @@ const ProductDetail = () => {
                             autoplay={{ delay: 4000 }}
                             className='w-[500px] h-[500px] rounded-xl relative'
                         >
-                            <SwiperSlide>
-                                {img[0] && (
+                            {img.map((item, index) => (
+                                <SwiperSlide key={index}>
                                     <img
-                                        src={img[0]}
+                                        src={item}
                                         alt='Image'
                                         className='w-full h-full object-cover'
                                     />
-                                )}
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                {img[1] && (
-                                    <img
-                                        src={img[1]}
-                                        alt='Image'
-                                        className='w-full h-full object-cover'
-                                    />
-                                )}
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                {img[2] && (
-                                    <img
-                                        src={img[2]}
-                                        alt='Image'
-                                        className='w-full h-full object-cover'
-                                    />
-                                )}
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                {img[3] && (
-                                    <img
-                                        src={img[3]}
-                                        alt='Image'
-                                        className='w-full h-full object-cover'
-                                    />
-                                )}
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                {img[4] && (
-                                    <img
-                                        src={img[4]}
-                                        alt='Image'
-                                        className='w-full h-full object-cover'
-                                    />
-                                )}
-                            </SwiperSlide>
+                                </SwiperSlide>
+                            ))}
                         </Swiper>
                     </div>
 
@@ -336,60 +360,55 @@ const ProductDetail = () => {
                     <h3 className='text-lg font-bold text-black'>
                         Các sản phẩm khác cùng hãng
                     </h3>
-                    <div className='grid grid-cols-2 md:grid-cols-4 gap-6 mt-6'>
-                        <div className='flex flex-col items-center justify-center'>
-                            <img
-                                src='https://timex.com/cdn/shop/files/TW2W51700.png?v=1711407784&width=400'
-                                alt='Image'
-                                className='w-40 h-40 object-cover'
-                            />
-                            <p className='text-black text-sm font-bold mt-2'>
-                                Casio - Nam AE-1200WHD-1AVDF
-                            </p>
-                            <p className='text-blue-500 text-sm font-bold mt-1'>
-                                1.120.000₫
-                            </p>
-                        </div>
-                        <div className='flex flex-col items-center justify-center'>
-                            <img
-                                src='https://timex.com/cdn/shop/files/TW2W51700.png?v=1711407784&width=400'
-                                alt='Image'
-                                className='w-40 h-40 object-cover'
-                            />
-                            <p className='text-black text-sm font-bold mt-2'>
-                                Casio - Nam AE-1200WHD-1AVDF
-                            </p>
-                            <p className='text-blue-500 text-sm font-bold mt-1'>
-                                1.120.000₫
-                            </p>
-                        </div>
-                        <div className='flex flex-col items-center justify-center'>
-                            <img
-                                src='https://timex.com/cdn/shop/files/TW2W51700.png?v=1711407784&width=400'
-                                alt='Image'
-                                className='w-40 h-40 object-cover'
-                            />
-                            <p className='text-black text-sm font-bold mt-2'>
-                                Casio - Nam AE-1200WHD-1AVDF
-                            </p>
-                            <p className='text-blue-500 text-sm font-bold mt-1'>
-                                1.120.000₫
-                            </p>
-                        </div>
-                        <div className='flex flex-col items-center justify-center'>
-                            <img
-                                src='https://timex.com/cdn/shop/files/TW2W51700.png?v=1711407784&width=400'
-                                alt='Image'
-                                className='w-40 h-40 object-cover'
-                            />
-                            <p className='text-black text-sm font-bold mt-2'>
-                                Casio - Nam AE-1200WHD-1AVDF
-                            </p>
-                            <p className='text-blue-500 text-sm font-bold mt-1'>
-                                1.120.000₫
-                            </p>
-                        </div>
-                    </div>
+                    <Swiper
+                        spaceBetween={20}
+                        slidesPerView={1}
+                        navigation
+                        autoplay={{ delay: 4000 }}
+                        className='mt-4'
+                    >
+                        {productChunks.map((chunk, index) => (
+                            <SwiperSlide
+                                key={index}
+                                className='grid grid-cols-4 gap-4'
+                            >
+                                {chunk.map((product) => (
+                                    <div
+                                        key={product.id}
+                                        className='p-4 border rounded-lg'
+                                    >
+                                        <img
+                                            src={product.img[0]}
+                                            alt={product.productName}
+                                            className='w-full h-40 object-cover'
+                                        />
+                                        <div
+                                            onClick={() =>
+                                                go_ProductDetail_Page(
+                                                    product.id,
+                                                    product
+                                                )
+                                            }
+                                            className='cursor-pointer'
+                                        >
+                                            <h3 className='mt-2 text-lg font-semibold'>
+                                                {product.productName}
+                                            </h3>
+                                            <p className='mt-1 text-gray-600'>
+                                                {new Intl.NumberFormat(
+                                                    'vi-VN',
+                                                    {
+                                                        style: 'currency',
+                                                        currency: 'VND',
+                                                    }
+                                                ).format(product.price)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
                 </div>
 
                 {/* comments */}

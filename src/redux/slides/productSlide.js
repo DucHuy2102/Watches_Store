@@ -16,11 +16,11 @@ const initialState = {
     feature: '',
     shape: '',
     condition: '',
-    height: '',
     genderUser: '',
     description: '',
     color: '',
     weight: '',
+    category: '',
 };
 
 export const productSlide = createSlice({
@@ -44,11 +44,11 @@ export const productSlide = createSlice({
                 feature = '',
                 shape = '',
                 condition = '',
-                height = '',
                 genderUser = '',
                 description = '',
                 color = '',
                 weight = '',
+                category = '',
             } = action.payload;
             state.id = id;
             state.productName = productName;
@@ -65,11 +65,11 @@ export const productSlide = createSlice({
             state.feature = feature;
             state.shape = shape;
             state.condition = condition;
-            state.height = height;
             state.genderUser = genderUser;
             state.description = description;
             state.color = color;
             state.weight = weight;
+            state.category = category;
         },
         resetProduct: (state) => {
             state.id = '';
@@ -87,11 +87,11 @@ export const productSlide = createSlice({
             state.feature = '';
             state.shape = '';
             state.condition = '';
-            state.height = '';
             state.genderUser = '';
             state.description = '';
             state.color = '';
             state.weight = '';
+            state.category = '';
         },
     },
 });

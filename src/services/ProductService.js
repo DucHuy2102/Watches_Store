@@ -17,8 +17,10 @@ export const getProductById = async (id) => {
 };
 
 // Get all product by category
-export const getAllProductByCategory = async () => {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/category`);
+export const getAllProductByCategory = async (id) => {
+    const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/category/${id}`
+    );
     return res.data;
 };
 

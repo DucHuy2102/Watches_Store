@@ -58,9 +58,7 @@ const Admin_UserPage = () => {
                 { token, id: selectedUserId },
                 {
                     onSuccess: () => {
-                        message.success(
-                            'Xóa người dùng thành công. Trang sẽ tự động làm mới'
-                        );
+                        message.success('Xóa người dùng thành công. Trang sẽ tự động làm mới');
                     },
                     onError: () => {
                         message.error('Xóa người dùng thất bại');
@@ -86,9 +84,7 @@ const Admin_UserPage = () => {
                 { token, id: selectedUserId },
                 {
                     onSuccess: () => {
-                        message.success(
-                            'Chặn người dùng thành công. Trang sẽ tự động làm mới'
-                        );
+                        message.success('Chặn người dùng thành công. Trang sẽ tự động làm mới');
                     },
                     onError: () => {
                         message.error('Chặn người dùng thất bại');
@@ -149,9 +145,7 @@ const Admin_UserPage = () => {
             render: (text) => (
                 <button
                     className={`hover:cursor-pointer w-24 py-2 rounded-lg uppercase ${
-                        text === 'online'
-                            ? 'bg-blue-500 text-white'
-                            : 'bg-gray-500 text-white'
+                        text === 'online' ? 'bg-blue-500 text-white' : 'bg-gray-500 text-white'
                     }`}
                 >
                     {text}
@@ -198,17 +192,11 @@ const Admin_UserPage = () => {
     return (
         <div>
             <div className='mt-3 px-14 flex justify-center items-center'>
-                <h1 className='font-bold text-3xl mt-2 text-center'>
-                    Danh sách người dùng
-                </h1>
+                <h1 className='font-bold text-3xl mt-2 text-center'>Danh sách người dùng</h1>
             </div>
             <div className='w-full'>
                 <div className='mt-5'>
-                    <Table
-                        columns={columns}
-                        dataSource={dataTable}
-                        pagination={false}
-                    />
+                    <Table columns={columns} dataSource={dataTable} pagination={false} />
                 </div>
             </div>
 
@@ -220,15 +208,13 @@ const Admin_UserPage = () => {
                 style={{ textAlign: 'center' }}
                 open={isModalOpen}
                 okButtonProps={{
-                    className:
-                        'bg-black text-white hover:bg-red-500 hover:text-white',
+                    className: 'bg-black text-white hover:bg-red-500 hover:text-white',
                 }}
                 onOk={handleOk_Delete}
                 onCancel={handleCancel_Delete}
             >
                 <p className='text-lg'>
-                    Hành động này sẽ xóa người dùng khỏi hệ thống và dữ liệu
-                    không thể khôi phục!
+                    Hành động này sẽ xóa người dùng khỏi hệ thống và dữ liệu không thể khôi phục!
                 </p>
             </Modal>
 
@@ -240,15 +226,14 @@ const Admin_UserPage = () => {
                 style={{ textAlign: 'center' }}
                 open={isModalBlockUserOpen}
                 okButtonProps={{
-                    className:
-                        'bg-black text-white hover:bg-red-500 hover:text-white',
+                    className: 'bg-black text-white hover:bg-red-500 hover:text-white',
                 }}
                 onOk={handleOk_Block}
                 onCancel={handleCancel_Block}
             >
                 <p className='mb-2 text-lg'>
-                    Hành động này sẽ chặn người dùng khỏi hệ thống và người dùng
-                    không thể truy cập vào hệ thống!
+                    Hành động này sẽ chặn người dùng khỏi hệ thống và người dùng không thể truy cập
+                    vào hệ thống!
                 </p>
                 <Form.Item
                     rules={[

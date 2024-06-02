@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button, Form, Input, message } from 'antd';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import * as UserService from '../../services/UserService';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 // validate form
 const validateMessages = {
@@ -19,29 +21,32 @@ const ResetPasswordPage = () => {
     const [confirmPass, setConfirmPass] = useState('');
     const navigate = useNavigate();
 
+    // useMutationHook to call API reset password
     const mutation = useMutationHook((data) => UserService.resetPassword(data));
+    const { isPending } = mutation;
 
+    // handle submit form
     const handleSubmit = () => {
-        if (newPass !== confirmPass) {
-            message.error('Mật khẩu không trùng khớp!');
-            return;
-        } else {
-            mutation.mutate(
-                { token: codePassword, password: newPass },
-                {
-                    onSuccess: () => {
+        mutation.mutate(
+            { token: codePassword, password: newPass },
+            {
+                onSuccess: () => {
+                    toast.success('Đã đặt lại mật khẩu! Đang chuyển hướng...');
+                    setTimeout(() => {
                         navigate('/login');
-                        message.success(
-                            'Đặt lại mật khẩu thành công! Đang chuyển về trang đăng nhập...'
-                        );
-                    },
-                    onError: () => {
-                        message.error('Đặt lại mật khẩu thất bại!');
-                    },
-                }
-            );
-        }
+                    }, 3000);
+                },
+                onError: () => {
+                    toast.error('Đặt lại mật khẩu thất bại!');
+                },
+            }
+        );
     };
+
+    // notify when reset password success
+    {
+        isPending && toast.info('Đang xử lý. Vui lòng chờ trong giây lát!');
+    }
 
     return (
         <div className='w-full flex items-center justify-between px-20'>
@@ -56,13 +61,16 @@ const ResetPasswordPage = () => {
 
             {/* form register */}
             <div className='flex flex-col justify-center items-end h-screen'>
+                {/* title page */}
                 <h1 className='mx-auto text-3xl font-bold text-black mb-2 font-PlayfairDisplay'>
                     Đặt lại mật khẩu
                 </h1>
+
+                {/* form */}
                 <Form
                     className='mx-auto w-[40vw] text-center'
                     layout='vertical'
-                    name='basic'
+                    name='dependencies'
                     onFinish={handleSubmit}
                     validateMessages={validateMessages}
                 >
@@ -102,18 +110,24 @@ const ResetPasswordPage = () => {
                         />
                     </Form.Item>
 
-                    {/* username */}
+                    {/* confirm password */}
                     <Form.Item
-                        label={
-                            <label className='text-lg'>Xác nhận mật khẩu</label>
-                        }
-                        name='password'
+                        label={<label className='text-lg'>Xác nhận mật khẩu</label>}
+                        name='confirmPassword'
+                        dependencies={['password']}
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Xác nhận mật khẩu không được bỏ trống!',
+                                message: 'Xác nhận mật khẩu không được bỏ trống!',
                             },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue('password') === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('Mật khẩu không giống nhau!'));
+                                },
+                            }),
                         ]}
                         className='text-red-500 text-start mt-1 mb-8'
                     >
@@ -122,13 +136,6 @@ const ResetPasswordPage = () => {
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
                         />
                     </Form.Item>
-
-                    {/* error */}
-                    {/* {isError && (
-                        <div className='text-red-500 font-bold text-xl text-center mt-1 mb-5'>
-                            <p>Đăng nhập thất bại!</p>
-                        </div>
-                    )} */}
 
                     {/* button register */}
                     <Form.Item>
@@ -142,7 +149,7 @@ const ResetPasswordPage = () => {
                     </Form.Item>
                 </Form>
 
-                {/* Register */}
+                {/* navigate to login page */}
                 <div className='text-lg flex font-PlayfairDisplay'>
                     <p>Bạn muốn quay về trang đăng nhập?</p>
                     <Link
@@ -152,6 +159,19 @@ const ResetPasswordPage = () => {
                         Trang đăng nhập
                     </Link>
                 </div>
+
+                {/* toast */}
+                <ToastContainer
+                    position='top-right'
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </div>
         </div>
     );

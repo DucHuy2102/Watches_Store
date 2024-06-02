@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Form, Input, message } from 'antd';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import * as UserService from '../../services/UserService';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 // validate form
 const validateMessages = {
@@ -17,37 +19,46 @@ const ForgotPasswordPage = () => {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
 
-    const mutation = useMutationHook((data) =>
-        UserService.forgotPassword(data)
-    );
+    // useMutationHook to forgot password
+    const mutation = useMutationHook((data) => UserService.forgotPassword(data));
+    const { isPending } = mutation;
 
+    // handle submit forgot password
     const handleSubmit = () => {
         mutation.mutate(
             { email },
             {
                 onSuccess: () => {
-                    message.success(
-                        'Hệ thống đã gửi email đổi mật khẩu! Vui lòng kiểm tra email của bạn'
+                    toast.success(
+                        'Đã gửi email, vui lòng kiểm tra hộp thư của bạn. Đang chuyển hướng...'
                     );
                     setEmail('');
-                    navigate('/resetPassword');
+                    setTimeout(() => {
+                        navigate('/resetPassword');
+                    }, 3000);
                 },
                 onError: () => {
-                    message.error(
-                        'Hệ thống gửi email thất bại! Vui lòng truy cập sau 30 phút'
-                    );
+                    toast.error('Hệ thống gửi email thất bại! Vui lòng truy cập sau 30 phút');
                 },
             }
         );
     };
 
+    // notify when reset password success
+    {
+        isPending && toast.info('Đang xử lý. Vui lòng chờ trong giây lát!');
+    }
+
     return (
         <div className='w-full flex items-center justify-between px-20 font-Lato'>
             {/* form login */}
             <div className='flex flex-col justify-center items-start h-screen'>
+                {/* title page */}
                 <h1 className='mx-auto text-3xl font-bold text-black mb-5 font-PlayfairDisplay'>
                     Quên mật khẩu
                 </h1>
+
+                {/* form */}
                 <Form
                     className='mx-auto w-[40vw] text-center'
                     layout='vertical'
@@ -72,13 +83,6 @@ const ForgotPasswordPage = () => {
                         />
                     </Form.Item>
 
-                    {/* error */}
-                    {/* {isError && (
-                        <div className='text-red-500 font-bold text-xl text-center mt-1 mb-5'>
-                            <p>Hệ thống gửi email thất bại! Vui lòng truy cập sau 30 phút</p>
-                        </div>
-                    )} */}
-
                     {/* button login */}
                     <Form.Item>
                         <Button
@@ -93,9 +97,7 @@ const ForgotPasswordPage = () => {
 
                 {/* Register */}
                 <div className='text-lg flex'>
-                    <p className='font-PlayfairDisplay'>
-                        Bạn muốn quay về trang đăng nhập?
-                    </p>
+                    <p className='font-PlayfairDisplay'>Bạn muốn quay về trang đăng nhập?</p>
                     <Link
                         to='/register'
                         className='font-PlayfairDisplay text-lg pl-2 text-gray-400 hover:text-black font-bold transition duration-200'
@@ -113,6 +115,19 @@ const ForgotPasswordPage = () => {
                     className='w-full h-screen object-cover'
                 />
             </div>
+
+            {/* toast */}
+            <ToastContainer
+                position='top-right'
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };

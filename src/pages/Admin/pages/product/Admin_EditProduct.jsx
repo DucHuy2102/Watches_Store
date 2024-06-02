@@ -6,6 +6,8 @@ import { useMutationHook } from '../../../../hooks/useMutationHook';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 const { TextArea } = Input;
 
@@ -58,12 +60,15 @@ const uploadImages = async (fileList) => {
 
 const Admin_EditProduct = () => {
     const navigate = useNavigate();
+    const adminToken = localStorage.getItem('adminToken');
     const product_Redux = useSelector((state) => state.product);
     const [stateProduct, setStateProduct] = useState(product_Redux);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState([]);
 
+    // Set initial state for product and fileList
+    // when the page is loaded or product_Redux is changed
     useEffect(() => {
         setStateProduct(product_Redux);
         const initialFileList = product_Redux.img.map((url, index) => ({
@@ -75,8 +80,7 @@ const Admin_EditProduct = () => {
         setFileList(initialFileList);
     }, [product_Redux]);
 
-    // get adminToken from localStorage
-    const adminToken = localStorage.getItem('adminToken');
+    // useMutationHook to edit product
     const mutation = useMutationHook(({ adminToken, product }) => {
         return ProductService.editProduct(adminToken, product);
     });
@@ -96,7 +100,7 @@ const Admin_EditProduct = () => {
             { adminToken, product: productData },
             {
                 onSuccess: () => {
-                    message.success('Cập nhật sản phẩm thành công');
+                    toast.success('Cập nhật sản phẩm thành công');
                     navigate('/admin/product');
                 },
             }
@@ -115,8 +119,7 @@ const Admin_EditProduct = () => {
     };
 
     // Handle change image
-    const handleChange = ({ fileList: newFileList }) =>
-        setFileList(newFileList);
+    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
 
     // Handle preview image
     const handlePreview = async (file) => {
@@ -145,14 +148,10 @@ const Admin_EditProduct = () => {
 
     return (
         <>
-            <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>
-                Sửa thông tin đồng hồ
-            </h1>
-            <Form
-                initialValues={stateProduct}
-                onFinish={handleAddProduct}
-                className='px-14'
-            >
+            <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>Sửa thông tin đồng hồ</h1>
+
+            {/* form */}
+            <Form initialValues={stateProduct} onFinish={handleAddProduct} className='px-14'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                     <Form.Item
                         label='Tên đồng hồ'
@@ -185,17 +184,13 @@ const Admin_EditProduct = () => {
                                 },
                                 () => ({
                                     validator(_, value) {
-                                        return new Promise(
-                                            (resolve, reject) => {
-                                                if (isNaN(value)) {
-                                                    reject(
-                                                        'Giá đồng hồ phải là một số.'
-                                                    );
-                                                } else {
-                                                    resolve();
-                                                }
+                                        return new Promise((resolve, reject) => {
+                                            if (isNaN(value)) {
+                                                reject('Giá đồng hồ phải là một số.');
+                                            } else {
+                                                resolve();
                                             }
-                                        );
+                                        });
                                     },
                                 }),
                             ]}
@@ -218,17 +213,13 @@ const Admin_EditProduct = () => {
                                 },
                                 () => ({
                                     validator(_, value) {
-                                        return new Promise(
-                                            (resolve, reject) => {
-                                                if (isNaN(value)) {
-                                                    reject(
-                                                        'Số lượng phải là một số.'
-                                                    );
-                                                } else {
-                                                    resolve();
-                                                }
+                                        return new Promise((resolve, reject) => {
+                                            if (isNaN(value)) {
+                                                reject('Số lượng phải là một số.');
+                                            } else {
+                                                resolve();
                                             }
-                                        );
+                                        });
                                     },
                                 }),
                             ]}
@@ -286,8 +277,7 @@ const Admin_EditProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Kích thước đồng hồ không được bỏ trống!',
+                                message: 'Kích thước đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -325,8 +315,7 @@ const Admin_EditProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Chất liệu dây đồng hồ không được bỏ trống!',
+                                message: 'Chất liệu dây đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -345,8 +334,7 @@ const Admin_EditProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Chất liệu vỏ đồng hồ không được bỏ trống!',
+                                message: 'Chất liệu vỏ đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -365,8 +353,7 @@ const Admin_EditProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Phong cách đồng hồ không được bỏ trống!',
+                                message: 'Phong cách đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -385,8 +372,7 @@ const Admin_EditProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Tính năng đồng hồ không được bỏ trống!',
+                                message: 'Tính năng đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -405,8 +391,7 @@ const Admin_EditProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Hình dáng đồng hồ không được bỏ trống!',
+                                message: 'Hình dáng đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -425,8 +410,7 @@ const Admin_EditProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Trọng lượng đồng hồ không được bỏ trống!',
+                                message: 'Trọng lượng đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -445,8 +429,7 @@ const Admin_EditProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Đối tượng sử dụng không được bỏ trống!',
+                                message: 'Đối tượng sử dụng không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -537,17 +520,14 @@ const Admin_EditProduct = () => {
                         {previewImage && (
                             <Image
                                 key={
-                                    fileList.find(
-                                        (file) => file.url === previewImage
-                                    )?.uid || 'preview'
+                                    fileList.find((file) => file.url === previewImage)?.uid ||
+                                    'preview'
                                 }
                                 wrapperStyle={{ display: 'none' }}
                                 preview={{
                                     visible: previewOpen,
-                                    onVisibleChange: (visible) =>
-                                        setPreviewOpen(visible),
-                                    afterOpenChange: (visible) =>
-                                        !visible && setPreviewImage(''),
+                                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
                                 }}
                                 src={previewImage}
                             />
@@ -564,6 +544,19 @@ const Admin_EditProduct = () => {
                     </Button>
                 </div>
             </Form>
+
+            {/* toast */}
+            <ToastContainer
+                position='top-right'
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </>
     );
 };

@@ -5,6 +5,8 @@ import * as ProductService from '../../../../services/ProductService';
 import { useMutationHook } from '../../../../hooks/useMutationHook';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 const { TextArea } = Input;
 
@@ -57,6 +59,9 @@ const uploadImages = async (fileList) => {
 
 const AddProduct = () => {
     const navigate = useNavigate();
+    const [fileList, setFileList] = useState([]);
+    const [previewImage, setPreviewImage] = useState('');
+    const [previewOpen, setPreviewOpen] = useState(false);
     const [stateProduct, setStateProduct] = useState({
         productName: '',
         img: [],
@@ -78,13 +83,10 @@ const AddProduct = () => {
         weight: '',
     });
 
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [fileList, setFileList] = useState([]);
-
     // get adminToken from localStorage
     const adminToken = localStorage.getItem('adminToken');
 
+    // useMutationHook to create product function
     const mutation = useMutationHook(({ adminToken, product }) => {
         return ProductService.createProduct(adminToken, product);
     });
@@ -104,7 +106,7 @@ const AddProduct = () => {
             { adminToken, product: productData },
             {
                 onSuccess: () => {
-                    message.success('Thêm sản phẩm thành công');
+                    toast.success('Thêm sản phẩm thành công');
                     navigate('/admin/product');
                 },
             }
@@ -123,8 +125,7 @@ const AddProduct = () => {
     };
 
     // Handle change image
-    const handleChange = ({ fileList: newFileList }) =>
-        setFileList(newFileList);
+    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
 
     // Handle preview image
     const handlePreview = async (file) => {
@@ -153,9 +154,9 @@ const AddProduct = () => {
 
     return (
         <>
-            <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>
-                Thêm thông tin đồng hồ
-            </h1>
+            <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>Thêm thông tin đồng hồ</h1>
+
+            {/* form */}
             <Form onFinish={handleAddProduct} className='px-14'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                     <Form.Item
@@ -189,17 +190,13 @@ const AddProduct = () => {
                                 },
                                 () => ({
                                     validator(_, value) {
-                                        return new Promise(
-                                            (resolve, reject) => {
-                                                if (isNaN(value)) {
-                                                    reject(
-                                                        'Giá đồng hồ phải là một số.'
-                                                    );
-                                                } else {
-                                                    resolve();
-                                                }
+                                        return new Promise((resolve, reject) => {
+                                            if (isNaN(value)) {
+                                                reject('Giá đồng hồ phải là một số.');
+                                            } else {
+                                                resolve();
                                             }
-                                        );
+                                        });
                                     },
                                 }),
                             ]}
@@ -222,17 +219,13 @@ const AddProduct = () => {
                                 },
                                 () => ({
                                     validator(_, value) {
-                                        return new Promise(
-                                            (resolve, reject) => {
-                                                if (isNaN(value)) {
-                                                    reject(
-                                                        'Số lượng phải là một số.'
-                                                    );
-                                                } else {
-                                                    resolve();
-                                                }
+                                        return new Promise((resolve, reject) => {
+                                            if (isNaN(value)) {
+                                                reject('Số lượng phải là một số.');
+                                            } else {
+                                                resolve();
                                             }
-                                        );
+                                        });
                                     },
                                 }),
                             ]}
@@ -290,8 +283,7 @@ const AddProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Kích thước đồng hồ không được bỏ trống!',
+                                message: 'Kích thước đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -329,8 +321,7 @@ const AddProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Chất liệu dây đồng hồ không được bỏ trống!',
+                                message: 'Chất liệu dây đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -349,8 +340,7 @@ const AddProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Chất liệu vỏ đồng hồ không được bỏ trống!',
+                                message: 'Chất liệu vỏ đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -369,8 +359,7 @@ const AddProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Phong cách đồng hồ không được bỏ trống!',
+                                message: 'Phong cách đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -389,8 +378,7 @@ const AddProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Tính năng đồng hồ không được bỏ trống!',
+                                message: 'Tính năng đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -409,8 +397,7 @@ const AddProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Hình dáng đồng hồ không được bỏ trống!',
+                                message: 'Hình dáng đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -429,8 +416,7 @@ const AddProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Trọng lượng đồng hồ không được bỏ trống!',
+                                message: 'Trọng lượng đồng hồ không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -449,8 +435,7 @@ const AddProduct = () => {
                         rules={[
                             {
                                 required: true,
-                                message:
-                                    'Đối tượng sử dụng không được bỏ trống!',
+                                message: 'Đối tượng sử dụng không được bỏ trống!',
                             },
                         ]}
                         className='col-span-2 md:col-span-1'
@@ -543,10 +528,8 @@ const AddProduct = () => {
                                 wrapperStyle={{ display: 'none' }}
                                 preview={{
                                     visible: previewOpen,
-                                    onVisibleChange: (visible) =>
-                                        setPreviewOpen(visible),
-                                    afterOpenChange: (visible) =>
-                                        !visible && setPreviewImage(''),
+                                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
                                 }}
                                 src={previewImage}
                             />
@@ -565,6 +548,19 @@ const AddProduct = () => {
                     </Form.Item>
                 </div>
             </Form>
+
+            {/* toast */}
+            <ToastContainer
+                position='top-right'
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </>
     );
 };

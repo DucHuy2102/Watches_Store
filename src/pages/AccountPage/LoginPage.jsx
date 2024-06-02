@@ -5,7 +5,9 @@ import { useMutationHook } from '../../hooks/useMutationHook';
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../../redux/slides/userSlide';
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input } from 'antd';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 const LoginPage = () => {
     const [username, setUserName] = useState('');
@@ -13,18 +15,18 @@ const LoginPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // useMutationHook to login user
     const mutation = useMutationHook((data) => UserService.loginUser(data));
-    const { data } = mutation;
+    const { data, isPending } = mutation;
 
+    // get user detail after login success
     useEffect(() => {
         const handleGetUserDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
             dispatch(updateUser({ ...res?.data, access_token: access_token }));
-            // console.log('data-User-Redux: -->', res?.data);
         };
 
         if (data?.code === 200) {
-            navigate('/');
             const access_token = data?.data?.token;
             localStorage.setItem('tokenUser', access_token);
             if (access_token) {
@@ -36,29 +38,39 @@ const LoginPage = () => {
         }
     }, [data, navigate, dispatch]);
 
+    // handle submit login
     const handleSubmitLogin = () => {
         mutation.mutate(
             { username, password },
             {
                 onSuccess: () => {
-                    message.success(
-                        'Đăng nhập thành công! Chuyển hướng về trang chủ'
-                    );
+                    toast.success('Đăng nhập thành công! Đang chuyển hướng...');
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 3000);
                 },
                 onError: () => {
-                    message.error('Đăng nhập thất bại!');
+                    toast.error('Đăng nhập thất bại!');
                 },
             }
         );
     };
 
+    // notify when login success
+    {
+        isPending && toast.info('Đang xử lý. Vui lòng chờ trong giây lát!');
+    }
+
     return (
         <div className='w-full flex items-center justify-between px-20 font-Lato'>
             {/* form login */}
             <div className='flex flex-col justify-center items-start h-screen'>
+                {/* title page */}
                 <h1 className='mx-auto text-3xl font-bold text-black mb-5 font-PlayfairDisplay'>
                     Đăng nhập
                 </h1>
+
+                {/* form */}
                 <Form
                     className='mx-auto w-[40vw] text-center'
                     layout='vertical'
@@ -115,9 +127,7 @@ const LoginPage = () => {
 
                 {/* Register */}
                 <div className='text-lg flex'>
-                    <p className='font-PlayfairDisplay'>
-                        Bạn chưa có tài khoản để đăng nhập?
-                    </p>
+                    <p className='font-PlayfairDisplay'>Bạn chưa có tài khoản để đăng nhập?</p>
                     <Link
                         to='/register'
                         className='font-PlayfairDisplay text-lg pl-2 text-gray-400 hover:text-black font-bold transition duration-200'
@@ -140,6 +150,19 @@ const LoginPage = () => {
                     className='w-full h-screen object-cover'
                 />
             </div>
+
+            {/* toast */}
+            <ToastContainer
+                position='top-right'
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };

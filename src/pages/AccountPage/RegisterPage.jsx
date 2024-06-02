@@ -3,6 +3,8 @@ import * as UserService from '../../services/UserService';
 import { Link, useNavigate, useNavigation } from 'react-router-dom';
 import { Button, Form, Input, message } from 'antd';
 import { useMutationHook } from '../../hooks/useMutationHook';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 // validate form
 const validateMessages = {
@@ -22,22 +24,32 @@ const RegisterPage = () => {
 
     const navigate = useNavigate();
 
+    // useMutationHook to register user
     const mutation = useMutationHook((data) => UserService.registerUser(data));
-    const { isError } = mutation;
+    const { isPending } = mutation;
 
+    // handle submit register
     const handleSubmitRegister = () => {
         mutation.mutate(
             { email, phone, username, password },
             {
                 onSuccess: () => {
-                    message.success(
-                        'Đăng ký tài khoản thành công! Chuyển hướng về trang Đăng nhập'
-                    );
-                    navigate('/login');
+                    toast.success('Đăng ký thành công! Đang chuyển hướng...');
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 3000);
+                },
+                onError: () => {
+                    toast.error('Đăng ký tài khoản thất bại!');
                 },
             }
         );
     };
+
+    // notify when register success
+    {
+        isPending && toast.info('Đang xử lý. Vui lòng chờ trong giây lát!');
+    }
 
     return (
         <div className='w-full flex items-center justify-between px-20'>
@@ -52,21 +64,22 @@ const RegisterPage = () => {
 
             {/* form register */}
             <div className='flex flex-col justify-center items-end h-screen'>
+                {/* title page */}
                 <h1 className='mx-auto text-3xl font-bold text-black mb-2 font-PlayfairDisplay'>
                     Đăng ký tài khoản
                 </h1>
+
+                {/* form */}
                 <Form
                     className='mx-auto w-[40vw] text-center'
                     layout='vertical'
-                    name='basic'
+                    name='dependencies'
                     onFinish={handleSubmitRegister}
                     validateMessages={validateMessages}
                 >
                     {/* username */}
                     <Form.Item
-                        label={
-                            <label className='text-lg'>Tên người dùng</label>
-                        }
+                        label={<label className='text-lg'>Tên người dùng</label>}
                         name='Tên người dùng'
                         rules={[
                             {
@@ -96,6 +109,8 @@ const RegisterPage = () => {
                                             reject(
                                                 'Số điện thoại phải là số và không chứa ký tự đặc biệt!'
                                             );
+                                        } else if (value.length !== 10) {
+                                            reject('Số điện thoại phải có 10 số!');
                                         } else {
                                             resolve();
                                         }
@@ -148,14 +163,21 @@ const RegisterPage = () => {
 
                     {/* confirm password */}
                     <Form.Item
-                        label={
-                            <label className='text-lg'>Xác thực mật khẩu</label>
-                        }
+                        label={<label className='text-lg'>Xác thực mật khẩu</label>}
                         name='Xác thực mật khẩu'
+                        dependencies={['password']}
                         rules={[
                             {
                                 required: true,
                             },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue('password') === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('Mật khẩu không giống nhau!'));
+                                },
+                            }),
                         ]}
                         className='text-red-500 text-start mt-1'
                     >
@@ -164,13 +186,6 @@ const RegisterPage = () => {
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
                         />
                     </Form.Item>
-
-                    {/* error */}
-                    {isError && (
-                        <div className='text-red-500 font-bold text-xl text-center mt-1 mb-5'>
-                            <p>Đăng nhập thất bại!</p>
-                        </div>
-                    )}
 
                     {/* button register */}
                     <Form.Item>
@@ -194,6 +209,19 @@ const RegisterPage = () => {
                         Đăng nhập
                     </Link>
                 </div>
+
+                {/* toast */}
+                <ToastContainer
+                    position='top-right'
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                />
             </div>
         </div>
     );

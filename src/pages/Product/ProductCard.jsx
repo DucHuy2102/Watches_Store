@@ -3,8 +3,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateProduct } from '../../redux/slides/productSlide';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 const ProductCard = (props) => {
     const dispatch = useDispatch();
@@ -43,27 +43,17 @@ const ProductCard = (props) => {
             {/* image watches  */}
             <div className='w-[466px] h-[466px] flex items-center justify-center bg-gray-100'>
                 {/* image  */}
-                <Swiper
-                    className='h-[430px] w-[430px]'
-                    loop={true}
-                    spaceBetween={0}
-                >
+                <Swiper className='h-[430px] w-[430px]' loop={true} spaceBetween={0}>
                     {img.map((item, index) => (
                         <SwiperSlide key={index}>
-                            <img
-                                src={item}
-                                className='h-full w-full object-cover'
-                            />
+                            <img src={item} className='h-full w-full object-cover' />
                         </SwiperSlide>
                     ))}
                 </Swiper>
             </div>
 
             {/* name and price  */}
-            <div
-                onClick={() => go_ProductDetail_Page(id)}
-                className='mt-3 mb-3 pl-3 pr-3'
-            >
+            <div onClick={() => go_ProductDetail_Page(id)} className='mt-3 mb-3 pl-3 pr-3'>
                 {/* name */}
                 <div>{productName}</div>
 
@@ -79,12 +69,23 @@ const ProductCard = (props) => {
             {/* button buy  */}
             <div
                 onClick={handleBuyNow}
-                className={`border text-lg text-center py-2 border-gray-200 hover:border-black hover:font-bold hover:cursor-pointer ${
-                    userRedux.username ? 'bg-red-500' : ''
+                className={`border text-lg text-center py-2 border-gray-200 hover:border-black transition duration-300 hover:font-bold cursor-pointer ${
+                    userRedux.username ? '' : 'bg-gray-900 text-white'
                 }`}
             >
                 Mua hàng ngay
             </div>
+            <ToastContainer
+                position='top-right'
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };

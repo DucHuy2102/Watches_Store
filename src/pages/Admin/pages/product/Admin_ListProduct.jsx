@@ -8,11 +8,14 @@ import { EditOutlined } from '@ant-design/icons';
 import { useMutationHook } from '../../../../hooks/useMutationHook';
 import { useDispatch } from 'react-redux';
 import { updateProduct } from '../../../../redux/slides/productSlide';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 const Admin_ListProduct = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const token = localStorage.getItem('adminToken');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState(null);
 
@@ -26,12 +29,15 @@ const Admin_ListProduct = () => {
         const res = await ProductService.getAllProduct();
         return res;
     };
+
+    // useQuery to get all product
     const { data, refetch } = useQuery({
         queryKey: ['products'],
         queryFn: getAllProduct,
         keepPreviousData: true,
     });
 
+    // useMutationHook to get product by id
     const mutationNavigate = useMutationHook(async (id) => {
         try {
             const res = await ProductService.getProductById(id);
@@ -43,11 +49,14 @@ const Admin_ListProduct = () => {
         }
     });
 
+    // handle edit product
     const handleEditProduct = (id) => {
         mutationNavigate.mutate(id, {
             onSuccess: () => {
-                message.success('Chuyển đến trang Sửa thông tin sản phẩm');
-                navigate(`/admin/product/edit/${id}`);
+                toast.success('Chuyển đến trang Sửa thông tin sản phẩm');
+                setTimeout(() => {
+                    navigate(`/admin/product/edit/${id}`);
+                }, 3000);
             },
             onError: () => {
                 console.log('Get product by id failed');
@@ -61,7 +70,7 @@ const Admin_ListProduct = () => {
         setIsModalOpen(true);
     };
 
-    const token = localStorage.getItem('adminToken');
+    // useMutationHook to delete product
     const mutationDelete = useMutationHook(({ token, id }) => {
         return ProductService.deleteProduct(token, id);
     });
@@ -74,12 +83,10 @@ const Admin_ListProduct = () => {
                 { token, id: selectedProductId },
                 {
                     onSuccess: () => {
-                        message.success(
-                            'Xóa sản phẩm thành công. Trang sẽ tự động làm mới'
-                        );
+                        toast.success('Xóa sản phẩm thành công. Trang sẽ tự động làm mới');
                     },
                     onError: () => {
-                        message.error('Xóa sản phẩm thất bại');
+                        toast.error('Xóa sản phẩm thất bại');
                     },
                     onSettled: () => {
                         if (refetch) {
@@ -90,7 +97,7 @@ const Admin_ListProduct = () => {
             );
         } catch (error) {
             console.error('Delete product failed:', error);
-            message.error('Lỗi hệ thống! Xóa sản phẩm thất bại');
+            toast.error('Lỗi hệ thống! Xóa sản phẩm thất bại');
         }
     };
 
@@ -99,6 +106,7 @@ const Admin_ListProduct = () => {
         setIsModalOpen(false);
     };
 
+    // column for table
     const columns = [
         {
             title: 'Tên đồng hồ',
@@ -145,9 +153,7 @@ const Admin_ListProduct = () => {
             render: (text) => (
                 <button
                     className={`hover:cursor-pointer w-24 py-2 rounded-lg uppercase ${
-                        text === 'saling'
-                            ? 'bg-blue-500 text-white'
-                            : 'bg-gray-500 text-white'
+                        text === 'saling' ? 'bg-blue-500 text-white' : 'bg-gray-500 text-white'
                     }`}
                 >
                     {text}
@@ -179,6 +185,7 @@ const Admin_ListProduct = () => {
         },
     ];
 
+    // data for table
     const dataTable = data?.data.map((product, indexProduct) => ({
         key: product.id || indexProduct,
         name: product.productName,
@@ -192,10 +199,14 @@ const Admin_ListProduct = () => {
 
     return (
         <div>
+            {/* top */}
             <div className='mt-3 px-14 flex justify-between items-center'>
+                {/* title page */}
                 <h1 className='font-bold font-PlayfairDisplay text-3xl mt-2 text-center'>
                     Danh sách đồng hồ
                 </h1>
+
+                {/* button add new product */}
                 <div className='flex justify-center items-center gap-5'>
                     <button
                         onClick={handleGoToAddProduct('/admin/product/add')}
@@ -205,6 +216,8 @@ const Admin_ListProduct = () => {
                     </button>
                 </div>
             </div>
+
+            {/* content */}
             <div className='w-full'>
                 <div className='mt-5'>
                     <Table
@@ -215,6 +228,8 @@ const Admin_ListProduct = () => {
                     />
                 </div>
             </div>
+
+            {/* modal delete product */}
             <Modal
                 title='Xác nhận xóa sản phẩm'
                 okText='Xác nhận xóa'
@@ -222,17 +237,28 @@ const Admin_ListProduct = () => {
                 style={{ textAlign: 'center' }}
                 open={isModalOpen}
                 okButtonProps={{
-                    className:
-                        'bg-black text-white hover:bg-red-500 hover:text-white',
+                    className: 'bg-black text-white hover:bg-red-500 hover:text-white',
                 }}
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
                 <p className='text-lg'>
-                    Hành động này sẽ xóa sản phẩm khỏi hệ thống và dữ liệu không
-                    thể khôi phục!
+                    Hành động này sẽ xóa sản phẩm khỏi hệ thống và dữ liệu không thể khôi phục!
                 </p>
             </Modal>
+
+            {/* toast */}
+            <ToastContainer
+                position='top-right'
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };

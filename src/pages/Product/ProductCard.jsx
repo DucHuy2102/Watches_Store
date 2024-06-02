@@ -1,24 +1,42 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateProduct } from '../../redux/slides/productSlide';
-
-const styleImage = 'h-full w-full object-cover';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductCard = (props) => {
-    const { id, genderUser, img, price, productName, size } = props.product;
-    const dispath = useDispatch();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // get user data from redux
+    const userRedux = useSelector((state) => state.user);
+    console.log('userRedux -->', userRedux);
+
+    // get product data from props
+    const { id, genderUser, img, price, productName, size } = props.product;
+
+    // go to product detail page
     const go_ProductDetail_Page = (id) => {
-        dispath(updateProduct({ ...props.product, id }));
+        dispatch(updateProduct({ ...props.product, id }));
         navigate(`/product_detail/${id}`);
     };
 
+    // format price
     const priceFormat = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
     }).format(price);
+
+    // handle buy now
+    const handleBuyNow = () => {
+        if (userRedux.username) {
+            navigate('/order');
+        } else {
+            toast.info('Vui lòng đăng nhập để mua hàng!');
+        }
+    };
 
     return (
         <div className='h-[625px] w-[466px] font-Lato hover:scale-105 transition-transform duration-300 hover:cursor-pointer'>
@@ -30,15 +48,14 @@ const ProductCard = (props) => {
                     loop={true}
                     spaceBetween={0}
                 >
-                    <SwiperSlide>
-                        <img src={img[0]} className={styleImage} />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src={img[1]} className={styleImage} />
-                    </SwiperSlide>
-                    <SwiperSlide>
-                        <img src={img[2]} className={styleImage} />
-                    </SwiperSlide>
+                    {img.map((item, index) => (
+                        <SwiperSlide key={index}>
+                            <img
+                                src={item}
+                                className='h-full w-full object-cover'
+                            />
+                        </SwiperSlide>
+                    ))}
                 </Swiper>
             </div>
 
@@ -60,8 +77,13 @@ const ProductCard = (props) => {
             </div>
 
             {/* button buy  */}
-            <div className='border text-lg text-center py-2 border-gray-200 hover:border-black hover:font-bold hover:cursor-pointer'>
-                <Link to='/order'>Mua hàng ngay</Link>
+            <div
+                onClick={handleBuyNow}
+                className={`border text-lg text-center py-2 border-gray-200 hover:border-black hover:font-bold hover:cursor-pointer ${
+                    userRedux.username ? 'bg-red-500' : ''
+                }`}
+            >
+                Mua hàng ngay
             </div>
         </div>
     );

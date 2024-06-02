@@ -6,7 +6,6 @@ import * as ProductService from '../../../services/ProductService';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { updateProduct } from '../../../redux/slides/productSlide';
-import { useEffect } from 'react';
 
 const ProductDetail = () => {
     // get product from redux
@@ -16,7 +15,6 @@ const ProductDetail = () => {
 
     // destructuring product_Redux
     const {
-        id,
         brand,
         color,
         condition,

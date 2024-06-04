@@ -2,10 +2,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import { useDispatch, useSelector } from 'react-redux';
-import * as ProductService from '../../../services/ProductService';
+import * as ProductService from '../../services/ProductService';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { updateProduct } from '../../../redux/slides/productSlide';
+import { updateProduct } from '../../redux/slides/productSlide';
 
 const ProductDetail = () => {
     // get product from redux
@@ -34,20 +34,6 @@ const ProductDetail = () => {
         weight,
         category,
     } = product_Redux;
-
-    // useEffect(() => {
-    //     const fetchProductDetails = async () => {
-    //         try {
-    //             const productDetails = await ProductService.getProductById(id);
-    //             dispatch(updateProduct(productDetails.data));
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     };
-    //     if (id) {
-    //         fetchProductDetails();
-    //     }
-    // }, [id, dispatch]);
 
     // specifications of product
     const specifications = [
@@ -161,14 +147,10 @@ const ProductDetail = () => {
         window.scrollTo(0, 0);
     };
 
-    // useEffect(() => {
-    //     refetch();
-    // }, [product_Redux, refetch]);
-
     return (
         <div className='font-Lato bg-white'>
             <div className='p-6 lg:max-w-7xl max-w-4xl mx-auto'>
-                {/* top */}
+                {/* top: images & info product */}
                 <div className='grid items-start grid-cols-1 lg:grid-cols-5 gap-12 shadow-md p-6'>
                     {/* image product */}
                     <div className='lg:col-span-3 w-full lg:sticky top-0 text-center'>
@@ -194,15 +176,11 @@ const ProductDetail = () => {
                     {/* info product */}
                     <div className='lg:col-span-2'>
                         {/* name product */}
-                        <h2 className='text-2xl font-extrabold text-black'>
-                            {productName}
-                        </h2>
+                        <h2 className='text-2xl font-extrabold text-black'>{productName}</h2>
 
                         {/* price product */}
                         <div className='flex flex-wrap justify-start items-center gap-4 mt-2'>
-                            <p className='text-blue-500 text-4xl font-bold'>
-                                {priceFormat}
-                            </p>
+                            <p className='text-blue-500 text-4xl font-bold'>{priceFormat}</p>
                             <p className='text-gray-400 text-xl flex justify-start items-center'>
                                 <strike>{discountPriceFormat}₫</strike>
                                 <span className='text-sm bg-red-500 text-white px-2 py-1 rounded-lg ml-3'>
@@ -254,25 +232,19 @@ const ProductDetail = () => {
                             >
                                 <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
                             </svg>
-                            <h4 className='text-black text-base'>
-                                500 Lượt đánh giá
-                            </h4>
+                            <h4 className='text-black text-base'>500 Lượt đánh giá</h4>
                         </div>
 
                         {/* brand */}
                         <div className='flex items-center mt-2'>
                             <p className='text-lg text-black'>Thương hiệu:</p>
-                            <p className='text-lg text-blue-500 font-bold ml-2'>
-                                {brand}
-                            </p>
+                            <p className='text-lg text-blue-500 font-bold ml-2'>{brand}</p>
                         </div>
 
                         {/* in stock */}
                         <div className='flex justify-start items-center mt-2'>
                             <p className='text-lg text-black'>Tình trạng:</p>
-                            <p className='text-lg text-blue-500 font-bold ml-2'>
-                                {condition}
-                            </p>
+                            <p className='text-lg text-blue-500 font-bold ml-2'>{condition}</p>
                         </div>
 
                         {/* 5 reasons */}
@@ -289,17 +261,14 @@ const ProductDetail = () => {
                             </div>
                             <hr className='border-0 border-dotted border-b-2 border-black opacity-50 my-1' />
                             <p className='text-sm pl-1 pt-1'>
-                                Nếu 5 lý do trên chưa đủ thuyết phục bạn thì hãy
-                                cho chúng tôi 1 cơ hội để được chứng minh điều
-                                đó. Xin cảm ơn!
+                                Nếu 5 lý do trên chưa đủ thuyết phục bạn thì hãy cho chúng tôi 1 cơ
+                                hội để được chứng minh điều đó. Xin cảm ơn!
                             </p>
                         </div>
 
                         {/* contact to buy */}
                         <div className='flex flex-col justify-center items-center mt-2'>
-                            <p className='text-md text-black'>
-                                Đặt hàng/tư vấn (8h00 - 22h00)
-                            </p>
+                            <p className='text-md text-black'>Đặt hàng/tư vấn (8h00 - 22h00)</p>
                             <p className='text-md text-blue-500 font-bold ml-2 hover:cursor-pointer'>
                                 0979.117.117 - 0979.217.217 - 0979.317.317
                             </p>
@@ -325,9 +294,7 @@ const ProductDetail = () => {
 
                 {/* body */}
                 <div className='mt-10 shadow-md px-5 pb-5'>
-                    <h3 className='text-lg font-bold text-black'>
-                        Mô tả sản phẩm
-                    </h3>
+                    <h3 className='text-lg font-bold text-black'>Mô tả sản phẩm</h3>
 
                     {/* description */}
                     <p className='mt-2 px-5 text-black'>{description}</p>
@@ -344,9 +311,7 @@ const ProductDetail = () => {
                                     className='px-5 text-md hover:bg-gray-100 hover:cursor-pointer'
                                 >
                                     {item.title}
-                                    <span className='ml-4 float-right'>
-                                        {item.value}
-                                    </span>
+                                    <span className='ml-4 float-right'>{item.value}</span>
                                 </li>
                             );
                         })}
@@ -355,9 +320,7 @@ const ProductDetail = () => {
 
                 {/* more products */}
                 <div className='mt-5 shadow-md p-6'>
-                    <h3 className='text-lg font-bold text-black'>
-                        Các sản phẩm khác cùng hãng
-                    </h3>
+                    <h3 className='text-lg font-bold text-black'>Các sản phẩm khác cùng hãng</h3>
                     <Swiper
                         spaceBetween={20}
                         slidesPerView={1}
@@ -366,15 +329,9 @@ const ProductDetail = () => {
                         className='mt-4'
                     >
                         {productChunks.map((chunk, index) => (
-                            <SwiperSlide
-                                key={index}
-                                className='grid grid-cols-4 gap-4'
-                            >
+                            <SwiperSlide key={index} className='grid grid-cols-4 gap-4'>
                                 {chunk.map((product) => (
-                                    <div
-                                        key={product.id}
-                                        className='p-4 border rounded-lg'
-                                    >
+                                    <div key={product.id} className='p-4 border rounded-lg'>
                                         <img
                                             src={product.img[0]}
                                             alt={product.productName}
@@ -382,10 +339,7 @@ const ProductDetail = () => {
                                         />
                                         <div
                                             onClick={() =>
-                                                go_ProductDetail_Page(
-                                                    product.id,
-                                                    product
-                                                )
+                                                go_ProductDetail_Page(product.id, product)
                                             }
                                             className='cursor-pointer'
                                         >
@@ -393,13 +347,10 @@ const ProductDetail = () => {
                                                 {product.productName}
                                             </h3>
                                             <p className='mt-1 text-gray-600'>
-                                                {new Intl.NumberFormat(
-                                                    'vi-VN',
-                                                    {
-                                                        style: 'currency',
-                                                        currency: 'VND',
-                                                    }
-                                                ).format(product.price)}
+                                                {new Intl.NumberFormat('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND',
+                                                }).format(product.price)}
                                             </p>
                                         </div>
                                     </div>
@@ -411,16 +362,12 @@ const ProductDetail = () => {
 
                 {/* comments */}
                 <div className='mt-5 shadow-md p-6'>
-                    <h3 className='text-lg font-bold text-black'>
-                        (10) Lượt đánh giá
-                    </h3>
+                    <h3 className='text-lg font-bold text-black'>(10) Lượt đánh giá</h3>
                     <div className='grid md:grid-cols-2 gap-12 mt-2'>
                         <div>
                             <div className='space-y-3'>
                                 <div className='flex items-center'>
-                                    <p className='text-md text-black font-bold'>
-                                        5.0
-                                    </p>
+                                    <p className='text-md text-black font-bold'>5.0</p>
                                     <svg
                                         className='w-5 fill-yellow-400 ml-1'
                                         viewBox='0 0 14 13'
@@ -432,14 +379,10 @@ const ProductDetail = () => {
                                     <div className='bg-gray-400 rounded w-full h-2 ml-3'>
                                         <div className='w-2/3 h-full rounded bg-black'></div>
                                     </div>
-                                    <p className='text-sm text-black font-bold ml-3'>
-                                        66%
-                                    </p>
+                                    <p className='text-sm text-black font-bold ml-3'>66%</p>
                                 </div>
                                 <div className='flex items-center'>
-                                    <p className='text-sm text-black font-bold'>
-                                        4.0
-                                    </p>
+                                    <p className='text-sm text-black font-bold'>4.0</p>
                                     <svg
                                         className='w-5 fill-yellow-400 ml-1'
                                         viewBox='0 0 14 13'
@@ -451,14 +394,10 @@ const ProductDetail = () => {
                                     <div className='bg-gray-400 rounded w-full h-2 ml-3'>
                                         <div className='w-1/3 h-full rounded bg-black'></div>
                                     </div>
-                                    <p className='text-sm text-black font-bold ml-3'>
-                                        33%
-                                    </p>
+                                    <p className='text-sm text-black font-bold ml-3'>33%</p>
                                 </div>
                                 <div className='flex items-center'>
-                                    <p className='text-sm text-black font-bold'>
-                                        3.0
-                                    </p>
+                                    <p className='text-sm text-black font-bold'>3.0</p>
                                     <svg
                                         className='w-5 fill-yellow-400 ml-1'
                                         viewBox='0 0 14 13'
@@ -470,14 +409,10 @@ const ProductDetail = () => {
                                     <div className='bg-gray-400 rounded w-full h-2 ml-3'>
                                         <div className='w-1/6 h-full rounded bg-black'></div>
                                     </div>
-                                    <p className='text-sm text-black font-bold ml-3'>
-                                        16%
-                                    </p>
+                                    <p className='text-sm text-black font-bold ml-3'>16%</p>
                                 </div>
                                 <div className='flex items-center'>
-                                    <p className='text-sm text-black font-bold'>
-                                        2.0
-                                    </p>
+                                    <p className='text-sm text-black font-bold'>2.0</p>
                                     <svg
                                         className='w-5 fill-yellow-400 ml-1'
                                         viewBox='0 0 14 13'
@@ -489,14 +424,10 @@ const ProductDetail = () => {
                                     <div className='bg-gray-400 rounded w-full h-2 ml-3'>
                                         <div className='w-1/12 h-full rounded bg-black'></div>
                                     </div>
-                                    <p className='text-sm text-black font-bold ml-3'>
-                                        8%
-                                    </p>
+                                    <p className='text-sm text-black font-bold ml-3'>8%</p>
                                 </div>
                                 <div className='flex items-center'>
-                                    <p className='text-sm text-black font-bold'>
-                                        1.0
-                                    </p>
+                                    <p className='text-sm text-black font-bold'>1.0</p>
                                     <svg
                                         className='w-5 fill-yellow-400 ml-1'
                                         viewBox='0 0 14 13'
@@ -508,9 +439,7 @@ const ProductDetail = () => {
                                     <div className='bg-gray-400 rounded w-full h-2 ml-3'>
                                         <div className='w-[6%] h-full rounded bg-black'></div>
                                     </div>
-                                    <p className='text-sm text-black font-bold ml-3'>
-                                        6%
-                                    </p>
+                                    <p className='text-sm text-black font-bold ml-3'>6%</p>
                                 </div>
                             </div>
                         </div>
@@ -521,9 +450,7 @@ const ProductDetail = () => {
                                     className='w-12 h-12 rounded-full border-2 border-white'
                                 />
                                 <div className='ml-3'>
-                                    <h4 className='text-sm font-bold text-black'>
-                                        John Doe
-                                    </h4>
+                                    <h4 className='text-sm font-bold text-black'>John Doe</h4>
                                     <div className='flex space-x-1 mt-1'>
                                         <svg
                                             className='w-4 fill-yellow-400'
@@ -570,10 +497,8 @@ const ProductDetail = () => {
                                         </p>
                                     </div>
                                     <p className='text-sm mt-4 text-black'>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipisci elit, sed eiusmod tempor
-                                        incidunt ut labore et dolore magna
-                                        aliqua.
+                                        Lorem ipsum dolor sit amet, consectetur adipisci elit, sed
+                                        eiusmod tempor incidunt ut labore et dolore magna aliqua.
                                     </p>
                                 </div>
                             </div>

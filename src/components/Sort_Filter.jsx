@@ -29,9 +29,7 @@ const Sort_Filter = () => {
     const [isOpenSort, setIsOpenSort] = useState(false);
     const [selectedOption, setSelectedOption] = useState('Sắp xếp theo');
 
-    const mutationFindProduct = useMutationHook((name) =>
-        ProductService.findProductByName(name)
-    );
+    const mutationFindProduct = useMutationHook((name) => ProductService.findProductByName(name));
 
     const toggleMenuFilter = () => {
         if (isOpenFilter) {
@@ -72,10 +70,7 @@ const Sort_Filter = () => {
     const sortRef = useRef(null);
     useEffect(() => {
         const handleClickOutsideFilter = (event) => {
-            if (
-                filterRef.current &&
-                !filterRef.current.contains(event.target)
-            ) {
+            if (filterRef.current && !filterRef.current.contains(event.target)) {
                 setIsOpenFilter(false);
             }
         };
@@ -97,22 +92,19 @@ const Sort_Filter = () => {
             {/* link to page */}
             <div className='w-[30vw]'>
                 <Link to='/'>Trang chủ</Link> /{' '}
-                {selectedFilter
-                    ? `Lọc được ${numberProduct} sản phẩm`
-                    : 'Tất cả sản phẩm'}
+                {selectedFilter ? `Lọc được ${numberProduct} sản phẩm` : 'Tất cả sản phẩm'}
             </div>
 
             {/* name page */}
             <div className='w-full text-center'>
                 <p className='font-bold text-xl'>
-                    {selectedFilter === 'Bộ lọc'
-                        ? 'Tất cả sản phẩm'
-                        : selectedFilter}
+                    {selectedFilter === 'Bộ lọc' ? 'Tất cả sản phẩm' : selectedFilter}
                 </p>
             </div>
 
             {/* sort and filter */}
             <div className='flex items-center justify-end gap-2'>
+                {/* filter */}
                 <div className='relative mt-1' ref={filterRef}>
                     <button
                         className='border border-black flex justify-center items-center bg-white text-black px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-300'
@@ -127,26 +119,16 @@ const Sort_Filter = () => {
                             <ul className='text-black'>
                                 <li
                                     className='pl-7 flex items-center px-2 py-2 hover:bg-black hover:text-white cursor-pointer'
-                                    onClick={() =>
-                                        handleFilterClick('Đồng hồ nam')
-                                    }
+                                    onClick={() => handleFilterClick('Đồng hồ nam')}
                                 >
-                                    <FontAwesomeIcon
-                                        icon={faPerson}
-                                        className='mr-2'
-                                    />
+                                    <FontAwesomeIcon icon={faPerson} className='mr-2' />
                                     Đồng hồ nam
                                 </li>
                                 <li
                                     className='pl-7 flex items-center px-2 py-2 hover:bg-black hover:text-white cursor-pointer'
-                                    onClick={() =>
-                                        handleFilterClick('Đồng hồ nữ')
-                                    }
+                                    onClick={() => handleFilterClick('Đồng hồ nữ')}
                                 >
-                                    <FontAwesomeIcon
-                                        icon={faPersonDress}
-                                        className='mr-2'
-                                    />
+                                    <FontAwesomeIcon icon={faPersonDress} className='mr-2' />
                                     Đồng hồ nữ
                                 </li>
                                 {/* Thêm các tùy chọn lọc khác tại đây */}
@@ -174,38 +156,23 @@ const Sort_Filter = () => {
                             <ul className='text-gray-800'>
                                 <li
                                     className='flex items-center px-4 py-2 hover:bg-black hover:text-white cursor-pointer'
-                                    onClick={() =>
-                                        handleOptionClick('Được xem nhiều')
-                                    }
+                                    onClick={() => handleOptionClick('Được xem nhiều')}
                                 >
-                                    <FontAwesomeIcon
-                                        icon={faEye}
-                                        className='mr-2'
-                                    />
+                                    <FontAwesomeIcon icon={faEye} className='mr-2' />
                                     Được xem nhiều
                                 </li>
                                 <li
                                     className='flex items-center px-4 py-2 hover:bg-black hover:text-white cursor-pointer'
-                                    onClick={() =>
-                                        handleOptionClick('Giá cao tới thấp')
-                                    }
+                                    onClick={() => handleOptionClick('Giá cao tới thấp')}
                                 >
-                                    <FontAwesomeIcon
-                                        icon={faSortAmountDownAlt}
-                                        className='mr-2'
-                                    />
+                                    <FontAwesomeIcon icon={faSortAmountDownAlt} className='mr-2' />
                                     Giá cao tới thấp
                                 </li>
                                 <li
                                     className='flex items-center px-4 py-2 hover:bg-black hover:text-white cursor-pointer'
-                                    onClick={() =>
-                                        handleOptionClick('Giá thấp tới cao')
-                                    }
+                                    onClick={() => handleOptionClick('Giá thấp tới cao')}
                                 >
-                                    <FontAwesomeIcon
-                                        icon={faSortAmountUp}
-                                        className='mr-2'
-                                    />
+                                    <FontAwesomeIcon icon={faSortAmountUp} className='mr-2' />
                                     Giá thấp tới cao
                                 </li>
                             </ul>

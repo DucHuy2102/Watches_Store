@@ -20,8 +20,7 @@ const styleButtonPage =
     'transition-all duration-300 hover:rounded-lg hover:py-1 hover:text-white hover:px-3 ease-in-out hover:bg-black text-gray-400 text-xl';
 
 const Header = () => {
-    const [clickButtonWithoutAccount, setClickButtonWithoutAccount] =
-        useState(false);
+    const [clickButtonWithoutAccount, setClickButtonWithoutAccount] = useState(false);
     const [clickButtonAccount, setClickButtonAccount] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -31,18 +30,12 @@ const Header = () => {
 
     useEffect(() => {
         const handleClickOutButtonAccout = (event) => {
-            if (
-                accountRef.current &&
-                !accountRef.current.contains(event.target)
-            ) {
+            if (accountRef.current && !accountRef.current.contains(event.target)) {
                 setClickButtonAccount(false);
             }
         };
         const handleClickoutButtonWithoutAccount = (event) => {
-            if (
-                accountRef.current &&
-                !accountRef.current.contains(event.target)
-            ) {
+            if (accountRef.current && !accountRef.current.contains(event.target)) {
                 setClickButtonWithoutAccount(false);
             }
         };
@@ -51,10 +44,7 @@ const Header = () => {
         document.addEventListener('click', handleClickoutButtonWithoutAccount);
         return () => {
             document.removeEventListener('click', handleClickOutButtonAccout);
-            document.removeEventListener(
-                'click',
-                handleClickoutButtonWithoutAccount
-            );
+            document.removeEventListener('click', handleClickoutButtonWithoutAccount);
         };
     }, []);
 
@@ -75,9 +65,7 @@ const Header = () => {
         const capitalizedValue = capitalizeFirstLetter(e.target.value);
         setSearchValue(capitalizedValue);
     };
-    const mutationFindProduct = useMutationHook((name) =>
-        ProductService.findProductByName(name)
-    );
+    const mutationFindProduct = useMutationHook((name) => ProductService.findProductByName(name));
 
     const handleKeyPress = async (e) => {
         if (e.key === 'Enter') {
@@ -105,10 +93,7 @@ const Header = () => {
         <nav className='w-full h-16 px-10 flex items-center flex-grow shadow-lg'>
             {/* name website */}
             <div>
-                <Link
-                    to='/'
-                    className='text-3xl font-bold font-PlayfairDisplay'
-                >
+                <Link to='/' className='text-3xl font-bold font-PlayfairDisplay'>
                     Watc<span className='text-yellow-400 text-4xl'>H</span>es
                 </Link>
             </div>
@@ -144,10 +129,8 @@ const Header = () => {
                     // login success
                     <>
                         <div
-                            onClick={() =>
-                                setClickButtonAccount(!clickButtonAccount)
-                            }
-                            className={`${styleButton} hover:cursor-pointer mr-2 w-[10rem] rounded-lg flex justify-center items-center text-lg gap-1`}
+                            onClick={() => setClickButtonAccount(!clickButtonAccount)}
+                            className={`${styleButton} cursor-pointer mr-2 w-[10rem] rounded-lg flex justify-center items-center text-lg gap-1`}
                         >
                             Chào:
                             <span className='text-blue-500 font-medium hover:text-white'>
@@ -164,10 +147,7 @@ const Header = () => {
                                     onClick={() => setClickButtonAccount(false)}
                                     className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
                                 >
-                                    <FontAwesomeIcon
-                                        icon={faUserGear}
-                                        className='mr-2'
-                                    />
+                                    <FontAwesomeIcon icon={faUserGear} className='mr-2' />
                                     Tài khoản
                                 </Link>
 
@@ -179,10 +159,7 @@ const Header = () => {
                                     }}
                                     className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
                                 >
-                                    <FontAwesomeIcon
-                                        icon={faCircleArrowLeft}
-                                        className='mr-2'
-                                    />
+                                    <FontAwesomeIcon icon={faCircleArrowLeft} className='mr-2' />
                                     Đăng xuất
                                 </button>
                             </div>
@@ -193,11 +170,7 @@ const Header = () => {
                     <>
                         <Link
                             to='/login'
-                            onClick={() =>
-                                setClickButtonWithoutAccount(
-                                    !clickButtonWithoutAccount
-                                )
-                            }
+                            onClick={() => setClickButtonWithoutAccount(!clickButtonWithoutAccount)}
                             className={`${styleButton} relative`}
                         >
                             <FontAwesomeIcon icon={faUser} className='mr-2' />
@@ -208,14 +181,8 @@ const Header = () => {
 
                 {/* shopping cart */}
                 <Badge count={5}>
-                    <Link
-                        to='/order'
-                        className={`${styleButton} font-PlayfairDisplay`}
-                    >
-                        <FontAwesomeIcon
-                            icon={faCartShopping}
-                            className='mr-2'
-                        />
+                    <Link to='/order' className={`${styleButton} font-PlayfairDisplay`}>
+                        <FontAwesomeIcon icon={faCartShopping} className='mr-2' />
                         Giỏ hàng
                     </Link>
                 </Badge>

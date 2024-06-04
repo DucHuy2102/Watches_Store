@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ProductCard } from '../exportPages';
-import {
-    PaginationComponent,
-    Sort_Filter,
-} from '../../components/exportComponents';
+import { PaginationComponent, Sort_Filter } from '../../components/exportComponents';
 import { useQuery } from '@tanstack/react-query';
 import * as ProductService from '../../services/ProductService';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,9 +18,7 @@ const ProductPage = () => {
     const dispatch = useDispatch();
 
     // get data from redux
-    const dataSearch_Redux = useSelector(
-        (state) => state?.searchProduct?.search
-    );
+    const dataSearch_Redux = useSelector((state) => state?.searchProduct?.search);
 
     // get all products from api and set to state allProducts
     // and products to display on page
@@ -81,9 +76,10 @@ const ProductPage = () => {
 
             {/* products */}
             <div className='mt-7 mb-3 grid grid-cols-3 gap-10'>
-                {currentProducts.map((product) => (
+                <ProductCard products={currentProducts} />
+                {/* {currentProducts.map((product) => (
                     <ProductCard key={product.id} product={product} />
-                ))}
+                ))} */}
             </div>
 
             {/* pagination */}

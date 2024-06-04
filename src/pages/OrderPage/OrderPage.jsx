@@ -6,8 +6,14 @@ const OrderPage = () => {
     return (
         <div className='bg-gray-100 h-screen py-8'>
             <div className='container mx-auto px-4'>
-                <h1 className='text-4xl text-center font-bold mb-4 font-PlayfairDisplay'>Giỏ hàng của bạn</h1>
+                {/* title page */}
+                <h1 className='text-4xl text-center font-bold mb-4 font-PlayfairDisplay'>
+                    Giỏ hàng của bạn
+                </h1>
+
+                {/* content order page */}
                 <div className='flex flex-col md:flex-row gap-4'>
+                    {/* product info */}
                     <div className='md:w-3/4'>
                         <div className='bg-white rounded-lg shadow-md p-6 mb-4'>
                             <table className='w-full'>
@@ -18,7 +24,9 @@ const OrderPage = () => {
                                         <th className='text-center font-semibold'>Màu sắc</th>
                                         <th className='text-center font-semibold'>Giá tiền</th>
                                         <th className='font-semibold text-center'>Số lượng</th>
-                                        <th className='text-center font-semibold'>Tổng tiền (VNĐ)</th>
+                                        <th className='text-center font-semibold'>
+                                            Tổng tiền (VNĐ)
+                                        </th>
                                     </tr>
                                 </thead>
 
@@ -36,7 +44,8 @@ const OrderPage = () => {
 
                                                 {/* name */}
                                                 <span className='w-80 font-semibold'>
-                                                    Q Timex Chronograph 40mm Stainless Steel Bracelet Watch
+                                                    Q Timex Chronograph 40mm Stainless Steel
+                                                    Bracelet Watch
                                                 </span>
                                             </div>
                                         </td>
@@ -53,9 +62,13 @@ const OrderPage = () => {
                                         {/* quantity */}
                                         <td className='py-4'>
                                             <div className='flex items-center justify-center'>
-                                                <button className='border rounded-md py-2 px-4 mr-2'>-</button>
+                                                <button className='border rounded-md py-2 px-4 mr-2'>
+                                                    -
+                                                </button>
                                                 <span className='text-center w-8'>1</span>
-                                                <button className='border rounded-md py-2 px-4 ml-2'>+</button>
+                                                <button className='border rounded-md py-2 px-4 ml-2'>
+                                                    +
+                                                </button>
                                             </div>
                                         </td>
 

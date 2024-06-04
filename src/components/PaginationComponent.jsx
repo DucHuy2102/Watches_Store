@@ -1,10 +1,6 @@
 import { Pagination } from 'antd';
 
-const PaginationComponent = ({
-    totalProducts,
-    productPerPage,
-    setCurrentPage,
-}) => {
+const PaginationComponent = ({ totalProducts, productPerPage, setCurrentPageValue }) => {
     let pages = [];
     for (let i = 1; i <= Math.ceil(totalProducts / productPerPage); i++) {
         pages.push(i);
@@ -16,7 +12,7 @@ const PaginationComponent = ({
                 className='text-md'
                 total={totalProducts}
                 pageSize={productPerPage}
-                onChange={(page) => setCurrentPage(page)}
+                onChange={(page) => setCurrentPageValue(page)}
             />
         </div>
     );

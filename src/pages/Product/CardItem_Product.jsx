@@ -60,7 +60,7 @@ const CardItem_Product = (props) => {
                 </div>
 
                 {/* price */}
-                <div className='font-bold'>{priceFormat}₫</div>
+                <div className='font-bold'>{priceFormat}</div>
             </div>
 
             {/* button buy  */}

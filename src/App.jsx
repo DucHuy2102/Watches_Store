@@ -1,9 +1,4 @@
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Navigate,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { routes } from './routes/exportRoutes';
 import { DefaultComponent } from './components/exportComponents';
 import { Fragment } from 'react';
@@ -62,9 +57,9 @@ const routeAdmin = [
 
 const AdminRoute = ({ element }) => {
     const admin_Redux = useSelector((state) => state.admin);
-    // const isUserAdmin = admin_Redux?.admin;
-    // console.log('isUserAdmin -->', isUserAdmin);
-    const isUserAdmin = true;
+    const isUserAdmin = admin_Redux?.admin;
+    console.log('isUserAdmin -->', isUserAdmin);
+    // const isUserAdmin = true;
     return isUserAdmin ? element : <Navigate to='/login' />;
 };
 
@@ -76,9 +71,7 @@ const App = () => {
                     {/* Route user */}
                     {routes.map((route) => {
                         const Page = route.component;
-                        const Layout = route.isShowHeader
-                            ? DefaultComponent
-                            : Fragment;
+                        const Layout = route.isShowHeader ? DefaultComponent : Fragment;
                         return (
                             <Route
                                 key={route.path}
@@ -104,9 +97,7 @@ const App = () => {
                                                 <Route
                                                     key={route.path}
                                                     path={route.path}
-                                                    element={
-                                                        <route.component />
-                                                    }
+                                                    element={<route.component />}
                                                 />
                                             ))}
                                         </Routes>

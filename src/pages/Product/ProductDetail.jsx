@@ -320,44 +320,52 @@ const ProductDetail = () => {
 
                 {/* more products */}
                 <div className='mt-5 shadow-md p-6'>
-                    <h3 className='text-lg font-bold text-black'>Các sản phẩm khác cùng hãng</h3>
-                    <Swiper
-                        spaceBetween={20}
-                        slidesPerView={1}
-                        navigation
-                        autoplay={{ delay: 4000 }}
-                        className='mt-4'
-                    >
-                        {productChunks.map((chunk, index) => (
-                            <SwiperSlide key={index} className='grid grid-cols-4 gap-4'>
-                                {chunk.map((product) => (
-                                    <div key={product.id} className='p-4 border rounded-lg'>
-                                        <img
-                                            src={product.img[0]}
-                                            alt={product.productName}
-                                            className='w-full h-40 object-cover'
-                                        />
-                                        <div
-                                            onClick={() =>
-                                                go_ProductDetail_Page(product.id, product)
-                                            }
-                                            className='cursor-pointer'
-                                        >
-                                            <h3 className='mt-2 text-lg font-semibold'>
-                                                {product.productName}
-                                            </h3>
-                                            <p className='mt-1 text-gray-600'>
-                                                {new Intl.NumberFormat('vi-VN', {
-                                                    style: 'currency',
-                                                    currency: 'VND',
-                                                }).format(product.price)}
-                                            </p>
-                                        </div>
-                                    </div>
+                    {productChunks.length === 0 ? (
+                        ''
+                    ) : (
+                        <>
+                            <h3 className='text-lg font-bold text-black'>
+                                Các sản phẩm khác cùng hãng
+                            </h3>
+                            <Swiper
+                                spaceBetween={20}
+                                slidesPerView={1}
+                                navigation
+                                autoplay={{ delay: 4000 }}
+                                className='mt-4'
+                            >
+                                {productChunks.map((chunk, index) => (
+                                    <SwiperSlide key={index} className='grid grid-cols-4 gap-4'>
+                                        {chunk.map((product) => (
+                                            <div key={product.id} className='p-4 border rounded-lg'>
+                                                <img
+                                                    src={product.img[0]}
+                                                    alt={product.productName}
+                                                    className='w-full h-40 object-cover'
+                                                />
+                                                <div
+                                                    onClick={() =>
+                                                        go_ProductDetail_Page(product.id, product)
+                                                    }
+                                                    className='cursor-pointer'
+                                                >
+                                                    <h3 className='mt-2 text-lg font-semibold'>
+                                                        {product.productName}
+                                                    </h3>
+                                                    <p className='mt-1 text-gray-600'>
+                                                        {new Intl.NumberFormat('vi-VN', {
+                                                            style: 'currency',
+                                                            currency: 'VND',
+                                                        }).format(product.price)}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </SwiperSlide>
                                 ))}
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
+                            </Swiper>
+                        </>
+                    )}
                 </div>
 
                 {/* comments */}

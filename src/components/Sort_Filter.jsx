@@ -150,6 +150,7 @@ const Sort_Filter = () => {
                             <FontAwesomeIcon icon={faSort} />
                         )}
                     </button>
+
                     {/* Menu tùy chọn */}
                     {isOpenSort && (
                         <div className='absolute border border-gray-300 right-0 mt-2 w-48 bg-white rounded shadow-lg z-10'>

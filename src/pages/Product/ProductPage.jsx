@@ -8,7 +8,7 @@ import { clearSearch } from '../../redux/slides/findProductSlide';
 
 const ProductPage = () => {
     // pagination state and function to handle pagination logic
-    const [currentPage, setCurrentPage] = useState(2);
+    const [currentPage, setCurrentPage] = useState(1);
     const [productPerPage] = useState(12);
     const lastProductIndex = currentPage * productPerPage;
     const firstProductIndex = lastProductIndex - productPerPage;
@@ -38,6 +38,7 @@ const ProductPage = () => {
     const currentProducts = Array.isArray(products)
         ? products.slice(firstProductIndex, lastProductIndex)
         : [];
+    console.log('-->', currentProducts);
 
     // set all products to state allProducts and products to display on page
     useEffect(() => {
@@ -86,7 +87,7 @@ const ProductPage = () => {
             <PaginationComponent
                 totalProducts={products.length}
                 productPerPage={productPerPage}
-                setCurrentPage={setCurrentPage}
+                setCurrentPageValue={setCurrentPage}
             />
         </div>
     );

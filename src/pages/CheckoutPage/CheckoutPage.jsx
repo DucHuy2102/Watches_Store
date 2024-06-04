@@ -62,7 +62,8 @@ const CheckoutPage = () => {
                                                     required
                                                 />
                                                 <div className='text-red-600 text-xs mt-1'>
-                                                    Please enter a valid email address for shipping updates.
+                                                    Please enter a valid email address for shipping
+                                                    updates.
                                                 </div>
                                             </div>
                                             <div>
@@ -88,7 +89,10 @@ const CheckoutPage = () => {
                                                     htmlFor='address2'
                                                     className='block text-sm font-medium text-gray-700'
                                                 >
-                                                    Address 2 <span className='text-gray-400'>(Optional)</span>
+                                                    Address 2{' '}
+                                                    <span className='text-gray-400'>
+                                                        (Optional)
+                                                    </span>
                                                 </label>
                                                 <input
                                                     type='text'
@@ -149,7 +153,9 @@ const CheckoutPage = () => {
                                                     placeholder=''
                                                     required
                                                 />
-                                                <div className='text-red-600 text-xs mt-1'>Zip code required.</div>
+                                                <div className='text-red-600 text-xs mt-1'>
+                                                    Zip code required.
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -233,7 +239,9 @@ const CheckoutPage = () => {
                                                     placeholder=''
                                                     required
                                                 />
-                                                <div className='text-red-600 text-xs mt-1'>Security code required</div>
+                                                <div className='text-red-600 text-xs mt-1'>
+                                                    Security code required
+                                                </div>
                                             </div>
                                         </div>
                                         <button

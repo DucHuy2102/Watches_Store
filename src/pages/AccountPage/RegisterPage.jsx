@@ -26,7 +26,6 @@ const RegisterPage = () => {
 
     // useMutationHook to register user
     const mutation = useMutationHook((data) => UserService.registerUser(data));
-    const { isPending } = mutation;
 
     // handle submit register
     const handleSubmitRegister = () => {
@@ -45,11 +44,6 @@ const RegisterPage = () => {
             }
         );
     };
-
-    // notify when register success
-    {
-        isPending && toast.info('Đang xử lý. Vui lòng chờ trong giây lát!');
-    }
 
     return (
         <div className='w-full flex items-center justify-between px-20'>

@@ -19,16 +19,15 @@ export const orderSlide = createSlice({
     initialState,
     reducers: {
         addProduct: (state, action) => {
-            const { orderItem } = action.payload;
-            const existItem = state?.orderItems?.find(
-                (item) => item?.product === orderItem.product
-            );
+            const { orderItems } = action.payload;
+            const existItem = state?.orderItems?.find((item) => item?.id === orderItems.id);
             if (existItem) {
-                existItem.amount += orderItem?.amount;
+                existItem.amount += orderItems?.amount;
             } else {
-                state.orderItems.push(orderItem);
+                state.orderItems.push(orderItems);
             }
         },
+
         removeProductOrder: (state, action) => {
             const { idProduct } = action.payload;
             const itemOrder = state?.orderItems?.find((item) => item?.product !== idProduct);

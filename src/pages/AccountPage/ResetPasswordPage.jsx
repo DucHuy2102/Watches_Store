@@ -23,7 +23,6 @@ const ResetPasswordPage = () => {
 
     // useMutationHook to call API reset password
     const mutation = useMutationHook((data) => UserService.resetPassword(data));
-    const { isPending } = mutation;
 
     // handle submit form
     const handleSubmit = () => {
@@ -42,11 +41,6 @@ const ResetPasswordPage = () => {
             }
         );
     };
-
-    // notify when reset password success
-    {
-        isPending && toast.info('Đang xử lý. Vui lòng chờ trong giây lát!');
-    }
 
     return (
         <div className='w-full flex items-center justify-between px-20'>

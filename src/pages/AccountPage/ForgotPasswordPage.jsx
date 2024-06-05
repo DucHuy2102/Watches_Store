@@ -21,7 +21,6 @@ const ForgotPasswordPage = () => {
 
     // useMutationHook to forgot password
     const mutation = useMutationHook((data) => UserService.forgotPassword(data));
-    const { isPending } = mutation;
 
     // handle submit forgot password
     const handleSubmit = () => {
@@ -43,11 +42,6 @@ const ForgotPasswordPage = () => {
             }
         );
     };
-
-    // notify when reset password success
-    {
-        isPending && toast.info('Đang xử lý. Vui lòng chờ trong giây lát!');
-    }
 
     return (
         <div className='w-full flex items-center justify-between px-20 font-Lato'>

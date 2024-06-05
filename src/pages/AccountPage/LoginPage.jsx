@@ -17,7 +17,7 @@ const LoginPage = () => {
 
     // useMutationHook to login user
     const mutation = useMutationHook((data) => UserService.loginUser(data));
-    const { data, isPending } = mutation;
+    const { data } = mutation;
 
     // get user detail after login success
     useEffect(() => {
@@ -55,11 +55,6 @@ const LoginPage = () => {
             }
         );
     };
-
-    // notify when login success
-    {
-        isPending && toast.info('Đang xử lý. Vui lòng chờ trong giây lát!');
-    }
 
     return (
         <div className='w-full flex items-center justify-between px-20 font-Lato'>

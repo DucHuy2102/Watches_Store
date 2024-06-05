@@ -6,6 +6,11 @@ import * as ProductService from '../../services/ProductService';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { updateProduct } from '../../redux/slides/productSlide';
+import { addProduct } from '../../redux/slides/orderSlide';
+import { useState } from 'react';
+import { useMutationHook } from '../../hooks/useMutationHook';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 const ProductDetail = () => {
     // get product from redux
@@ -15,6 +20,7 @@ const ProductDetail = () => {
 
     // destructuring product_Redux
     const {
+        id,
         brand,
         color,
         condition,
@@ -141,10 +147,66 @@ const ProductDetail = () => {
 
     // go to product detail page
     const go_ProductDetail_Page = (id, product) => {
-        // console.log('id product --> ', id);
         dispatch(updateProduct({ ...product, id }));
         navigate(`/product_detail/${id}`);
         window.scrollTo(0, 0);
+    };
+
+    // set amount product
+    const [quantityProduct, setQuantityProduct] = useState(0);
+
+    // increase quantity
+    const increaseQuantity = () => {
+        setQuantityProduct(quantityProduct + 1);
+    };
+
+    // decrease quantity
+    const decreaseQuantity = () => {
+        setQuantityProduct(quantityProduct - 1);
+    };
+
+    // get token user
+    const tokenUser = localStorage.getItem('tokenUser');
+
+    // useMutationHook to add product to cart
+    const mutationAddToCart = useMutationHook(({ token, productAddToCart }) =>
+        ProductService.addProductToCart(token, productAddToCart)
+    );
+
+    // handle add to cart
+    const handleAddToCart = () => {
+        // console.log('product_Redux --> ', product_Redux, product_Redux.id);
+        const dataAddToCart = {
+            product: product_Redux.id,
+            quantity: quantityProduct,
+        };
+        mutationAddToCart.mutate(
+            {
+                token: tokenUser,
+                productAddToCart: dataAddToCart,
+            },
+            {
+                onSuccess: () => {
+                    toast.success('Đã thêm vào giỏ hàng!');
+
+                    // add product to order slide in redux
+                    // dispatch(
+                    //     addProduct({
+                    //         orderItems: {
+                    //             id: id,
+                    //             name: productName,
+                    //             img: img,
+                    //             amount: quantityProduct,
+                    //             price: price,
+                    //         },
+                    //     })
+                    // );
+                },
+                onError: () => {
+                    toast.error('Có lỗi xảy ra! Vui lòng thử lại sau!');
+                },
+            }
+        );
     };
 
     return (
@@ -190,7 +252,7 @@ const ProductDetail = () => {
                         </div>
 
                         {/* stars */}
-                        <div className='flex space-x-2 mt-2'>
+                        {/* <div className='flex space-x-2 mt-2'>
                             <p className='text-lg'>Xếp hạng:</p>
                             <svg
                                 className='w-5 fill-[#F7FD04]'
@@ -233,18 +295,21 @@ const ProductDetail = () => {
                                 <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
                             </svg>
                             <h4 className='text-black text-base'>500 Lượt đánh giá</h4>
-                        </div>
+                        </div> */}
 
-                        {/* brand */}
-                        <div className='flex items-center mt-2'>
-                            <p className='text-lg text-black'>Thương hiệu:</p>
-                            <p className='text-lg text-blue-500 font-bold ml-2'>{brand}</p>
-                        </div>
+                        {/* brand & condition */}
+                        <div className='flex gap-10 items-center'>
+                            {/* brand */}
+                            <div className='flex items-center mt-2'>
+                                <p className='text-lg text-black'>Thương hiệu:</p>
+                                <p className='text-lg text-blue-500 font-bold ml-2'>{brand}</p>
+                            </div>
 
-                        {/* in stock */}
-                        <div className='flex justify-start items-center mt-2'>
-                            <p className='text-lg text-black'>Tình trạng:</p>
-                            <p className='text-lg text-blue-500 font-bold ml-2'>{condition}</p>
+                            {/* condition */}
+                            <div className='flex justify-start items-center mt-2'>
+                                <p className='text-lg text-black'>Tình trạng:</p>
+                                <p className='text-lg text-blue-500 font-bold ml-2'>{condition}</p>
+                            </div>
                         </div>
 
                         {/* 5 reasons */}
@@ -274,6 +339,26 @@ const ProductDetail = () => {
                             </p>
                         </div>
 
+                        <div className='pt-2 flex gap-5 items-center'>
+                            <p className='text-lg'>Số lượng đặt mua</p>
+                            <div className='flex justify-center items-center'>
+                                <button
+                                    onClick={decreaseQuantity}
+                                    disabled={quantityProduct === 0}
+                                    className='border text-xl cursor-pointer rounded-md py-1 px-3 hover:bg-blue-500 hover:text-white mr-2'
+                                >
+                                    -
+                                </button>
+                                <span className='text-center text-lg w-8'>{quantityProduct}</span>
+                                <button
+                                    onClick={increaseQuantity}
+                                    className='border text-xl cursor-pointer rounded-md py-1 px-3 hover:bg-blue-500 hover:text-white ml-2'
+                                >
+                                    +
+                                </button>
+                            </div>
+                        </div>
+
                         {/* button: buy now & add to cart */}
                         <div className='flex flex-wrap items-center justify-between gap-4 mt-2'>
                             <button
@@ -283,6 +368,7 @@ const ProductDetail = () => {
                                 Mua ngay
                             </button>
                             <button
+                                onClick={handleAddToCart}
                                 type='button'
                                 className='min-w-[200px] px-3 py-2.5 border border-black bg-transparent hover:bg-gray-500 hover:border-gray-500 hover:text-white text-black text-lg font-bold rounded'
                             >
@@ -520,6 +606,19 @@ const ProductDetail = () => {
                     </div>
                 </div>
             </div>
+
+            {/* toast */}
+            <ToastContainer
+                position='top-right'
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };

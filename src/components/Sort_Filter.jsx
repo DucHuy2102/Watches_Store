@@ -19,18 +19,23 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const Sort_Filter = () => {
     const dispatch = useDispatch();
+
+    // Lấy dữ liệu sản phẩm từ Redux
     const dataRedux = useSelector((state) => state?.searchProduct?.search);
     const numberProduct = dataRedux?.length;
 
     // filter
     const [isOpenFilter, setIsOpenFilter] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('Bộ lọc');
+
     // sort
     const [isOpenSort, setIsOpenSort] = useState(false);
     const [selectedOption, setSelectedOption] = useState('Sắp xếp theo');
 
+    // Hook xử lý tìm kiếm sản phẩm theo tên
     const mutationFindProduct = useMutationHook((name) => ProductService.findProductByName(name));
 
+    // Xử lý mở / đóng menu lọc
     const toggleMenuFilter = () => {
         if (isOpenFilter) {
             if (selectedFilter === 'Bộ lọc') {
@@ -66,8 +71,11 @@ const Sort_Filter = () => {
         // Thêm xử lý logic sắp xếp sản phẩm ở đây
     };
 
+    // Hook xử lý tìm kiếm sản phẩm theo tên sản phẩm và loại sản phẩm
     const filterRef = useRef(null);
     const sortRef = useRef(null);
+
+    // Xử lý click ngoài menu lọc và menu sắp xếp
     useEffect(() => {
         const handleClickOutsideFilter = (event) => {
             if (filterRef.current && !filterRef.current.contains(event.target)) {
@@ -92,7 +100,9 @@ const Sort_Filter = () => {
             {/* link to page */}
             <div className='w-[30vw]'>
                 <Link to='/'>Trang chủ</Link> /{' '}
-                {selectedFilter ? `Lọc được ${numberProduct} sản phẩm` : 'Tất cả sản phẩm'}
+                {selectedFilter !== 'Bộ lọc'
+                    ? `Lọc được ${numberProduct} sản phẩm`
+                    : 'Tất cả sản phẩm'}
             </div>
 
             {/* name page */}

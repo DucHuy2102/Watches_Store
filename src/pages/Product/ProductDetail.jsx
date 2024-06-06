@@ -13,10 +13,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 
 const ProductDetail = () => {
-    // get product from redux
-    const product_Redux = useSelector((state) => state.product);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // get product from redux
+    const product_Redux = useSelector((state) => state.product);
 
     // destructuring product_Redux
     const {
@@ -175,33 +176,33 @@ const ProductDetail = () => {
 
     // handle add to cart
     const handleAddToCart = () => {
-        // console.log('product_Redux --> ', product_Redux, product_Redux.id);
+        // data to add to cart
         const dataAddToCart = {
             product: product_Redux.id,
             quantity: quantityProduct,
         };
+
+        // add product to order slide in redux
+        dispatch(
+            addProduct({
+                orderItems: {
+                    id: id,
+                    name: productName,
+                    img: img,
+                    amount: quantityProduct,
+                    price: price,
+                },
+            })
+        );
+        toast.success('Đã thêm vào giỏ hàng!');
+
+        // call mutationAddToCart to add product to cart in database
         mutationAddToCart.mutate(
             {
                 token: tokenUser,
                 productAddToCart: dataAddToCart,
             },
             {
-                onSuccess: () => {
-                    toast.success('Đã thêm vào giỏ hàng!');
-
-                    // add product to order slide in redux
-                    // dispatch(
-                    //     addProduct({
-                    //         orderItems: {
-                    //             id: id,
-                    //             name: productName,
-                    //             img: img,
-                    //             amount: quantityProduct,
-                    //             price: price,
-                    //         },
-                    //     })
-                    // );
-                },
                 onError: () => {
                     toast.error('Có lỗi xảy ra! Vui lòng thử lại sau!');
                 },

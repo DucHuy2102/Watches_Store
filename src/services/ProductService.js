@@ -73,3 +73,14 @@ export const addProductToCart = async (token, data) => {
     });
     return res.data;
 };
+
+// get orders by user id
+export const getOrdersByUserId = async (token) => {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/cart`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+    return res.data;
+};

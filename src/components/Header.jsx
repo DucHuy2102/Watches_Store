@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateProduct } from '../redux/slides/findProductSlide';
 import { useMutationHook } from '../hooks/useMutationHook';
 import * as ProductService from '../services/ProductService';
+import { useQuery } from '@tanstack/react-query';
+import { addProduct } from '../redux/slides/orderSlide';
 
 // style
 const styleButton =
@@ -20,14 +22,20 @@ const styleButtonPage =
     'transition-all duration-300 hover:rounded-lg hover:py-1 hover:text-white hover:px-3 ease-in-out hover:bg-black text-gray-400 text-xl';
 
 const Header = () => {
-    const [clickButtonWithoutAccount, setClickButtonWithoutAccount] = useState(false);
-    const [clickButtonAccount, setClickButtonAccount] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const accountRef = useRef(null);
 
+    // Lấy dữ liệu từ Redux
     const dataUSer = useSelector((state) => state.user);
+    const orders = useSelector((state) => state.orderProduct);
+    const amountProduct = orders?.orderItems?.length;
 
+    // state for click button
+    const [clickButtonAccount, setClickButtonAccount] = useState(false);
+    const [clickButtonWithoutAccount, setClickButtonWithoutAccount] = useState(false);
+
+    // click out button
     useEffect(() => {
         const handleClickOutButtonAccout = (event) => {
             if (accountRef.current && !accountRef.current.contains(event.target)) {
@@ -58,15 +66,22 @@ const Header = () => {
     // search product
     const [searchValue, setSearchValue] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+
+    // capitalize first letter
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
+
+    // search product by name and navigate to page products
     const handleSearchChange = (e) => {
         const capitalizedValue = capitalizeFirstLetter(e.target.value);
         setSearchValue(capitalizedValue);
     };
+
+    // hook search product by name
     const mutationFindProduct = useMutationHook((name) => ProductService.findProductByName(name));
 
+    // handle key press enter to search product
     const handleKeyPress = async (e) => {
         if (e.key === 'Enter') {
             if (searchValue) {
@@ -88,6 +103,41 @@ const Header = () => {
             }
         }
     };
+
+    // get token user from localStorage
+    const tokenUser = localStorage.getItem('tokenUser');
+
+    // useMutationHook to get orders by user id
+    const getOrderUser = async () => {
+        const res = await ProductService.getOrdersByUserId(tokenUser);
+        return res;
+    };
+
+    // useQuery to get orders by user id
+    const { data } = useQuery({
+        queryKey: ['ordersUser'],
+        queryFn: getOrderUser,
+        enabled: !!tokenUser,
+        keepPreviousData: true,
+    });
+    const quantityValue = data?.data.length;
+
+    // state for display quantity
+    const [displayQuantity, setDisplayQuantity] = useState(0);
+
+    // Initialize displayQuantity with quantityValue from API
+    useEffect(() => {
+        if (quantityValue !== undefined) {
+            setDisplayQuantity(quantityValue);
+        }
+    }, [quantityValue]);
+
+    // Update displayQuantity with amountProduct from Redux
+    useEffect(() => {
+        if (amountProduct !== undefined) {
+            setDisplayQuantity(amountProduct + quantityValue);
+        }
+    }, [amountProduct, quantityValue]);
 
     return (
         <nav className='w-full h-16 px-10 flex items-center flex-grow shadow-lg'>
@@ -111,7 +161,7 @@ const Header = () => {
                 </Link>
             </div>
 
-            {/* search */}
+            {/* search input */}
             <div className='w-[10rem] flex-grow relative'>
                 <input
                     onChange={handleSearchChange}
@@ -123,8 +173,9 @@ const Header = () => {
                 />
             </div>
 
-            {/* 3 buttons: login, register & order button */}
+            {/* buttons: account & cart */}
             <div className='flex gap-2 font-PlayfairDisplay' ref={accountRef}>
+                {/* button account */}
                 {dataUSer?.username ? (
                     // login success
                     <>
@@ -179,8 +230,8 @@ const Header = () => {
                     </>
                 )}
 
-                {/* shopping cart */}
-                <Badge count={5}>
+                {/* button shopping cart */}
+                <Badge count={displayQuantity}>
                     <Link to='/order' className={`${styleButton} font-PlayfairDisplay`}>
                         <FontAwesomeIcon icon={faCartShopping} className='mr-2' />
                         Giỏ hàng

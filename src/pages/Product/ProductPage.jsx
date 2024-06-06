@@ -38,7 +38,6 @@ const ProductPage = () => {
     const currentProducts = Array.isArray(products)
         ? products.slice(firstProductIndex, lastProductIndex)
         : [];
-    console.log('-->', currentProducts);
 
     // set all products to state allProducts and products to display on page
     useEffect(() => {
@@ -78,9 +77,6 @@ const ProductPage = () => {
             {/* products */}
             <div className='mt-7 mb-3 grid grid-cols-3 gap-10'>
                 <ProductCard products={currentProducts} />
-                {/* {currentProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))} */}
             </div>
 
             {/* pagination */}

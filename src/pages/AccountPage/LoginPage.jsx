@@ -10,10 +10,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 
 const LoginPage = () => {
-    const [username, setUserName] = useState('');
-    const [password, setPassword] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
 
     // useMutationHook to login user
     const mutation = useMutationHook((data) => UserService.loginUser(data));

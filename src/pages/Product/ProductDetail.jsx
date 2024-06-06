@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { updateProduct } from '../../redux/slides/productSlide';
 import { addProduct } from '../../redux/slides/orderSlide';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
@@ -15,6 +15,11 @@ import 'react-toastify/ReactToastify.css';
 const ProductDetail = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // scroll to top when render page
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     // get product from redux
     const product_Redux = useSelector((state) => state.product);
@@ -112,11 +117,13 @@ const ProductDetail = () => {
     ];
 
     // format price
-    const priceFormat = new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-    }).format(price);
-
+    const priceFormat = useMemo(() => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(price);
+    }, [price]);
+    
     // format discount price
     const discountPrice = 1506000;
     const discountPriceFormat = new Intl.NumberFormat('vi-VN', {
@@ -129,6 +136,8 @@ const ProductDetail = () => {
         const res = await ProductService.getProductByCategory(category);
         return res;
     };
+
+    // useQuery to get products by category
     const { data } = useQuery({
         queryKey: ['products'],
         queryFn: getProducts_Category,
@@ -182,32 +191,36 @@ const ProductDetail = () => {
             quantity: quantityProduct,
         };
 
-        // add product to order slide in redux
-        dispatch(
-            addProduct({
-                orderItems: {
-                    id: id,
-                    name: productName,
-                    img: img,
-                    amount: quantityProduct,
-                    price: price,
-                },
-            })
-        );
-        toast.success('Đã thêm vào giỏ hàng!');
+        if (quantityProduct !== 0) {
+            // add product to order slide in redux
+            dispatch(
+                addProduct({
+                    orderItems: {
+                        id: id,
+                        name: productName,
+                        img: img,
+                        amount: quantityProduct,
+                        price: price,
+                    },
+                })
+            );
+            toast.success('Đã thêm vào giỏ hàng!');
 
-        // call mutationAddToCart to add product to cart in database
-        mutationAddToCart.mutate(
-            {
-                token: tokenUser,
-                productAddToCart: dataAddToCart,
-            },
-            {
-                onError: () => {
-                    toast.error('Có lỗi xảy ra! Vui lòng thử lại sau!');
+            // call mutationAddToCart to add product to cart in database
+            mutationAddToCart.mutate(
+                {
+                    token: tokenUser,
+                    productAddToCart: dataAddToCart,
                 },
-            }
-        );
+                {
+                    onError: () => {
+                        toast.error('Có lỗi xảy ra! Vui lòng thử lại sau!');
+                    },
+                }
+            );
+        } else {
+            toast.error('Vui lòng chọn số lượng sản phẩm!');
+        }
     };
 
     return (
@@ -340,6 +353,7 @@ const ProductDetail = () => {
                             </p>
                         </div>
 
+                        {/* quantity product */}
                         <div className='pt-2 flex gap-5 items-center'>
                             <p className='text-lg'>Số lượng đặt mua</p>
                             <div className='flex justify-center items-center'>

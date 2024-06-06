@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateProduct } from '../../redux/slides/productSlide';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
+import { useMemo } from 'react';
 
 const CardItem_Product = (props) => {
     const dispatch = useDispatch();
@@ -21,10 +22,12 @@ const CardItem_Product = (props) => {
     };
 
     // format price
-    const priceFormat = new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-    }).format(price);
+    const priceFormat = useMemo(() => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(price);
+    }, [price]);
 
     // handle buy now
     const handleBuyNow = () => {

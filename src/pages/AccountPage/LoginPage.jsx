@@ -82,7 +82,7 @@ const LoginPage = () => {
                                 message: 'Tên đăng nhập không được bỏ trống!',
                             },
                         ]}
-                        className='text-red-500 text-start mt-1 mb-8'
+                        className='text-start mt-1 mb-8'
                     >
                         <Input
                             onChange={(e) => setUserName(e.target.value)}
@@ -100,7 +100,7 @@ const LoginPage = () => {
                                 message: 'Mật khẩu không được bỏ trống!',
                             },
                         ]}
-                        className='text-red-500 text-start mt-1 mb-8'
+                        className='text-start mt-1 mb-8'
                     >
                         <Input.Password
                             onChange={(e) => setPassword(e.target.value)}

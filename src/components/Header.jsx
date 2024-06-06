@@ -105,39 +105,43 @@ const Header = () => {
     };
 
     // get token user from localStorage
-    const tokenUser = localStorage.getItem('tokenUser');
+    // const tokenUser = localStorage.getItem('tokenUser');
 
-    // useMutationHook to get orders by user id
-    const getOrderUser = async () => {
-        const res = await ProductService.getOrdersByUserId(tokenUser);
-        return res;
-    };
+    // // useMutationHook to get orders by user id
+    // const getOrderUser = async () => {
+    //     const res = await ProductService.getOrdersByUserId(tokenUser);
+    //     return res;
+    // };
 
-    // useQuery to get orders by user id
-    const { data } = useQuery({
-        queryKey: ['ordersUser'],
-        queryFn: getOrderUser,
-        enabled: !!tokenUser,
-        keepPreviousData: true,
-    });
-    const quantityValue = data?.data.length;
+    // // useQuery to get orders by user id
+    // const { data } = useQuery({
+    //     queryKey: ['ordersUser'],
+    //     queryFn: getOrderUser,
+    //     enabled: !!tokenUser,
+    //     keepPreviousData: true,
+    // });
+    // const quantityValue = data?.data.length;
 
-    // state for display quantity
-    const [displayQuantity, setDisplayQuantity] = useState(0);
+    // // state for display quantity
+    // const [displayQuantity, setDisplayQuantity] = useState(0);
 
-    // Initialize displayQuantity with quantityValue from API
-    useEffect(() => {
-        if (quantityValue !== undefined) {
-            setDisplayQuantity(quantityValue);
-        }
-    }, [quantityValue]);
+    // // Initialize displayQuantity with quantityValue from API
+    // useEffect(() => {
+    //     if (quantityValue !== undefined) {
+    //         setDisplayQuantity(quantityValue);
+    //     } else {
+    //         setDisplayQuantity(0);
+    //     }
+    // }, [quantityValue]);
 
-    // Update displayQuantity with amountProduct from Redux
-    useEffect(() => {
-        if (amountProduct !== undefined) {
-            setDisplayQuantity(amountProduct + quantityValue);
-        }
-    }, [amountProduct, quantityValue]);
+    // // Update displayQuantity with amountProduct from Redux
+    // useEffect(() => {
+    //     if (amountProduct !== undefined) {
+    //         setDisplayQuantity(amountProduct + quantityValue);
+    //     } else {
+    //         setDisplayQuantity(quantityValue);
+    //     }
+    // }, [amountProduct, quantityValue]);
 
     return (
         <nav className='w-full h-16 px-10 flex items-center flex-grow shadow-lg'>
@@ -231,7 +235,7 @@ const Header = () => {
                 )}
 
                 {/* button shopping cart */}
-                <Badge count={displayQuantity}>
+                <Badge count={amountProduct}>
                     <Link to='/order' className={`${styleButton} font-PlayfairDisplay`}>
                         <FontAwesomeIcon icon={faCartShopping} className='mr-2' />
                         Giỏ hàng

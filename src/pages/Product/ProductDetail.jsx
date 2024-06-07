@@ -25,7 +25,7 @@ const ProductDetail = () => {
     }, []);
 
     // get product from redux
-    const product_Redux = useSelector((state) => state.product);
+    const product_Redux = useSelector((state) => state.product.product);
 
     // destructuring product_Redux
     const {

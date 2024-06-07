@@ -15,7 +15,11 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 const Admin_ListProduct = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    // get token from localStorage
     const token = localStorage.getItem('adminToken');
+
+    // state for modal
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState(null);
 

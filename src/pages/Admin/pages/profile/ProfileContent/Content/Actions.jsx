@@ -4,12 +4,11 @@ import { useMutationHook } from '../../../../../../hooks/useMutationHook';
 import * as UserService from '../../../../../../services/UserService';
 
 function Actions() {
-    const dataAdmin_Redux = useSelector((state) => state.admin);
+    const dataAdmin_Redux = useSelector((state) => state.user);
 
     const mutation = useMutationHook(({ getToken, dataAdmin_Redux }) => {
         UserService.updateInfoUser(getToken, dataAdmin_Redux);
     });
-    const { data } = mutation;
 
     const getToken = localStorage.getItem('adminToken');
     const handleUpdateUser = (e) => {

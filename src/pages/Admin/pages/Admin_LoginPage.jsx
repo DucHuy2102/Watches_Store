@@ -4,8 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useMutationHook } from '../../../hooks/useMutationHook';
 import * as UserService from '../../../services/UserService';
 import { useDispatch } from 'react-redux';
-import { updateAdmin } from '../../../redux/slides/adminSlide';
+import { updateUser } from '../../../redux/slides/userSlide';
 import { jwtDecode } from 'jwt-decode';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 const Admin_LoginPage = () => {
     const [username, setUserName] = useState('');
@@ -27,7 +29,7 @@ const Admin_LoginPage = () => {
     useEffect(() => {
         const handleGetAdminDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
-            dispatch(updateAdmin({ ...res?.data, access_token: access_token }));
+            dispatch(updateUser({ ...res?.data, access_token: access_token }));
         };
 
         const fetchAPI = async () => {
@@ -40,7 +42,6 @@ const Admin_LoginPage = () => {
                         await handleGetAdminDetail(access_token);
                     }
                 }
-                navigate('/admin/dashboard');
             }
         };
         fetchAPI();
@@ -49,11 +50,14 @@ const Admin_LoginPage = () => {
         mutation.mutate(
             { username, password },
             {
-                onError: () => {
-                    message.error('Tên đăng nhập hoặc mật khẩu không chính xác!');
-                },
                 onSuccess: () => {
-                    message.success('Đăng nhập thành công!');
+                    toast.success('Đăng nhập thành công! Đang chuyển hướng...');
+                    setTimeout(() => {
+                        navigate('/admin/dashboard');
+                    }, 3000);
+                },
+                onError: () => {
+                    toast.error('Đăng nhập thất bại!');
                 },
             }
         );
@@ -132,6 +136,19 @@ const Admin_LoginPage = () => {
                     </p>
                 </Form.Item>
             </Form>
+
+            {/* toast */}
+            <ToastContainer
+                position='top-right'
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };

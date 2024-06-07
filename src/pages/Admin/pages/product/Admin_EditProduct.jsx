@@ -60,8 +60,14 @@ const uploadImages = async (fileList) => {
 
 const Admin_EditProduct = () => {
     const navigate = useNavigate();
+
+    // get token from localStorage
     const adminToken = localStorage.getItem('adminToken');
-    const product_Redux = useSelector((state) => state.product);
+
+    // get product from redux
+    const product_Redux = useSelector((state) => state?.product.product);
+
+    // state for product and fileList
     const [stateProduct, setStateProduct] = useState(product_Redux);
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');

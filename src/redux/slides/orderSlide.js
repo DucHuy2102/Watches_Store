@@ -48,10 +48,14 @@ export const orderSlide = createSlice({
             const { idProduct } = action.payload;
             state.orderItems = state.orderItems.filter((item) => item?.id !== idProduct);
         },
+
+        resetOrder: () => {
+            return { ...initialState };
+        },
     },
 });
 
-export const { addProduct, removeProductOrder, increaseAmount, decreaseAmount } =
+export const { addProduct, removeProductOrder, increaseAmount, decreaseAmount, resetOrder } =
     orderSlide.actions;
 
 export default orderSlide.reducer;

@@ -27,7 +27,6 @@ const Admin_UserPage = () => {
         queryFn: getUsers,
         keepPreviousData: true,
     });
-    console.log('data_users -->', data);
 
     // cancel modal delete user
     const handleCancel_Delete = () => {

@@ -4,7 +4,7 @@ import { PaginationComponent, Sort_Filter } from '../../components/exportCompone
 import { useQuery } from '@tanstack/react-query';
 import * as ProductService from '../../services/ProductService';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearSearch } from '../../redux/slides/findProductSlide';
+import { clearSearch } from '../../redux/slides/productSlide';
 
 const ProductPage = () => {
     // pagination state and function to handle pagination logic
@@ -18,7 +18,7 @@ const ProductPage = () => {
     const dispatch = useDispatch();
 
     // get data from redux
-    const dataSearch_Redux = useSelector((state) => state?.searchProduct?.search);
+    const dataSearch_Redux = useSelector((state) => state.product.search);
 
     // get all products from api and set to state allProducts
     // and products to display on page

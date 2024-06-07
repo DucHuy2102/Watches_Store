@@ -9,11 +9,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Badge, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateProduct } from '../redux/slides/findProductSlide';
+import { updateSearch } from '../redux/slides/productSlide';
 import { useMutationHook } from '../hooks/useMutationHook';
 import * as ProductService from '../services/ProductService';
 import { useQuery } from '@tanstack/react-query';
 import { addProduct } from '../redux/slides/orderSlide';
+import { resetUser } from '../redux/slides/userSlide';
 
 // style
 const styleButton =
@@ -59,6 +60,7 @@ const Header = () => {
     // logout demo function
     const logout = () => {
         localStorage.removeItem('tokenUser');
+        dispatch(resetUser());
         navigate('/');
         window.location.reload();
     };
@@ -90,7 +92,7 @@ const Header = () => {
                         const products = data?.data;
                         setSearchValue('');
                         setSearchResults(products);
-                        dispatch(updateProduct(products));
+                        dispatch(updateSearch(products));
                         navigate('/products');
                     },
                     onError: () => {

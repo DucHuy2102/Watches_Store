@@ -25,7 +25,9 @@ const CoverImg_ProfileUser = () => {
     const userProfile_From_Redux = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
-    const [backgroundImg, setBackgroundImg] = useState(userProfile_From_Redux.backgroundImg ?? '/assets/cover.jpg');
+    const [backgroundImg, setBackgroundImg] = useState(
+        userProfile_From_Redux.backgroundImg ?? '/assets/cover.jpg'
+    );
     const inputRef = useRef(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -51,12 +53,18 @@ const CoverImg_ProfileUser = () => {
             formData.append('file', selected);
             formData.append('upload_preset', 'backgroundPreset');
 
-            const res = await Axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData);
+            const res = await Axios.post(
+                'https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload',
+                formData
+            );
             const response = res.data;
             dispatch(updateUser({ ...userProfile_From_Redux, backgroundImg: response.secure_url }));
             mutation.mutate({
                 getToken,
-                userInfo_From_Redux: { ...userProfile_From_Redux, backgroundImg: response.secure_url },
+                userInfo_From_Redux: {
+                    ...userProfile_From_Redux,
+                    backgroundImg: response.secure_url,
+                },
             });
         } else {
             onOpen();
@@ -91,7 +99,9 @@ const CoverImg_ProfileUser = () => {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader className='text-red-500 font-bold text-center'>Lỗi Cập Nhật Ảnh Nền</ModalHeader>
+                    <ModalHeader className='text-red-500 font-bold text-center'>
+                        Lỗi Cập Nhật Ảnh Nền
+                    </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Text>File bạn vừa chọn không được hỗ trợ!</Text>

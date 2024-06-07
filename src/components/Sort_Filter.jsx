@@ -14,14 +14,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useMutationHook } from '../hooks/useMutationHook';
 import * as ProductService from '../services/ProductService';
 import { message } from 'antd';
-import { updateProduct } from '../redux/slides/findProductSlide';
+import { updateSearch } from '../redux/slides/productSlide';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Sort_Filter = () => {
     const dispatch = useDispatch();
 
     // Lấy dữ liệu sản phẩm từ Redux
-    const dataRedux = useSelector((state) => state?.searchProduct?.search);
+    const dataRedux = useSelector((state) => state.product.search);
     const numberProduct = dataRedux?.length;
 
     // filter
@@ -54,7 +54,7 @@ const Sort_Filter = () => {
             mutationFindProduct.mutate(filterName, {
                 onSuccess: (data) => {
                     const products = data?.data;
-                    dispatch(updateProduct(products));
+                    dispatch(updateSearch(products));
                     setIsOpenFilter(false);
                 },
                 onError: () => {

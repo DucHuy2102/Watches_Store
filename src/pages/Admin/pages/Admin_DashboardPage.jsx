@@ -93,12 +93,8 @@ const Admin_DashboardPage = () => {
                 timeZone: 'Asia/Ho_Chi_Minh',
             };
 
-            setCurrentTime(
-                new Intl.DateTimeFormat('vi-VN', optionsTime).format(now)
-            );
-            setCurrentDate(
-                new Intl.DateTimeFormat('vi-VN', optionsDate).format(now)
-            );
+            setCurrentTime(new Intl.DateTimeFormat('vi-VN', optionsTime).format(now));
+            setCurrentDate(new Intl.DateTimeFormat('vi-VN', optionsDate).format(now));
         };
 
         updateTimeAndDate();

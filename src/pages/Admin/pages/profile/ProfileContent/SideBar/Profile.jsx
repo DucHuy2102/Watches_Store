@@ -19,13 +19,13 @@ import {
 } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import Axios from 'axios';
-import { updateAdmin } from '../../../../../../redux/slides/adminSlide';
+import { updateUser } from '../../../../../../redux/slides/userSlide';
 import { useMutationHook } from '../../../../../../hooks/useMutationHook';
 import * as UserService from '../../../../../../services/UserService';
 
 function Profile() {
     // get user profile from redux
-    const dataAdmin_Redux = useSelector((state) => state.admin);
+    const dataAdmin_Redux = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
     const [avatarImg, setAvatarImage] = useState(dataAdmin_Redux.avatarImg ?? '');
@@ -53,9 +53,12 @@ function Profile() {
             formData.append('file', selected);
             formData.append('upload_preset', 'avatarAdmin');
 
-            const res = await Axios.post('https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload', formData);
+            const res = await Axios.post(
+                'https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload',
+                formData
+            );
             const response = res.data;
-            dispatch(updateAdmin({ ...dataAdmin_Redux, avatarImg: response.secure_url }));
+            dispatch(updateUser({ ...dataAdmin_Redux, avatarImg: response.secure_url }));
             mutation.mutate({
                 getToken,
                 userInfo_From_Redux: { ...dataAdmin_Redux, avatarImg: response.secure_url },
@@ -96,7 +99,9 @@ function Profile() {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader className='text-red-500 font-bold text-center'>Lỗi Cập Nhật Ảnh Đại Diện</ModalHeader>
+                    <ModalHeader className='text-red-500 font-bold text-center'>
+                        Lỗi Cập Nhật Ảnh Đại Diện
+                    </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Text>File bạn vừa chọn không được hỗ trợ!</Text>

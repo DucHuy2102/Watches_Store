@@ -4,9 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { GiShoppingCart } from 'react-icons/gi';
-import { decreaseAmount, increaseAmount, removeProductOrder } from '../../redux/slides/orderSlide';
+import {
+    decreaseAmount,
+    increaseAmount,
+    removeProductOrder,
+    resetOrder,
+} from '../../redux/slides/orderSlide';
 import { Modal } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const OrderPage = () => {
     const dispatch = useDispatch();
@@ -50,6 +55,14 @@ const OrderPage = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+
+    // reset order when user logout
+    const token = localStorage.getItem('tokenUser');
+    useEffect(() => {
+        if (!token) {
+            dispatch(resetOrder());
+        }
+    }, [token, dispatch]);
 
     return (
         <div className='bg-gray-100 min-h-screen py-8'>
@@ -108,7 +121,6 @@ const OrderPage = () => {
                                     {/* body product */}
                                     <tbody>
                                         {orders?.orderItems.map((order, index) => {
-                                            console.log(order);
                                             return (
                                                 <tr key={index}>
                                                     {/* image, name */}

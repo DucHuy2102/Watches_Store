@@ -16,6 +16,9 @@ const ProductDetail = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // set amount product
+    const [quantityProduct, setQuantityProduct] = useState(0);
+
     // scroll to top when render page
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -123,7 +126,7 @@ const ProductDetail = () => {
             currency: 'VND',
         }).format(price);
     }, [price]);
-    
+
     // format discount price
     const discountPrice = 1506000;
     const discountPriceFormat = new Intl.NumberFormat('vi-VN', {
@@ -158,12 +161,10 @@ const ProductDetail = () => {
     // go to product detail page
     const go_ProductDetail_Page = (id, product) => {
         dispatch(updateProduct({ ...product, id }));
+        setQuantityProduct(0);
         navigate(`/product_detail/${id}`);
         window.scrollTo(0, 0);
     };
-
-    // set amount product
-    const [quantityProduct, setQuantityProduct] = useState(0);
 
     // increase quantity
     const increaseQuantity = () => {

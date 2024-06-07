@@ -30,26 +30,28 @@ export const orderSlide = createSlice({
 
         increaseAmount: (state, action) => {
             const { idProduct } = action.payload;
-            const itemOrder = state?.orderItems?.find((item) => item?.product === idProduct);
-            itemOrder.amount += 1;
+            const itemOrder = state?.orderItems?.find((item) => item?.id === idProduct);
+            if (itemOrder) {
+                itemOrder.amount += 1;
+            }
         },
 
         decreaseAmount: (state, action) => {
             const { idProduct } = action.payload;
-            const itemOrder = state?.orderItems?.find((item) => item?.product === idProduct);
-            if (itemOrder.amount > 1) {
+            const itemOrder = state?.orderItems?.find((item) => item?.id === idProduct);
+            if (itemOrder && itemOrder.amount > 1) {
                 itemOrder.amount -= 1;
             }
         },
 
         removeProductOrder: (state, action) => {
             const { idProduct } = action.payload;
-            const itemOrder = state?.orderItems?.find((item) => item?.product !== idProduct);
-            itemOrder.orderItems = itemOrder;
+            state.orderItems = state.orderItems.filter((item) => item?.id !== idProduct);
         },
     },
 });
 
-export const { addProduct, removeProductOrder } = orderSlide.actions;
+export const { addProduct, removeProductOrder, increaseAmount, decreaseAmount } =
+    orderSlide.actions;
 
 export default orderSlide.reducer;

@@ -58,7 +58,7 @@ const Header = () => {
 
     // logout demo function
     const logout = () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('tokenUser');
         navigate('/');
         window.location.reload();
     };

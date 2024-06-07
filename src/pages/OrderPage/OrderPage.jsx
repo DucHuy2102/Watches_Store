@@ -1,13 +1,20 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { GiShoppingCart } from 'react-icons/gi';
+import { decreaseAmount, increaseAmount, removeProductOrder } from '../../redux/slides/orderSlide';
+import { Modal } from 'antd';
+import { useState } from 'react';
 
 const OrderPage = () => {
+    const dispatch = useDispatch();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedProductId, setSelectedProductId] = useState(null);
+
+    // get orders from redux
     const orders = useSelector((state) => state.orderProduct);
-    console.log(orders);
     const amountProduct = orders?.orderItems?.length;
 
     // format price
@@ -18,26 +25,30 @@ const OrderPage = () => {
         }).format(price);
     };
 
-    // set amount product
-    const [quantityProduct, setQuantityProduct] = useState(0);
-
     // handle change quantity
-    const handleChangeQuantity = (type) => {
+    const handleChangeQuantity = (type, idProduct) => {
         if (type === 'increase') {
-            increaseQuantity();
+            dispatch(increaseAmount({ idProduct }));
         } else {
-            decreaseQuantity();
+            dispatch(decreaseAmount({ idProduct }));
         }
     };
 
-    // increase quantity
-    const increaseQuantity = () => {
-        setQuantityProduct(quantityProduct + 1);
+    // show modal when click delete button
+    const showModal = (id) => {
+        setSelectedProductId(id);
+        setIsModalOpen(true);
     };
 
-    // decrease quantity
-    const decreaseQuantity = () => {
-        setQuantityProduct(quantityProduct - 1);
+    // onClick delete button
+    const handleOk = () => {
+        setIsModalOpen(false);
+        dispatch(removeProductOrder({ idProduct: selectedProductId }));
+    };
+
+    // onClick cancel button in modal
+    const handleCancel = () => {
+        setIsModalOpen(false);
     };
 
     return (
@@ -88,67 +99,109 @@ const OrderPage = () => {
                                             <th className='text-center font-semibold'>
                                                 Thành tiền (VNĐ)
                                             </th>
+                                            <th className='text-center pl-2'>
+                                                <RiDeleteBin6Line size={20} />
+                                            </th>
                                         </tr>
                                     </thead>
 
-                                    {/* body product: 1 <tr> là 1 sản phẩm */}
+                                    {/* body product */}
                                     <tbody>
-                                        {orders?.orderItems.map((order, index) => (
-                                            <tr key={index}>
-                                                <td className='py-4'>
-                                                    <div className='flex items-center'>
-                                                        {/* image */}
-                                                        <img
-                                                            className='h-16 w-16 mr-4'
-                                                            src={order.img[0]}
-                                                            alt='Product image'
-                                                        />
+                                        {orders?.orderItems.map((order, index) => {
+                                            console.log(order);
+                                            return (
+                                                <tr key={index}>
+                                                    {/* image, name */}
+                                                    <td className='py-4'>
+                                                        <div className='flex items-center'>
+                                                            {/* image */}
+                                                            <img
+                                                                className='h-16 w-16 mr-4'
+                                                                src={order.img[0]}
+                                                                alt='Product image'
+                                                            />
 
-                                                        {/* name */}
-                                                        <span className='w-80 font-semibold'>
-                                                            {order.name}
-                                                        </span>
-                                                    </div>
-                                                </td>
+                                                            {/* name */}
+                                                            <span className='w-80 font-semibold'>
+                                                                {order.name}
+                                                            </span>
+                                                        </div>
+                                                    </td>
 
-                                                {/* price */}
-                                                <td className='py-4 text-center'>
-                                                    {priceFormat(order.price)}
-                                                </td>
+                                                    {/* price */}
+                                                    <td className='py-4 text-center'>
+                                                        {priceFormat(order.price)}
+                                                    </td>
 
-                                                {/* quantity */}
-                                                <td className='py-4'>
-                                                    <div className='flex items-center justify-center'>
-                                                        <button
-                                                            onClick={() =>
-                                                                handleChangeQuantity('decrease')
-                                                            }
-                                                            disabled={quantityProduct === 0}
-                                                            className='border rounded-md py-2 px-4 mr-2'
-                                                        >
-                                                            -
+                                                    {/* quantity */}
+                                                    <td className='py-4'>
+                                                        <div className='flex items-center justify-center'>
+                                                            {/* button decrease */}
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleChangeQuantity(
+                                                                        'decrease',
+                                                                        order.id
+                                                                    )
+                                                                }
+                                                                className='border rounded-md py-2 px-4 mr-2'
+                                                            >
+                                                                -
+                                                            </button>
+
+                                                            {/* quantity */}
+                                                            <span className='text-center w-8'>
+                                                                {order.amount}
+                                                            </span>
+
+                                                            {/* button increase */}
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleChangeQuantity(
+                                                                        'increase',
+                                                                        order.id
+                                                                    )
+                                                                }
+                                                                className='border rounded-md py-2 px-4 ml-2'
+                                                            >
+                                                                +
+                                                            </button>
+                                                        </div>
+                                                    </td>
+
+                                                    {/* total price = (price * quantity) */}
+                                                    <td className='py-4 text-center'>
+                                                        {priceFormat(order.price * order.amount)}
+                                                    </td>
+
+                                                    {/* delete product */}
+                                                    <td className='pt-2 text-center'>
+                                                        <button onClick={() => showModal(order.id)}>
+                                                            <RiDeleteBin6Line size={20} />
                                                         </button>
-                                                        <span className='text-center w-8'>
-                                                            {order.amount}
-                                                        </span>
-                                                        <button
-                                                            onClick={() =>
-                                                                handleChangeQuantity('increase')
-                                                            }
-                                                            className='border rounded-md py-2 px-4 ml-2'
-                                                        >
-                                                            +
-                                                        </button>
-                                                    </div>
-                                                </td>
-
-                                                {/* total price = (price * quantity) */}
-                                                <td className='py-4 font-bold text-center'>
-                                                    {priceFormat(order.price * order.amount)}
-                                                </td>
-                                            </tr>
-                                        ))}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
                                     </tbody>
+                                    {/* modal delete product */}
+                                    <Modal
+                                        title='Xác nhận xóa sản phẩm'
+                                        okText='Xác nhận xóa'
+                                        cancelText='Hủy bỏ'
+                                        style={{ textAlign: 'center' }}
+                                        open={isModalOpen}
+                                        okButtonProps={{
+                                            className:
+                                                'bg-black text-white hover:bg-red-500 hover:text-white',
+                                        }}
+                                        onOk={handleOk}
+                                        onCancel={handleCancel}
+                                    >
+                                        <p className='text-lg'>
+                                            Hành động này sẽ xóa sản phẩm khỏi giỏ hàng của bạn!
+                                        </p>
+                                    </Modal>
                                 </table>
                             </div>
                         </div>
@@ -156,19 +209,23 @@ const OrderPage = () => {
                         {/* Summary */}
                         <div className='md:w-1/4'>
                             <div className='bg-white rounded-lg shadow-md p-6'>
-                                <h2 className='text-lg font-semibold mb-4'>Hóa đơn</h2>
+                                <h2 className='text-lg font-semibold mb-4'>Thành tiền</h2>
+
+                                {/* total price */}
                                 <div className='flex justify-between mb-2'>
-                                    <span>Giá tiền</span>
-                                    <span>2.075.000</span>
+                                    <span>Tạm tính</span>
+                                    <span>
+                                        123.456.789
+                                        {/* {priceFormat(order.price * order.amount)} */}
+                                    </span>
                                 </div>
-                                <div className='flex justify-between mb-2'>
-                                    <span>Giá thuế</span>
-                                    <span>0.75%</span>
-                                </div>
+
+                                {/* shippingPrice */}
                                 <div className='flex justify-between mb-2'>
                                     <span>Tiền ship</span>
                                     <span>27.000</span>
                                 </div>
+
                                 <hr className='my-2' />
                                 <div className='flex justify-between mb-2'>
                                     <span className='text-lg font-semibold'>Tổng tiền</span>

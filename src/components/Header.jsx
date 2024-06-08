@@ -12,8 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateSearch } from '../redux/slides/productSlide';
 import { useMutationHook } from '../hooks/useMutationHook';
 import * as ProductService from '../services/ProductService';
-import { useQuery } from '@tanstack/react-query';
-import { addProduct } from '../redux/slides/orderSlide';
+import { resetOrder } from '../redux/slides/orderSlide';
 import { resetUser } from '../redux/slides/userSlide';
 
 // style
@@ -61,6 +60,7 @@ const Header = () => {
     const logout = () => {
         localStorage.removeItem('tokenUser');
         dispatch(resetUser());
+        dispatch(resetOrder());
         navigate('/');
     };
 
@@ -104,45 +104,6 @@ const Header = () => {
             }
         }
     };
-
-    // get token user from localStorage
-    // const tokenUser = localStorage.getItem('tokenUser');
-
-    // // useMutationHook to get orders by user id
-    // const getOrderUser = async () => {
-    //     const res = await ProductService.getOrdersByUserId(tokenUser);
-    //     return res;
-    // };
-
-    // // useQuery to get orders by user id
-    // const { data } = useQuery({
-    //     queryKey: ['ordersUser'],
-    //     queryFn: getOrderUser,
-    //     enabled: !!tokenUser,
-    //     keepPreviousData: true,
-    // });
-    // const quantityValue = data?.data.length;
-
-    // // state for display quantity
-    // const [displayQuantity, setDisplayQuantity] = useState(0);
-
-    // // Initialize displayQuantity with quantityValue from API
-    // useEffect(() => {
-    //     if (quantityValue !== undefined) {
-    //         setDisplayQuantity(quantityValue);
-    //     } else {
-    //         setDisplayQuantity(0);
-    //     }
-    // }, [quantityValue]);
-
-    // // Update displayQuantity with amountProduct from Redux
-    // useEffect(() => {
-    //     if (amountProduct !== undefined) {
-    //         setDisplayQuantity(amountProduct + quantityValue);
-    //     } else {
-    //         setDisplayQuantity(quantityValue);
-    //     }
-    // }, [amountProduct, quantityValue]);
 
     return (
         <nav className='w-full h-16 px-10 flex items-center flex-grow shadow-lg'>
@@ -201,7 +162,7 @@ const Header = () => {
                                 <Link
                                     to={`/profile`}
                                     onClick={() => setClickButtonAccount(false)}
-                                    className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
+                                    className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-center py-1 text-start text-lg border border-gray-300 rounded-lg'
                                 >
                                     <FontAwesomeIcon icon={faUserGear} className='mr-2' />
                                     Tài khoản
@@ -213,7 +174,7 @@ const Header = () => {
                                         logout();
                                         setClickButtonAccount(false);
                                     }}
-                                    className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-start pl-3 py-1 text-start text-lg border border-gray-400 rounded-lg'
+                                    className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-center py-1 text-start text-lg border border-gray-300 rounded-lg'
                                 >
                                     <FontAwesomeIcon icon={faCircleArrowLeft} className='mr-2' />
                                     Đăng xuất
@@ -237,7 +198,11 @@ const Header = () => {
 
                 {/* button shopping cart */}
                 <Badge count={amountProduct}>
-                    <Link to='/order' className={`${styleButton} font-PlayfairDisplay`}>
+                    <Link
+                        to='/order'
+                        // onClick={handleClickOrder}
+                        className={`${styleButton} font-PlayfairDisplay`}
+                    >
                         <FontAwesomeIcon icon={faCartShopping} className='mr-2' />
                         Giỏ hàng
                     </Link>

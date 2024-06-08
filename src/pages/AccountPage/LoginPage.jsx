@@ -6,14 +6,32 @@ import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { updateUser } from '../../redux/slides/userSlide';
 import { Button, Form, Input } from 'antd';
+import * as ProductService from '../../services/ProductService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
+import { updateOrderItems } from '../../redux/slides/orderSlide';
 
 const LoginPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
+
+    // handle load orders by user id
+    const handleGetOrderUser = async () => {
+        const tokenUser = localStorage.getItem('tokenUser');
+        const response = await ProductService.getOrdersByUserId(tokenUser);
+        const ordersData = response?.data;
+
+        // format data ordersData to ditpatch to orderItems in Redux
+        const formattedProducts = ordersData.map((order) => ({
+            ...order.product,
+            id: order.product.id,
+            amount: order.quantity,
+        }));
+        console.log('formattedProducts', formattedProducts);
+        dispatch(updateOrderItems(formattedProducts));
+    };
 
     // useMutationHook to login user
     const mutation = useMutationHook((data) => UserService.loginUser(data));
@@ -24,6 +42,7 @@ const LoginPage = () => {
         const handleGetUserDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
             dispatch(updateUser({ ...res?.data, access_token: access_token }));
+            handleGetOrderUser();
         };
 
         if (data?.code === 200) {

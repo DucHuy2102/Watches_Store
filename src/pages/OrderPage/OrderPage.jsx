@@ -18,6 +18,9 @@ const OrderPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState(null);
 
+    // State to manage the token
+    const [tokenUser, setTokenUser] = useState(localStorage.getItem('tokenUser'));
+
     // get orders from redux
     const orders = useSelector((state) => state.orderProduct);
     const amountProduct = orders?.orderItems?.length;
@@ -57,12 +60,22 @@ const OrderPage = () => {
     };
 
     // reset order when user logout
-    const token = localStorage.getItem('tokenUser');
     useEffect(() => {
-        if (!token) {
-            dispatch(resetOrder());
-        }
-    }, [token, dispatch]);
+        const handleStorageChange = () => {
+            const token = localStorage.getItem('tokenUser');
+            setTokenUser(token);
+            if (!token) {
+                dispatch(resetOrder());
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        handleStorageChange();
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, [dispatch]);
 
     return (
         <div className='bg-gray-100 min-h-screen py-8'>
@@ -135,7 +148,7 @@ const OrderPage = () => {
 
                                                             {/* name */}
                                                             <span className='w-80 font-semibold'>
-                                                                {order.name}
+                                                                {order.productName}
                                                             </span>
                                                         </div>
                                                     </td>

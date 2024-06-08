@@ -52,10 +52,21 @@ export const orderSlide = createSlice({
         resetOrder: () => {
             return { ...initialState };
         },
+
+        // Thêm action cập nhật toàn bộ orderItems
+        updateOrderItems: (state, action) => {
+            state.orderItems = action.payload;
+        },
     },
 });
 
-export const { addProduct, removeProductOrder, increaseAmount, decreaseAmount, resetOrder } =
-    orderSlide.actions;
+export const {
+    addProduct,
+    removeProductOrder,
+    increaseAmount,
+    decreaseAmount,
+    resetOrder,
+    updateOrderItems,
+} = orderSlide.actions;
 
 export default orderSlide.reducer;

@@ -15,8 +15,26 @@ function AccountSettings() {
     const [address, setAddress] = useState(data_From_Redux.address ?? '');
 
     useEffect(() => {
-        dispatch(updateUser({ ...data_From_Redux, username, phone, firstname, lastname, email, address }));
-    }, [username, firstname, lastname, email, phone, dispatch, data_From_Redux, address]);
+        const user = {
+            username,
+            phone,
+            firstname,
+            lastname,
+            email,
+            address,
+        };
+
+        if (
+            user.username !== data_From_Redux.username ||
+            user.phone !== data_From_Redux.phone ||
+            user.firstname !== data_From_Redux.firstname ||
+            user.lastname !== data_From_Redux.lastname ||
+            user.email !== data_From_Redux.email ||
+            user.address !== data_From_Redux.address
+        ) {
+            dispatch(updateUser(user));
+        }
+    }, [username, phone, firstname, lastname, email, address, dispatch, data_From_Redux]);
 
     return (
         <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }} gap={6}>

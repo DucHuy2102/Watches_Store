@@ -62,7 +62,6 @@ const Header = () => {
         localStorage.removeItem('tokenUser');
         dispatch(resetUser());
         navigate('/');
-        window.location.reload();
     };
 
     // search product

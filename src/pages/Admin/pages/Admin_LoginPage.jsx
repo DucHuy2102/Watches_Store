@@ -10,11 +10,13 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 
 const Admin_LoginPage = () => {
-    const [username, setUserName] = useState('');
-    const [password, setPassword] = useState('');
-    const inputTagRef = useRef(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const inputTagRef = useRef(null);
+
+    // state username and password
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
 
     // autoFocus on input tag
     useEffect(() => {
@@ -23,29 +25,32 @@ const Admin_LoginPage = () => {
         }
     }, []);
 
-    // logic login
+    // logic login admin and get data admin
     const mutation = useMutationHook((data) => UserService.loginUser(data));
     const { data } = mutation;
     useEffect(() => {
         const handleGetAdminDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
             dispatch(updateUser({ ...res?.data, access_token: access_token }));
+            console.log('res', res);
         };
 
-        const fetchAPI = async () => {
+        const fetchAPI = () => {
             if (data?.code === 200) {
                 const access_token = data?.data?.token;
                 localStorage.setItem('adminToken', access_token);
                 if (access_token) {
                     const decode = jwtDecode(access_token);
                     if (decode?.sub) {
-                        await handleGetAdminDetail(access_token);
+                        handleGetAdminDetail(access_token);
                     }
                 }
             }
         };
         fetchAPI();
     }, [data, dispatch, navigate]);
+
+    // handle submit login and navigate to dashboard
     const handleSubmitLogin = () => {
         mutation.mutate(
             { username, password },

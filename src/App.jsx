@@ -57,6 +57,7 @@ const routeAdmin = [
 
 const AdminRoute = ({ element }) => {
     const userRedux = useSelector((state) => state.user);
+    console.log('userRedux', userRedux);
     const isUserAdmin = userRedux?.admin;
     // const isUserAdmin = true;
     return isUserAdmin ? element : <Navigate to='/login' />;

@@ -27,7 +27,7 @@ const ProductPage = () => {
     const getAllProduct = async () => {
         const res = await ProductService.getAllProduct();
         return res;
-    };
+    };  
     const { data } = useQuery({
         queryKey: ['products'],
         queryFn: getAllProduct,

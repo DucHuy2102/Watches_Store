@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as ProductService from '../../services/ProductService';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { updateProduct } from '../../redux/slides/productSlide';
+import { clearSearch, resetProduct, updateProduct } from '../../redux/slides/productSlide';
 import { addProduct } from '../../redux/slides/orderSlide';
 import { useEffect, useMemo, useState } from 'react';
 import { useMutationHook } from '../../hooks/useMutationHook';
@@ -49,6 +49,12 @@ const ProductDetail = () => {
         weight,
         category,
     } = product_Redux;
+
+    useEffect(() => {
+        return () => {
+            dispatch(resetProduct());
+        };
+    }, [dispatch]);
 
     // specifications of product
     const specifications = [

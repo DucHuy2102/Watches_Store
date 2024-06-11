@@ -18,6 +18,7 @@ const CardItem_Product = (props) => {
     // go to product detail page
     const go_ProductDetail_Page = (id) => {
         dispatch(updateProduct({ ...props.product, id }));
+        console.log('product', props.product);
         navigate(`/product_detail/${id}`);
     };
 

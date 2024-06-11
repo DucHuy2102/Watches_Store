@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     search: [],
+    products: [],
     product: {
         id: '',
         productName: '',
@@ -42,9 +43,13 @@ export const productSlide = createSlice({
         resetProduct: (state) => {
             state.product = { ...initialState.product };
         },
+        addAllProducts: (state, action) => {
+            state.products = action.payload;
+        },
     },
 });
 
-export const { updateSearch, clearSearch, updateProduct, resetProduct } = productSlide.actions;
+export const { updateSearch, clearSearch, updateProduct, resetProduct, addAllProducts } =
+    productSlide.actions;
 
 export default productSlide.reducer;

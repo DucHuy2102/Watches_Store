@@ -1,87 +1,72 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ProductCard } from '../exportPages';
 import { PaginationComponent, Sort_Filter } from '../../components/exportComponents';
-import { useQuery } from '@tanstack/react-query';
-import * as ProductService from '../../services/ProductService';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearSearch } from '../../redux/slides/productSlide';
 
 const ProductPage = () => {
-    // pagination state and function to handle pagination logic
+    const dispatch = useDispatch();
+
+    // Get all products from redux
+    const dataProducts_Redux = useSelector((state) => state.product.products);
+    const dataProduct_Redux = useSelector((state) => state.product.product);
+    console.log('redux_all', dataProducts_Redux);
+    console.log('redux_1', dataProduct_Redux);
+
+    // Get search data from redux
+    const dataSearch_Redux = useSelector((state) => state.product.search);
+
+    // Pagination state and function to handle pagination logic
     const [currentPage, setCurrentPage] = useState(1);
     const [productPerPage] = useState(12);
     const lastProductIndex = currentPage * productPerPage;
     const firstProductIndex = lastProductIndex - productPerPage;
 
-    // search state and function to handle search logic
-    const searchRef = useRef(false);
-    const dispatch = useDispatch();
+    // Get products to display on page
+    const currentProducts = useMemo(() => {
+        return Array.isArray(dataProducts_Redux)
+            ? dataProducts_Redux.slice(firstProductIndex, lastProductIndex)
+            : [];
+    }, [dataProducts_Redux, firstProductIndex, lastProductIndex]);
 
-    // get data from redux
-    const dataSearch_Redux = useSelector((state) => state.product.search);
+    const [displayProduct, setDisplayProduct] = useState(currentProducts);
 
-    // get all products from api and set to state allProducts
-    // and products to display on page
-    const [products, setProducts] = useState([]);
-    const [allProducts, setAllProducts] = useState([]);
-    const getAllProduct = async () => {
-        const res = await ProductService.getAllProduct();
-        return res;
-    };  
-    const { data } = useQuery({
-        queryKey: ['products'],
-        queryFn: getAllProduct,
-        keepPreviousData: true,
-    });
-
-    // get products to display on page
-    const currentProducts = Array.isArray(products)
-        ? products.slice(firstProductIndex, lastProductIndex)
-        : [];
-
-    // set all products to state allProducts and products to display on page
+    // Get search products to display on page
     useEffect(() => {
-        if (data && data.data) {
-            setAllProducts(data.data);
-            if (!searchRef.current) {
-                setProducts(data.data);
-            }
+        if (dataSearch_Redux.length > 0) {
+            setDisplayProduct(dataSearch_Redux);
         }
-    }, [data]);
+    }, [dataProducts_Redux, dataSearch_Redux]);
 
-    // set products to display on page when search data change in redux store
-    // or when search data is empty in redux store
+    // Clear search data in redux store when component unmounts
     useEffect(() => {
-        if (searchRef.current) {
-            if (dataSearch_Redux && dataSearch_Redux.length > 0) {
-                setProducts(dataSearch_Redux);
-            } else {
-                setProducts(allProducts);
-            }
-        } else {
-            searchRef.current = true;
-        }
-    }, [dataSearch_Redux, allProducts]);
-
-    // clear search data in redux store when component unmount or change page to another page in pagination component
-    // or sort and filter component
-    useEffect(() => {
-        dispatch(clearSearch());
+        return () => {
+            dispatch(clearSearch());
+        };
     }, [dispatch]);
+
+    // Get search products to display on page
+    // useEffect(() => {
+    //     if (dataSearch_Redux.length > 0) {
+    //         setDisplayProduct(dataSearch_Redux);
+    //     } else {
+    //         setDisplayProduct(currentProducts);
+    //     }
+    // }, [currentProducts, dataProducts_Redux, dataSearch_Redux]);
 
     return (
         <div className='w-full mb-2 flex flex-col items-center justify-center'>
-            {/* sort and filter */}
+            {/* Sort and filter */}
             <Sort_Filter />
 
-            {/* products */}
+            {/* Products */}
             <div className='mt-7 mb-3 grid grid-cols-3 gap-10'>
-                <ProductCard products={currentProducts} />
+                <ProductCard products={displayProduct} />
             </div>
 
-            {/* pagination */}
+            {/* Pagination */}
             <PaginationComponent
-                totalProducts={products.length}
+                totalProducts={dataProducts_Redux.length}
                 productPerPage={productPerPage}
                 setCurrentPageValue={setCurrentPage}
             />

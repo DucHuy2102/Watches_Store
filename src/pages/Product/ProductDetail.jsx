@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as ProductService from '../../services/ProductService';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { clearSearch, resetProduct, updateProduct } from '../../redux/slides/productSlide';
+import { resetProduct, updateProduct } from '../../redux/slides/productSlide';
 import { addProduct } from '../../redux/slides/orderSlide';
 import { useEffect, useMemo, useState } from 'react';
 import { useMutationHook } from '../../hooks/useMutationHook';
@@ -29,7 +29,6 @@ const ProductDetail = () => {
 
     // destructuring product_Redux
     const {
-        id,
         brand,
         color,
         condition,
@@ -50,6 +49,7 @@ const ProductDetail = () => {
         category,
     } = product_Redux;
 
+    // reset product when component unmounts
     useEffect(() => {
         return () => {
             dispatch(resetProduct());
@@ -203,8 +203,8 @@ const ProductDetail = () => {
             dispatch(
                 addProduct({
                     orderItems: {
-                        id: id,
-                        name: productName,
+                        id: product_Redux.id,
+                        productName: productName,
                         img: img,
                         amount: quantityProduct,
                         price: price,

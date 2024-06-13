@@ -46,13 +46,13 @@ const ProductPage = () => {
     }, [dispatch]);
 
     // Get search products to display on page
-    // useEffect(() => {
-    //     if (dataSearch_Redux.length > 0) {
-    //         setDisplayProduct(dataSearch_Redux);
-    //     } else {
-    //         setDisplayProduct(currentProducts);
-    //     }
-    // }, [currentProducts, dataProducts_Redux, dataSearch_Redux]);
+    useEffect(() => {
+        if (dataSearch_Redux.length > 0) {
+            setDisplayProduct(dataSearch_Redux);
+        } else {
+            setDisplayProduct(currentProducts);
+        }
+    }, [currentProducts, dataProducts_Redux, dataSearch_Redux]);
 
     return (
         <div className='w-full mb-2 flex flex-col items-center justify-center'>

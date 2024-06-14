@@ -17,45 +17,9 @@ const LoginPage = () => {
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
-    // handle load orders by user id
-    const handleGetOrderUser = async () => {
-        const tokenUser = localStorage.getItem('tokenUser');
-        const response = await ProductService.getOrdersByUserId(tokenUser);
-        const ordersData = response?.data;
-
-        // format data ordersData to ditpatch to orderItems in Redux
-        const formattedProducts = ordersData.map((order) => ({
-            ...order.product,
-            id: order.product.id,
-            amount: order.quantity,
-        }));
-        console.log('formattedProducts', formattedProducts);
-        dispatch(updateOrderItems(formattedProducts));
-    };
-
     // useMutationHook to login user
     const mutation = useMutationHook((data) => UserService.loginUser(data));
     const { data } = mutation;
-
-    // get user detail after login success
-    useEffect(() => {
-        const handleGetUserDetail = async (access_token) => {
-            const res = await UserService.getUserDetail(access_token);
-            dispatch(updateUser({ ...res?.data, access_token: access_token }));
-            handleGetOrderUser();
-        };
-
-        if (data?.code === 200) {
-            const access_token = data?.data?.token;
-            localStorage.setItem('tokenUser', access_token);
-            if (access_token) {
-                const decode = jwtDecode(access_token);
-                if (decode?.sub) {
-                    handleGetUserDetail(access_token);
-                }
-            }
-        }
-    }, [data, navigate, dispatch]);
 
     // handle submit login
     const handleSubmitLogin = () => {
@@ -74,6 +38,40 @@ const LoginPage = () => {
             }
         );
     };
+
+    // get user detail after login success
+    useEffect(() => {
+        const handleGetUserDetail = async (access_token) => {
+            const res = await UserService.getUserDetail(access_token);
+            dispatch(updateUser({ ...res?.data, access_token: access_token }));
+
+            // handle load orders by user id
+            const handleGetOrderUser = async () => {
+                const tokenUser = localStorage.getItem('tokenUser');
+                const response = await ProductService.getOrdersByUserId(tokenUser);
+                const ordersData = response?.data;
+
+                // format data ordersData to ditpatch to orderItems in Redux
+                const formattedProducts = ordersData.map((order) => ({
+                    ...order.product,
+                    id: order.product.id,
+                    amount: order.quantity,
+                }));
+                dispatch(updateOrderItems(formattedProducts));
+            };
+        };
+
+        if (data?.code === 200) {
+            const access_token = data?.data?.token;
+            localStorage.setItem('tokenUser', access_token);
+            if (access_token) {
+                const decode = jwtDecode(access_token);
+                if (decode?.sub) {
+                    handleGetUserDetail(access_token);
+                }
+            }
+        }
+    }, [data, navigate, dispatch]);
 
     return (
         <div className='w-full flex items-center justify-between px-20 font-Lato'>

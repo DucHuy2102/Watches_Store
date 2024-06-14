@@ -166,7 +166,7 @@ const RegisterPage = () => {
                             },
                             ({ getFieldValue }) => ({
                                 validator(_, value) {
-                                    if (!value || getFieldValue('password') === value) {
+                                    if (!value || getFieldValue('Mật khẩu') === value) {
                                         return Promise.resolve();
                                     }
                                     return Promise.reject(new Error('Mật khẩu không giống nhau!'));
@@ -193,7 +193,7 @@ const RegisterPage = () => {
                     </Form.Item>
                 </Form>
 
-                {/* Register */}
+                {/* back to login page */}
                 <div className='text-lg flex font-PlayfairDisplay'>
                     <p>Bạn đã có tài khoản?</p>
                     <Link

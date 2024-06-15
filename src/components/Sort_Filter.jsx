@@ -21,6 +21,7 @@ const Sort_Filter = () => {
     const dispatch = useDispatch();
 
     // Lấy dữ liệu sản phẩm từ Redux
+    const dataProducts_Redux = useSelector((state) => state.product.products);
     const dataRedux = useSelector((state) => state.product.search);
     const numberProduct = dataRedux?.length;
 
@@ -50,17 +51,12 @@ const Sort_Filter = () => {
         const filterName = filter === 'Đồng hồ nam' ? 'Nam' : 'Nữ';
         setSelectedFilter(filter);
         setIsOpenSort(false);
-        if (filterName) {
-            mutationFindProduct.mutate(filterName, {
-                onSuccess: (data) => {
-                    const products = data?.data;
-                    dispatch(updateSearch(products));
-                    setIsOpenFilter(false);
-                },
-                onError: () => {
-                    message.error('Không tìm thấy sản phẩm');
-                },
-            });
+        const filterGenderProduct = dataProducts_Redux.filter(
+            (product) => product.genderUser === filterName
+        );
+        if (filterGenderProduct.length > 0) {
+            dispatch(updateSearch(filterGenderProduct));
+            setIsOpenFilter(false);
         }
     };
 

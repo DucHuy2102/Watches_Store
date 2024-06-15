@@ -30,11 +30,17 @@ const HomePage = () => {
         enabled: dataProducts_Redux.length === 0,
     });
 
+    // Add all products to redux store
     useEffect(() => {
         if (data?.data && dataProducts_Redux.length === 0) {
             dispatch(addAllProducts(data.data));
         }
     }, [data, dispatch, dataProducts_Redux.length]);
+
+    // scroll to top when render page
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <div>

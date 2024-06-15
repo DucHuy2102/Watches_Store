@@ -19,21 +19,17 @@ const ProductPage = () => {
     const lastProductIndex = currentPage * productPerPage;
     const firstProductIndex = lastProductIndex - productPerPage;
 
-    // Get products to display on page
-    const currentProducts = useMemo(() => {
-        return Array.isArray(dataProducts_Redux)
-            ? dataProducts_Redux.slice(firstProductIndex, lastProductIndex)
-            : [];
-    }, [dataProducts_Redux, firstProductIndex, lastProductIndex]);
-
-    const [displayProduct, setDisplayProduct] = useState(currentProducts);
-
-    // Get search products to display on page
-    useEffect(() => {
-        if (dataSearch_Redux.length > 0) {
-            setDisplayProduct(dataSearch_Redux);
-        }
+    // Get data to display on page
+    const dataToDisplay = useMemo(() => {
+        return dataSearch_Redux.length > 0 ? dataSearch_Redux : dataProducts_Redux;
     }, [dataProducts_Redux, dataSearch_Redux]);
+
+    // Get products to display on page
+    const displayData = useMemo(() => {
+        return Array.isArray(dataToDisplay)
+            ? dataToDisplay.slice(firstProductIndex, lastProductIndex)
+            : [];
+    }, [dataToDisplay, firstProductIndex, lastProductIndex]);
 
     // Clear search data in redux store when component unmounts
     useEffect(() => {
@@ -42,15 +38,6 @@ const ProductPage = () => {
         };
     }, [dispatch]);
 
-    // Get search products to display on page
-    useEffect(() => {
-        if (dataSearch_Redux.length > 0) {
-            setDisplayProduct(dataSearch_Redux);
-        } else {
-            setDisplayProduct(currentProducts);
-        }
-    }, [currentProducts, dataProducts_Redux, dataSearch_Redux]);
-
     return (
         <div className='w-full mb-2 flex flex-col items-center justify-center'>
             {/* Sort and filter */}
@@ -58,12 +45,12 @@ const ProductPage = () => {
 
             {/* Products */}
             <div className='mt-7 mb-3 grid grid-cols-3 gap-10'>
-                <ProductCard products={displayProduct} />
+                <ProductCard products={displayData} />
             </div>
 
             {/* Pagination */}
             <PaginationComponent
-                totalProducts={dataProducts_Redux.length}
+                totalProducts={dataToDisplay.length}
                 productPerPage={productPerPage}
                 setCurrentPageValue={setCurrentPage}
             />

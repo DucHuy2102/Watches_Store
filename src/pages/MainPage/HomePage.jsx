@@ -32,7 +32,6 @@ const HomePage = () => {
 
     useEffect(() => {
         if (data?.data && dataProducts_Redux.length === 0) {
-            console.log('all', data.data);
             dispatch(addAllProducts(data.data));
         }
     }, [data, dispatch, dataProducts_Redux.length]);

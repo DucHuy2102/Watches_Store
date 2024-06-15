@@ -32,7 +32,6 @@ const Admin_LoginPage = () => {
         const handleGetAdminDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
             dispatch(updateUser({ ...res?.data, access_token: access_token }));
-            console.log('res', res);
         };
 
         const fetchAPI = () => {

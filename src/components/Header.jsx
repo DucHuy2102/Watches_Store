@@ -62,7 +62,6 @@ const Header = () => {
         dispatch(resetUser());
         dispatch(resetOrder());
         navigate('/');
-        window.location.reload();
     };
 
     // search product

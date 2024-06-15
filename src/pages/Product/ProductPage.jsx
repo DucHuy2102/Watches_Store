@@ -9,9 +9,6 @@ const ProductPage = () => {
 
     // Get all products from redux
     const dataProducts_Redux = useSelector((state) => state.product.products);
-    const dataProduct_Redux = useSelector((state) => state.product.product);
-    console.log('redux_all', dataProducts_Redux);
-    console.log('redux_1', dataProduct_Redux);
 
     // Get search data from redux
     const dataSearch_Redux = useSelector((state) => state.product.search);

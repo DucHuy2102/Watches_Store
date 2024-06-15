@@ -41,24 +41,20 @@ const LoginPage = () => {
 
     // get user detail after login success
     useEffect(() => {
+        // handle get user detail
         const handleGetUserDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
             dispatch(updateUser({ ...res?.data, access_token: access_token }));
+        };
 
-            // handle load orders by user id
-            const handleGetOrderUser = async () => {
-                const tokenUser = localStorage.getItem('tokenUser');
-                const response = await ProductService.getOrdersByUserId(tokenUser);
-                const ordersData = response?.data;
+        // handle load orders by user id
+        const handleGetOrderUser = async () => {
+            const tokenUser = localStorage.getItem('tokenUser');
+            const response = await ProductService.getOrdersByUserId(tokenUser);
+            const ordersData = response?.data;
 
-                // format data ordersData to ditpatch to orderItems in Redux
-                const formattedProducts = ordersData.map((order) => ({
-                    ...order.product,
-                    id: order.product.id,
-                    amount: order.quantity,
-                }));
-                dispatch(updateOrderItems(formattedProducts));
-            };
+            // dispatch ordersData to redux
+            dispatch(updateOrderItems(ordersData));
         };
 
         if (data?.code === 200) {
@@ -67,6 +63,7 @@ const LoginPage = () => {
             if (access_token) {
                 const decode = jwtDecode(access_token);
                 if (decode?.sub) {
+                    handleGetOrderUser();
                     handleGetUserDetail(access_token);
                 }
             }

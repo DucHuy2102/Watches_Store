@@ -85,9 +85,9 @@ export const getOrdersByUserId = async (token) => {
     return res.data;
 };
 
-// edit order by user id
-export const editOrderById = async (token, data) => {
-    const res = await axios.post(`${import.meta.env.VITE_API_URL}/cart/editProductInCart`, data, {
+// update order by user id
+export const updateOrderById = async (token, data) => {
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/cart/update`, data, {
         headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

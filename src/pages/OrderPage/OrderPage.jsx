@@ -12,18 +12,25 @@ import {
 } from '../../redux/slides/orderSlide';
 import { Modal } from 'antd';
 import { useEffect, useState } from 'react';
+import { useMutationHook } from '../../hooks/useMutationHook';
+import * as ProductService from '../../services/ProductService';
 
 const OrderPage = () => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState(null);
 
-    // State to manage the token
-    const [tokenUser, setTokenUser] = useState(localStorage.getItem('tokenUser'));
+    // get tokenUser from localStorage
+    const token = localStorage.getItem('tokenUser');
 
     // get orders from redux
-    const orders = useSelector((state) => state.orderProduct);
-    const amountProduct = orders?.orderItems?.length;
+    const orders = useSelector((state) => state.orderProduct.orderItems);
+    const amountProduct = orders?.length;
+
+    // get total price of all product in cart
+    const totalPrice = orders.reduce((acc, order) => {
+        return acc + order.product.price * order.quantity;
+    }, 0);
 
     // format price
     const priceFormat = (price) => {
@@ -61,21 +68,40 @@ const OrderPage = () => {
 
     // reset order when user logout
     useEffect(() => {
-        const handleStorageChange = () => {
-            const token = localStorage.getItem('tokenUser');
-            setTokenUser(token);
-            if (!token) {
-                dispatch(resetOrder());
+        if (!token) {
+            dispatch(resetOrder());
+        }
+    }, [dispatch, token]);
+
+    // update order
+    const mutation = useMutationHook(({ token, data }) =>
+        ProductService.updateOrderById(token, data)
+    );
+
+    // data to update order
+    const formatData = orders.map((order) => ({
+        ...order,
+        quantity: order.quantity,
+    }));
+
+    // total quantity in cart
+    const total = formatData.reduce((acc, order) => {
+        return acc + order.quantity;
+    }, 0);
+
+    // call api when total quantity change
+    useEffect(() => {
+        return () => {
+            if (token) {
+                mutation.mutate({ token: token, data: formatData });
             }
         };
+    }, [total, token]);
 
-        window.addEventListener('storage', handleStorageChange);
-        handleStorageChange();
-
-        return () => {
-            window.removeEventListener('storage', handleStorageChange);
-        };
-    }, [dispatch]);
+    // handle checkout
+    const handleCheckout = () => {
+        console.log('click checkout');
+    };
 
     return (
         <div className='bg-gray-100 min-h-screen py-8'>
@@ -133,7 +159,7 @@ const OrderPage = () => {
 
                                     {/* body product */}
                                     <tbody>
-                                        {orders?.orderItems.map((order, index) => {
+                                        {orders.map((order, index) => {
                                             return (
                                                 <tr key={index}>
                                                     {/* image, name */}
@@ -142,20 +168,20 @@ const OrderPage = () => {
                                                             {/* image */}
                                                             <img
                                                                 className='h-16 w-16 mr-4'
-                                                                src={order.img[0]}
+                                                                src={order.product.img[0]}
                                                                 alt='Product image'
                                                             />
 
                                                             {/* name */}
                                                             <span className='w-80 font-semibold'>
-                                                                {order.productName}
+                                                                {order.product.productName}
                                                             </span>
                                                         </div>
                                                     </td>
 
                                                     {/* price */}
                                                     <td className='py-4 text-center'>
-                                                        {priceFormat(order.price)}
+                                                        {priceFormat(order.product.price)}
                                                     </td>
 
                                                     {/* quantity */}
@@ -166,7 +192,7 @@ const OrderPage = () => {
                                                                 onClick={() =>
                                                                     handleChangeQuantity(
                                                                         'decrease',
-                                                                        order.id
+                                                                        order.product.id
                                                                     )
                                                                 }
                                                                 className='border rounded-md py-2 px-4 mr-2'
@@ -176,7 +202,7 @@ const OrderPage = () => {
 
                                                             {/* quantity */}
                                                             <span className='text-center w-8'>
-                                                                {order.amount}
+                                                                {order.quantity}
                                                             </span>
 
                                                             {/* button increase */}
@@ -184,7 +210,7 @@ const OrderPage = () => {
                                                                 onClick={() =>
                                                                     handleChangeQuantity(
                                                                         'increase',
-                                                                        order.id
+                                                                        order.product.id
                                                                     )
                                                                 }
                                                                 className='border rounded-md py-2 px-4 ml-2'
@@ -196,7 +222,9 @@ const OrderPage = () => {
 
                                                     {/* total price = (price * quantity) */}
                                                     <td className='py-4 text-center'>
-                                                        {priceFormat(order.price * order.amount)}
+                                                        {priceFormat(
+                                                            order.product.price * order.quantity
+                                                        )}
                                                     </td>
 
                                                     {/* delete product */}
@@ -239,10 +267,7 @@ const OrderPage = () => {
                                 {/* total price */}
                                 <div className='flex justify-between mb-2'>
                                     <span>Tạm tính</span>
-                                    <span>
-                                        123.456.789
-                                        {/* {priceFormat(order.price * order.amount)} */}
-                                    </span>
+                                    <span>{priceFormat(totalPrice)}</span>
                                 </div>
 
                                 {/* shippingPrice */}
@@ -254,32 +279,35 @@ const OrderPage = () => {
                                 <hr className='my-2' />
                                 <div className='flex justify-between mb-2'>
                                     <span className='text-lg font-semibold'>Tổng tiền</span>
-                                    <span className='text-lg font-semibold'>2.075.000 VNĐ</span>
+                                    <span className='text-lg font-semibold'>
+                                        {priceFormat(totalPrice)}
+                                    </span>
                                 </div>
 
                                 {/* button checkout */}
-                                <Link to='/checkout' className='mt-6 text-center'>
-                                    <button
-                                        type='button'
-                                        className='group inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-6 py-4 text-lg font-semibold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800'
+                                {/* <Link to='/checkout' className='mt-6 text-center'> */}
+                                <button
+                                    onClick={() => handleCheckout()}
+                                    type='button'
+                                    className='group inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-6 py-4 text-lg font-semibold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800'
+                                >
+                                    Mua hàng
+                                    <svg
+                                        xmlns='http://www.w3.org/2000/svg'
+                                        className='group-hover:ml-8 ml-4 h-6 w-6 transition-all'
+                                        fill='none'
+                                        viewBox='0 0 24 24'
+                                        stroke='currentColor'
+                                        strokeWidth='2'
                                     >
-                                        Mua hàng
-                                        <svg
-                                            xmlns='http://www.w3.org/2000/svg'
-                                            className='group-hover:ml-8 ml-4 h-6 w-6 transition-all'
-                                            fill='none'
-                                            viewBox='0 0 24 24'
-                                            stroke='currentColor'
-                                            strokeWidth='2'
-                                        >
-                                            <path
-                                                strokeLinecap='round'
-                                                strokeLinejoin='round'
-                                                d='M13 7l5 5m0 0l-5 5m5-5H6'
-                                            />
-                                        </svg>
-                                    </button>
-                                </Link>
+                                        <path
+                                            strokeLinecap='round'
+                                            strokeLinejoin='round'
+                                            d='M13 7l5 5m0 0l-5 5m5-5H6'
+                                        />
+                                    </svg>
+                                </button>
+                                {/* </Link> */}
 
                                 {/* Secured Payment info */}
                                 <div className='flex flex-col items-center justify-center mt-3'>

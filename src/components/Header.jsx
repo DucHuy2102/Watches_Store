@@ -7,11 +7,9 @@ import {
     faUser,
     faUserGear,
 } from '@fortawesome/free-solid-svg-icons';
-import { Badge, message } from 'antd';
+import { Badge } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSearch } from '../redux/slides/productSlide';
-import { useMutationHook } from '../hooks/useMutationHook';
-import * as ProductService from '../services/ProductService';
 import { resetOrder } from '../redux/slides/orderSlide';
 import { resetUser } from '../redux/slides/userSlide';
 
@@ -26,8 +24,9 @@ const Header = () => {
     const dispatch = useDispatch();
     const accountRef = useRef(null);
 
-    // Lấy dữ liệu từ Redux
+    // get data from Redux
     const dataUSer = useSelector((state) => state.user);
+    const products = useSelector((state) => state.product.products);
     const orders = useSelector((state) => state.orderProduct);
     const amountProduct = orders?.orderItems?.length;
 
@@ -79,29 +78,15 @@ const Header = () => {
         setSearchValue(capitalizedValue);
     };
 
-    // hook search product by name
-    const mutationFindProduct = useMutationHook((name) => ProductService.findProductByName(name));
-
-    // handle key press enter to search product
-    const handleKeyPress = async (e) => {
-        if (e.key === 'Enter') {
-            if (searchValue) {
-                mutationFindProduct.mutate(searchValue, {
-                    onSuccess: (data) => {
-                        const products = data?.data;
-                        setSearchValue('');
-                        setSearchResults(products);
-                        dispatch(updateSearch(products));
-                        navigate('/products');
-                    },
-                    onError: () => {
-                        setSearchValue('');
-                        message.error('Không tìm thấy sản phẩm');
-                    },
-                });
-            } else {
-                setSearchResults([]);
-            }
+    // search product by name and navigate to page products
+    const handleKeyPress = () => {
+        if (searchValue) {
+            const res = products.filter((item) => item.productName.includes(searchValue));
+            setSearchResults(res);
+            navigate('/products');
+            dispatch(updateSearch(searchResults));
+        } else {
+            setSearchResults([]);
         }
     };
 

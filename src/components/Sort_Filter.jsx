@@ -13,17 +13,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutationHook } from '../hooks/useMutationHook';
 import * as ProductService from '../services/ProductService';
-import { message } from 'antd';
 import { updateSearch } from '../redux/slides/productSlide';
 import { useDispatch, useSelector } from 'react-redux';
+import { Select } from 'antd';
 
 const Sort_Filter = () => {
     const dispatch = useDispatch();
 
     // Lấy dữ liệu sản phẩm từ Redux
-    const dataProducts_Redux = useSelector((state) => state.product.products);
-    const dataRedux = useSelector((state) => state.product.search);
-    const numberProduct = dataRedux?.length;
+    const productsRedux = useSelector((state) => state.product.products);
+    const searchRedux = useSelector((state) => state.product.search);
+    const numberProduct = searchRedux?.length;
 
     // filter
     const [isOpenFilter, setIsOpenFilter] = useState(false);
@@ -51,7 +51,7 @@ const Sort_Filter = () => {
         const filterName = filter === 'Đồng hồ nam' ? 'Nam' : 'Nữ';
         setSelectedFilter(filter);
         setIsOpenSort(false);
-        const filterGenderProduct = dataProducts_Redux.filter(
+        const filterGenderProduct = productsRedux.filter(
             (product) => product.genderUser === filterName
         );
         if (filterGenderProduct.length > 0) {
@@ -91,14 +91,25 @@ const Sort_Filter = () => {
         };
     }, []);
 
+    const handleChange = (value) => {
+        console.log(`selected ${value}`);
+    };
+
+    const displaySearch = () => {
+        if (searchRedux && searchRedux.length > 0) {
+            return `Tìm được ${searchRedux.length} sản phẩm`;
+        }
+        return 'Tất cả sản phẩm';
+    };
+
     return (
         <div className='mt-3 h-10 font-medium w-full px-10 grid grid-cols-3 items-center font-PlayfairDisplay'>
             {/* link to page */}
             <div className='w-[30vw]'>
-                <Link to='/'>Trang chủ</Link> /{' '}
-                {selectedFilter !== 'Bộ lọc'
+                <Link to='/'>Trang chủ</Link> / {displaySearch()}
+                {/* {selectedFilter !== 'Bộ lọc'
                     ? `Lọc được ${numberProduct} sản phẩm`
-                    : 'Tất cả sản phẩm'}
+                    : 'Tất cả sản phẩm'} */}
             </div>
 
             {/* name page */}
@@ -111,7 +122,7 @@ const Sort_Filter = () => {
             {/* sort and filter */}
             <div className='flex items-center justify-end gap-2'>
                 {/* filter */}
-                <div className='relative mt-1' ref={filterRef}>
+                {/* <div className='relative mt-1' ref={filterRef}>
                     <button
                         className='border border-black flex justify-center items-center bg-white text-black px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-300'
                         onClick={toggleMenuFilter}
@@ -119,7 +130,6 @@ const Sort_Filter = () => {
                         <span className='mr-2'>{selectedFilter}</span>
                         <FontAwesomeIcon icon={faFilter} />
                     </button>
-                    {/* Menu tùy chọn lọc */}
                     {isOpenFilter && (
                         <div className='absolute border border-gray-300 right-0 mt-2 w-44 bg-white rounded shadow-lg z-10'>
                             <ul className='text-black'>
@@ -137,14 +147,38 @@ const Sort_Filter = () => {
                                     <FontAwesomeIcon icon={faPersonDress} className='mr-2' />
                                     Đồng hồ nữ
                                 </li>
-                                {/* Thêm các tùy chọn lọc khác tại đây */}
                             </ul>
                         </div>
                     )}
-                </div>
+                </div> */}
+                <Select
+                    placeholder='Bộ lọc'
+                    className='select-filter'
+                    allowClear
+                    onChange={handleChange}
+                    options={[
+                        {
+                            value: 'Nam',
+                            label: 'Đồng hồ nam',
+                        },
+                        {
+                            value: 'Nữ',
+                            label: 'Đồng hồ nữ',
+                        },
+                        // {
+                        //     value: 'Yiminghe',
+                        //     label: 'yiminghe',
+                        // },
+                        // {
+                        //     value: 'disabled',
+                        //     label: 'Disabled',
+                        //     disabled: true,
+                        // },
+                    ]}
+                />
 
                 {/* sort */}
-                <div className='relative mt-1' ref={sortRef}>
+                {/* <div className='relative mt-1' ref={sortRef}>
                     <button
                         className='border border-black flex justify-center items-center bg-white text-black px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-gray-300'
                         onClick={() => setIsOpenSort(!isOpenSort)}
@@ -157,7 +191,6 @@ const Sort_Filter = () => {
                         )}
                     </button>
 
-                    {/* Menu tùy chọn */}
                     {isOpenSort && (
                         <div className='absolute border border-gray-300 right-0 mt-2 w-48 bg-white rounded shadow-lg z-10'>
                             <ul className='text-gray-800'>
@@ -185,7 +218,23 @@ const Sort_Filter = () => {
                             </ul>
                         </div>
                     )}
-                </div>
+                </div> */}
+                <Select
+                    placeholder='Sắp xếp'
+                    className='select-sort'
+                    allowClear
+                    onChange={handleChange}
+                    options={[
+                        {
+                            value: 'descrease',
+                            label: 'Giá cao tới thấp',
+                        },
+                        {
+                            value: 'increase',
+                            label: 'Giá thấp tới cao',
+                        },
+                    ]}
+                />
             </div>
         </div>
     );

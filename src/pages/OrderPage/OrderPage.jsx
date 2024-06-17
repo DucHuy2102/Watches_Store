@@ -83,11 +83,14 @@ const OrderPage = () => {
         ...order,
         quantity: order.quantity,
     }));
+    console.log('redux -->', orders);
+    console.log('formatData -->', formatData);
 
     // total quantity in cart
     const total = formatData.reduce((acc, order) => {
         return acc + order.quantity;
     }, 0);
+    console.log('total quantity in cart -->', total);
 
     // call api when total quantity change
     useEffect(() => {
@@ -125,7 +128,7 @@ const OrderPage = () => {
 
                         {/* button go to products */}
                         <Link to='/products' className='mt-4'>
-                            <button className='bg-white text-black border border-black hover:bg-black hover:text-white transition duration-300 px-4 py-2 rounded-md'>
+                            <button className='bg-white text-black border border-black hover:bg-blue-500 hover:border-blue-500 hover:text-white transition duration-300 px-4 py-2 rounded-md'>
                                 Mua sắm ngay
                             </button>
                         </Link>
@@ -136,7 +139,6 @@ const OrderPage = () => {
                         {/* product info */}
                         <div className='md:w-3/4'>
                             <div className='bg-white rounded-lg shadow-md p-6 mb-4'>
-                                {/* table */}
                                 <table className='w-full'>
                                     {/* header table */}
                                     <thead>

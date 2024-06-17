@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux';
 import CardItem_Product from './CardItem_Product';
 
 const ProductCard = ({ products }) => {

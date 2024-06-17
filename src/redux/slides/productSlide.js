@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     search: [],
     products: [],
+    originalProducts: [],
     product: {
         id: '',
         productName: '',
@@ -24,6 +25,7 @@ const initialState = {
         color: '',
         weight: '',
         category: '',
+        discount: 0,
     },
 };
 
@@ -45,11 +47,36 @@ export const productSlide = createSlice({
         },
         addAllProducts: (state, action) => {
             state.products = action.payload;
+            state.originalProducts = action.payload;
+        },
+        sortProducts: (state, action) => {
+            const option = action.payload;
+            if (option === undefined || option === 'undefined') {
+                state.products = [...state.originalProducts];
+            } else if (option === 'increase') {
+                state.products = [...state.products].sort((a, b) => a.price - b.price);
+            } else if (option === 'decrease') {
+                state.products = [...state.products].sort((a, b) => b.price - a.price);
+            } else if (option === 'A-Z') {
+                state.products = [...state.products].sort((a, b) =>
+                    a.productName.localeCompare(b.productName)
+                );
+            } else if (option === 'Z-A') {
+                state.products = [...state.products].sort((a, b) =>
+                    b.productName.localeCompare(a.productName)
+                );
+            }
         },
     },
 });
 
-export const { updateSearch, clearSearch, updateProduct, resetProduct, addAllProducts } =
-    productSlide.actions;
+export const {
+    updateSearch,
+    clearSearch,
+    sortProducts,
+    updateProduct,
+    resetProduct,
+    addAllProducts,
+} = productSlide.actions;
 
 export default productSlide.reducer;

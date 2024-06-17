@@ -24,12 +24,13 @@ const ProductDetail = () => {
         window.scrollTo(0, 0);
     }, []);
 
-    // get product from redux
+    // get 1 product from redux
     const product_Redux = useSelector((state) => state.product.product);
 
     // destructuring product_Redux
     const {
         brand,
+        discount,
         color,
         condition,
         description,
@@ -134,25 +135,17 @@ const ProductDetail = () => {
     }, [price]);
 
     // format discount price
-    const discountPrice = 1506000;
+    const discountPrice = discount !== 0 ? price - (price * discount) / 100 : 0;
     const discountPriceFormat = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
     }).format(discountPrice);
 
-    // get products by category
-    const getProducts_Category = async () => {
-        const res = await ProductService.getProductByCategory(category);
-        return res;
-    };
+    // get all products from redux
+    const productsRedux = useSelector((state) => state.product.products);
 
-    // useQuery to get products by category
-    const { data } = useQuery({
-        queryKey: ['products'],
-        queryFn: getProducts_Category,
-        keepPreviousData: true,
-    });
-    const moreProduct = data?.data.product;
+    // get more products from the same brand
+    const moreProduct = productsRedux.filter((item) => item.brand === brand);
 
     // Split products into groups of 4
     const chunkArray = (array, chunkSize) => {
@@ -203,11 +196,14 @@ const ProductDetail = () => {
             dispatch(
                 addProduct({
                     orderItems: {
-                        id: product_Redux.id,
-                        productName: productName,
-                        img: img,
-                        amount: quantityProduct,
-                        price: price,
+                        id: product_Redux.id, // idCart
+                        product: {
+                            id: product_Redux.id,
+                            productName: productName,
+                            img: img,
+                            price: price,
+                        },
+                        quantity: quantityProduct,
                     },
                 })
             );
@@ -238,7 +234,7 @@ const ProductDetail = () => {
                     {/* image product */}
                     <div className='lg:col-span-3 w-full lg:sticky top-0 text-center'>
                         <Swiper
-                            loop={true}
+                            loop='true'
                             spaceBetween={0}
                             modules={[Navigation, Autoplay]}
                             autoplay={{ delay: 4000 }}
@@ -265,9 +261,9 @@ const ProductDetail = () => {
                         <div className='flex flex-wrap justify-start items-center gap-4 mt-2'>
                             <p className='text-blue-500 text-4xl font-bold'>{priceFormat}</p>
                             <p className='text-gray-400 text-xl flex justify-start items-center'>
-                                <strike>{discountPriceFormat}₫</strike>
+                                <strike>{discountPriceFormat}</strike>
                                 <span className='text-sm bg-red-500 text-white px-2 py-1 rounded-lg ml-3'>
-                                    -27%
+                                    -{discount}%
                                 </span>
                             </p>
                         </div>
@@ -437,7 +433,7 @@ const ProductDetail = () => {
                             </h3>
                             <Swiper
                                 spaceBetween={20}
-                                slidesPerView={1}
+                                slidesPerView='auto'
                                 navigation
                                 autoplay={{ delay: 4000 }}
                                 className='mt-4'

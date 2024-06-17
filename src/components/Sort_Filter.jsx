@@ -1,89 +1,25 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useMutationHook } from '../hooks/useMutationHook';
-import * as ProductService from '../services/ProductService';
-import { sortProducts, updateSearch } from '../redux/slides/productSlide';
+import { sortProducts } from '../redux/slides/productSlide';
 import { useDispatch, useSelector } from 'react-redux';
-import { Select } from 'antd';
+import { Input, Modal, Select, Table } from 'antd';
 
 const Sort_Filter = () => {
     const dispatch = useDispatch();
 
     // Lấy dữ liệu sản phẩm từ Redux
-    const productsRedux = useSelector((state) => state.product.products);
+    const products_Redux = useSelector((state) => state.product.products);
     const searchRedux = useSelector((state) => state.product.search);
     const numberProduct = searchRedux?.length;
 
-    // filter
-    const [isOpenFilter, setIsOpenFilter] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState('Bộ lọc');
-
-    // sort
-    const [isOpenSort, setIsOpenSort] = useState(false);
-    const [selectedOption, setSelectedOption] = useState('Sắp xếp theo');
-
-    // Hook xử lý tìm kiếm sản phẩm theo tên
-    const mutationFindProduct = useMutationHook((name) => ProductService.findProductByName(name));
-
-    // Xử lý mở / đóng menu lọc
-    const toggleMenuFilter = () => {
-        if (isOpenFilter) {
-            if (selectedFilter === 'Bộ lọc') {
-                setSelectedFilter('Bộ lọc');
-            }
-        }
-        setIsOpenFilter(!isOpenFilter);
-    };
-
-    // Xử lý lựa chọn một tùy chọn lọc
-    const handleFilterClick = (filter) => {
-        const filterName = filter === 'Đồng hồ nam' ? 'Nam' : 'Nữ';
-        setSelectedFilter(filter);
-        setIsOpenSort(false);
-        const filterGenderProduct = productsRedux.filter(
-            (product) => product.genderUser === filterName
-        );
-        if (filterGenderProduct.length > 0) {
-            dispatch(updateSearch(filterGenderProduct));
-            setIsOpenFilter(false);
-        }
-    };
-
-    // Xử lý lựa chọn một tùy chọn
-    const handleOptionClick = (option) => {
-        setSelectedOption(option);
-        setIsOpenFilter(false);
-        // Thêm xử lý logic sắp xếp sản phẩm ở đây
-    };
-
-    // Hook xử lý tìm kiếm sản phẩm theo tên sản phẩm và loại sản phẩm
-    const filterRef = useRef(null);
-    const sortRef = useRef(null);
-
-    // Xử lý click ngoài menu lọc và menu sắp xếp
-    useEffect(() => {
-        const handleClickOutsideFilter = (event) => {
-            if (filterRef.current && !filterRef.current.contains(event.target)) {
-                setIsOpenFilter(false);
-            }
-        };
-        const handleClickOutsideSort = (event) => {
-            if (sortRef.current && !sortRef.current.contains(event.target)) {
-                setIsOpenSort(false);
-            }
-        };
-        document.addEventListener('click', handleClickOutsideFilter);
-        document.addEventListener('click', handleClickOutsideSort);
-        return () => {
-            document.removeEventListener('click', handleClickOutsideFilter);
-            document.removeEventListener('click', handleClickOutsideSort);
-        };
-    }, []);
-
+    // handle sort product
     const handleSort = (value) => {
         console.log(`selected ${value}`);
         dispatch(sortProducts(value));
     };
+
+    // handle filter product
+    const handleFilter = () => {};
 
     const displaySearch = () => {
         if (searchRedux && searchRedux.length > 0) {
@@ -91,6 +27,54 @@ const Sort_Filter = () => {
         }
         return 'Tất cả sản phẩm';
     };
+
+    // //////////////////////////////////////////////////
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedValue, setSelectedValue] = useState('');
+    const [searchValue, setSearchValue] = useState('');
+    const options = [
+        {
+            key: 'Nam',
+            label: 'Đồng hồ nam',
+        },
+        {
+            key: 'Nữ',
+            label: 'Đồng hồ nữ',
+        },
+        {
+            key: 'Yiminghe',
+            label: 'yiminghe',
+        },
+    ];
+
+    const columns = [
+        {
+            title: 'Label',
+            dataIndex: 'label',
+            key: 'label',
+        },
+    ];
+
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleOk = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleSelect = (record) => {
+        setSelectedValue(record.label);
+        setIsModalVisible(false);
+    };
+
+    const filteredOptions = options.filter((option) =>
+        option.label.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
     return (
         <div className='mt-3 h-10 font-medium w-full px-10 grid grid-cols-3 items-center font-PlayfairDisplay'>
@@ -105,38 +89,45 @@ const Sort_Filter = () => {
             {/* name page */}
             <div className='w-full text-center'>
                 <p className='font-bold text-xl'>
-                    {selectedFilter === 'Bộ lọc' ? 'Tất cả sản phẩm' : selectedFilter}
+                    Sản phẩm
+                    {/* {selectedFilter === 'Bộ lọc' ? 'Tất cả sản phẩm' : selectedFilter} */}
                 </p>
             </div>
 
             {/* sort and filter */}
             <div className='flex items-center justify-end gap-2'>
                 {/* filter */}
-                {/* <Select
+                <Input
                     placeholder='Bộ lọc'
-                    className='select-filter'
-                    allowClear
-                    onChange={handleChange}
-                    options={[
-                        {
-                            value: 'Nam',
-                            label: 'Đồng hồ nam',
-                        },
-                        {
-                            value: 'Nữ',
-                            label: 'Đồng hồ nữ',
-                        },
-                        {
-                            value: 'Yiminghe',
-                            label: 'yiminghe',
-                        },
-                        {
-                            value: 'disabled',
-                            label: 'Disabled',
-                            disabled: true,
-                        },
-                    ]}
-                /> */}
+                    value={selectedValue}
+                    onClick={showModal}
+                    readOnly
+                    style={{ width: 200, marginBottom: 20 }}
+                />
+                <Modal
+                    title='Bộ lọc'
+                    visible={isModalVisible}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                    footer={null}
+                >
+                    <Input
+                        placeholder='Tìm kiếm bộ lọc...'
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                        style={{ marginBottom: 20 }}
+                    />
+                    <Table
+                        dataSource={filteredOptions}
+                        columns={columns}
+                        rowKey='key'
+                        pagination={false}
+                        onRow={(record) => ({
+                            onClick: () => handleSelect(record),
+                        })}
+                        rowClassName={(record) => (record.disabled ? 'ant-table-row-disabled' : '')}
+                    />
+                </Modal>
 
                 {/* sort */}
                 <Select

@@ -65,7 +65,6 @@ const Header = () => {
 
     // search product
     const [searchValue, setSearchValue] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
 
     // capitalize first letter
     const capitalizeFirstLetter = (string) => {
@@ -79,15 +78,12 @@ const Header = () => {
     };
 
     // search product by name and navigate to page products
-    const handleKeyPress = () => {
-        if (searchValue) {
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && searchValue) {
             const res = products.filter((item) => item.productName.includes(searchValue));
-            setSearchResults(res);
+            dispatch(updateSearch(res));
             navigate('/products');
             setSearchValue('');
-            dispatch(updateSearch(searchResults));
-        } else {
-            setSearchResults([]);
         }
     };
 
@@ -117,7 +113,7 @@ const Header = () => {
             <div className='w-[10rem] flex-grow relative'>
                 <input
                     onChange={handleSearchChange}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyPress}
                     type='text'
                     value={searchValue}
                     placeholder='Tên đồng hồ...'

@@ -22,7 +22,7 @@ export const orderSlide = createSlice({
             const { orderItems } = action.payload;
             const existItem = state?.orderItems?.find((item) => item?.id === orderItems.id);
             if (existItem) {
-                existItem.amount += orderItems?.amount;
+                existItem.quantity += orderItems?.quantity;
             } else {
                 state.orderItems.push(orderItems);
             }
@@ -53,9 +53,15 @@ export const orderSlide = createSlice({
             return { ...initialState };
         },
 
-        // Thêm action cập nhật toàn bộ orderItems
         updateOrderItems: (state, action) => {
             state.orderItems = action.payload;
+        },
+        updateProductInCart: (state, action) => {
+            const { oldId, newId } = action.payload;
+            const itemOrder = state?.orderItems?.find((item) => item?.id === oldId);
+            if (itemOrder) {
+                itemOrder.id = newId;
+            }
         },
     },
 });
@@ -67,6 +73,7 @@ export const {
     decreaseAmount,
     resetOrder,
     updateOrderItems,
+    updateProductInCart,
 } = orderSlide.actions;
 
 export default orderSlide.reducer;

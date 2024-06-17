@@ -84,6 +84,7 @@ const Header = () => {
             const res = products.filter((item) => item.productName.includes(searchValue));
             setSearchResults(res);
             navigate('/products');
+            setSearchValue('');
             dispatch(updateSearch(searchResults));
         } else {
             setSearchResults([]);

@@ -6,7 +6,7 @@ import * as ProductService from '../../services/ProductService';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { resetProduct, updateProduct } from '../../redux/slides/productSlide';
-import { addProduct } from '../../redux/slides/orderSlide';
+import { addProduct, updateProductInCart } from '../../redux/slides/orderSlide';
 import { useEffect, useMemo, useState } from 'react';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import { ToastContainer, toast } from 'react-toastify';
@@ -192,13 +192,14 @@ const ProductDetail = () => {
         };
 
         if (quantityProduct !== 0) {
+            const tempIdCart = 'tempId_' + new Date().getTime();
             // add product to order slide in redux
             dispatch(
                 addProduct({
                     orderItems: {
-                        id: product_Redux.id, // idCart
+                        id: tempIdCart, // idCart
                         product: {
-                            id: product_Redux.id,
+                            id: product_Redux.id, // idProduct
                             productName: productName,
                             img: img,
                             price: price,
@@ -216,6 +217,15 @@ const ProductDetail = () => {
                     productAddToCart: dataAddToCart,
                 },
                 {
+                    onSuccess: (data) => {
+                        const idCart = data?.data;
+                        dispatch(
+                            updateProductInCart({
+                                oldId: tempIdCart,
+                                newId: idCart,
+                            })
+                        );
+                    },
                     onError: () => {
                         toast.error('Có lỗi xảy ra! Vui lòng thử lại sau!');
                     },

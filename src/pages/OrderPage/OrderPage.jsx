@@ -25,6 +25,7 @@ const OrderPage = () => {
 
     // get orders from redux
     const orders = useSelector((state) => state.orderProduct.orderItems);
+    console.log('orders -->', orders);
     const amountProduct = orders?.length;
 
     // get total price of all product in cart
@@ -83,14 +84,11 @@ const OrderPage = () => {
         ...order,
         quantity: order.quantity,
     }));
-    console.log('redux -->', orders);
-    console.log('formatData -->', formatData);
 
     // total quantity in cart
     const total = formatData.reduce((acc, order) => {
         return acc + order.quantity;
     }, 0);
-    console.log('total quantity in cart -->', total);
 
     // call api when total quantity change
     useEffect(() => {

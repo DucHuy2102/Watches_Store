@@ -81,7 +81,7 @@ const Header = () => {
     const handleKeyPress = (e) => {
         if (e.key === 'Enter' && searchValue) {
             const res = products.filter((item) => item.productName.includes(searchValue));
-            dispatch(updateSearch(res));
+            dispatch(updateSearch(res, searchValue));
             navigate('/products');
             setSearchValue('');
         }

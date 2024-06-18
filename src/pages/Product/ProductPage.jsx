@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ProductCard } from '../exportPages';
 import { PaginationComponent, Sort_Filter } from '../../components/exportComponents';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,10 +33,12 @@ const ProductPage = () => {
 
     // Clear search data in redux store when component unmounts
     useEffect(() => {
-        return () => {
-            dispatch(clearSearch());
-        };
-    }, [dispatch]);
+        if (dataSearch_Redux.length > 0) {
+            return () => {
+                dispatch(clearSearch());
+            };
+        }
+    }, [dataSearch_Redux.length, dispatch]);
 
     return (
         <div className='w-full mb-2 flex flex-col items-center justify-center'>

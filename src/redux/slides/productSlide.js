@@ -26,6 +26,7 @@ const initialState = {
         weight: '',
         category: '',
         discount: 0,
+        waterproof: 0,
     },
 };
 
@@ -67,6 +68,25 @@ export const productSlide = createSlice({
                 );
             }
         },
+        filterProducts: (state, action) => {
+            const filters = action.payload;
+            state.products = state.originalProducts.filter((item) => {
+                return filters.every((filter) => {
+                    switch (filter.title) {
+                        case 'Đối tượng':
+                            return item.genderUser === filter.key;
+                        case 'Chất liệu dây':
+                            return item.wireMaterial === filter.key;
+                        case 'Hình dáng mặt đồng hồ':
+                            return item.shape === filter.key;
+                        case 'Kháng nước':
+                            return item.waterproof === filter.key;
+                        default:
+                            return true;
+                    }
+                });
+            });
+        },
     },
 });
 
@@ -77,6 +97,7 @@ export const {
     updateProduct,
     resetProduct,
     addAllProducts,
+    filterProducts,
 } = productSlide.actions;
 
 export default productSlide.reducer;

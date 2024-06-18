@@ -47,7 +47,7 @@ const ProductDetail = () => {
         thickness,
         wireMaterial,
         weight,
-        category,
+        waterproof,
     } = product_Redux;
 
     // reset product when component unmounts
@@ -76,7 +76,7 @@ const ProductDetail = () => {
         },
         {
             id: 4,
-            title: 'Size mặt',
+            title: 'Kích thước mặt',
             value: size,
         },
         {
@@ -106,8 +106,8 @@ const ProductDetail = () => {
         },
         {
             id: 10,
-            title: 'Tình trạng',
-            value: condition,
+            title: 'Kháng nước',
+            value: waterproof,
         },
         {
             id: 11,

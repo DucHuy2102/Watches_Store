@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.select-filter {
-    width: 10vw;
-    height: 5vh;
-    font-size: 16px;
-    outline: none;
-}
-
 .select-sort {
     width: 10vw;
     height: 5vh;

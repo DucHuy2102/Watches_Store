@@ -2,16 +2,17 @@ import { useEffect, useMemo, useState } from 'react';
 import { ProductCard } from '../exportPages';
 import { PaginationComponent, Sort_Filter } from '../../components/exportComponents';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearSearch } from '../../redux/slides/productSlide';
+import { clearSearch, clearFilter } from '../../redux/slides/productSlide';
 
 const ProductPage = () => {
     const dispatch = useDispatch();
 
     // Get all products from redux
-    const dataProducts_Redux = useSelector((state) => state.product.products);
+    const products_Redux = useSelector((state) => state.product.products);
 
     // Get search data from redux
-    const dataSearch_Redux = useSelector((state) => state.product.search);
+    const searchProduct_Redux = useSelector((state) => state.product.search);
+    const isFilter = useSelector((state) => state.product.isFilter);
 
     // Pagination state and function to handle pagination logic
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,8 +22,8 @@ const ProductPage = () => {
 
     // Get data to display on page
     const dataToDisplay = useMemo(() => {
-        return dataSearch_Redux.length > 0 ? dataSearch_Redux : dataProducts_Redux;
-    }, [dataProducts_Redux, dataSearch_Redux]);
+        return searchProduct_Redux.length > 0 ? searchProduct_Redux : products_Redux;
+    }, [products_Redux, searchProduct_Redux]);
 
     // Get products to display on page
     const displayData = useMemo(() => {
@@ -33,12 +34,16 @@ const ProductPage = () => {
 
     // Clear search data in redux store when component unmounts
     useEffect(() => {
-        if (dataSearch_Redux.length > 0) {
+        if (searchProduct_Redux.length > 0) {
             return () => {
                 dispatch(clearSearch());
             };
+        } else if (isFilter) {
+            return () => {
+                dispatch(clearFilter());
+            };
         }
-    }, [dataSearch_Redux.length, dispatch]);
+    }, [searchProduct_Redux.length, dispatch, isFilter]);
 
     return (
         <div className='w-full mb-2 flex flex-col items-center justify-center'>

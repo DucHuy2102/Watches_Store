@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     search: [],
+    isFilter: false,
     products: [],
     originalProducts: [],
     product: {
@@ -70,22 +71,39 @@ export const productSlide = createSlice({
         },
         filterProducts: (state, action) => {
             const filters = action.payload;
-            state.products = state.originalProducts.filter((item) => {
-                return filters.every((filter) => {
-                    switch (filter.title) {
-                        case 'Đối tượng':
-                            return item.genderUser === filter.key;
-                        case 'Chất liệu dây':
-                            return item.wireMaterial === filter.key;
-                        case 'Hình dáng mặt đồng hồ':
-                            return item.shape === filter.key;
-                        case 'Kháng nước':
-                            return item.waterproof === filter.key;
-                        default:
-                            return true;
-                    }
+            let count = 0;
+            if (filters.length === 0) {
+                state.products = state.originalProducts;
+                return;
+            } else {
+                state.products = state.originalProducts.filter((item) => {
+                    return filters.every((filter) => {
+                        switch (filter.title) {
+                            case 'Đối tượng':
+                                count++;
+                                return item.genderUser === filter.key;
+                            case 'Chất liệu dây':
+                                count++;
+                                return item.wireMaterial === filter.key;
+                            case 'Hình dáng mặt đồng hồ':
+                                count++;
+                                return item.shape === filter.key;
+                            case 'Kháng nước':
+                                count++;
+                                return item.waterproof === Number(filter.key);
+                            default:
+                                return true;
+                        }
+                    });
                 });
-            });
+            }
+            if (count !== 0) {
+                state.isFilter = true;
+            }
+        },
+        clearFilter: (state) => {
+            state.isFilter = false;
+            state.products = state.originalProducts;
         },
     },
 });
@@ -98,6 +116,7 @@ export const {
     resetProduct,
     addAllProducts,
     filterProducts,
+    clearFilter,
 } = productSlide.actions;
 
 export default productSlide.reducer;

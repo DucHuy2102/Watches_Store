@@ -107,7 +107,7 @@ const ProductDetail = () => {
         {
             id: 10,
             title: 'Kháng nước',
-            value: waterproof,
+            value: `${waterproof}atm`,
         },
         {
             id: 11,
@@ -191,48 +191,52 @@ const ProductDetail = () => {
             quantity: quantityProduct,
         };
 
-        if (quantityProduct !== 0) {
-            const tempIdCart = 'tempId_' + new Date().getTime();
-            // add product to order slide in redux
-            dispatch(
-                addProduct({
-                    orderItems: {
-                        id: tempIdCart, // idCart
-                        product: {
-                            id: product_Redux.id, // idProduct
-                            productName: productName,
-                            img: img,
-                            price: price,
+        if (tokenUser) {
+            if (quantityProduct !== 0) {
+                const tempIdCart = 'tempId_' + new Date().getTime();
+                // add product to order slide in redux
+                dispatch(
+                    addProduct({
+                        orderItems: {
+                            id: tempIdCart, // idCart
+                            product: {
+                                id: product_Redux.id, // idProduct
+                                productName: productName,
+                                img: img,
+                                price: price,
+                            },
+                            quantity: quantityProduct,
                         },
-                        quantity: quantityProduct,
-                    },
-                })
-            );
-            toast.success('Đã thêm vào giỏ hàng!');
+                    })
+                );
+                toast.success('Đã thêm vào giỏ hàng!');
 
-            // call mutationAddToCart to add product to cart in database
-            mutationAddToCart.mutate(
-                {
-                    token: tokenUser,
-                    productAddToCart: dataAddToCart,
-                },
-                {
-                    onSuccess: (data) => {
-                        const idCart = data?.data;
-                        dispatch(
-                            updateProductInCart({
-                                oldId: tempIdCart,
-                                newId: idCart,
-                            })
-                        );
+                // call mutationAddToCart to add product to cart in database
+                mutationAddToCart.mutate(
+                    {
+                        token: tokenUser,
+                        productAddToCart: dataAddToCart,
                     },
-                    onError: () => {
-                        toast.error('Có lỗi xảy ra! Vui lòng thử lại sau!');
-                    },
-                }
-            );
+                    {
+                        onSuccess: (data) => {
+                            const idCart = data?.data;
+                            dispatch(
+                                updateProductInCart({
+                                    oldId: tempIdCart,
+                                    newId: idCart,
+                                })
+                            );
+                        },
+                        onError: () => {
+                            toast.error('Có lỗi xảy ra! Vui lòng thử lại sau!');
+                        },
+                    }
+                );
+            } else {
+                toast.error('Vui lòng chọn số lượng sản phẩm!');
+            }
         } else {
-            toast.error('Vui lòng chọn số lượng sản phẩm!');
+            toast.error('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!');
         }
     };
 
@@ -269,9 +273,11 @@ const ProductDetail = () => {
 
                         {/* price product */}
                         <div className='flex flex-wrap justify-start items-center gap-4 mt-2'>
-                            <p className='text-blue-500 text-4xl font-bold'>{priceFormat}</p>
+                            <p className='text-blue-500 text-4xl font-bold'>
+                                {discountPriceFormat}
+                            </p>
                             <p className='text-gray-400 text-xl flex justify-start items-center'>
-                                <strike>{discountPriceFormat}</strike>
+                                <strike>{priceFormat}</strike>
                                 <span className='text-sm bg-red-500 text-white px-2 py-1 rounded-lg ml-3'>
                                     -{discount}%
                                 </span>

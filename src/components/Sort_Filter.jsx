@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { filterProducts, sortProducts } from '../redux/slides/productSlide';
 import { useDispatch, useSelector } from 'react-redux';
@@ -222,7 +222,7 @@ const Sort_Filter = () => {
                 {/* sort */}
                 <Select
                     placeholder='Sắp xếp'
-                    className='select-sort'
+                    className='w-[10vw] h-[5vh] outline-none'
                     allowClear
                     onChange={handleSort}
                     options={[

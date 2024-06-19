@@ -52,7 +52,6 @@ const LoginPage = () => {
             const tokenUser = localStorage.getItem('tokenUser');
             const response = await ProductService.getOrdersByUserId(tokenUser);
             const ordersData = response?.data;
-            console.log('get data api', ordersData, 'total', ordersData?.length);
 
             // dispatch ordersData to redux
             dispatch(updateOrderItems(ordersData));

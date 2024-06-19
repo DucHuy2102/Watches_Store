@@ -15,6 +15,7 @@ import { addAllProducts } from '../../redux/slides/productSlide';
 const HomePage = () => {
     const dispatch = useDispatch();
     const products_Redux = useSelector((state) => state.product.products);
+    const productLength = products_Redux.length;
 
     // Function to get all products from API
     const getProducts = async () => {
@@ -27,15 +28,15 @@ const HomePage = () => {
         queryKey: ['products'],
         queryFn: getProducts,
         // Only fetch if products are not in redux
-        enabled: products_Redux.length === 0,
+        enabled: productLength === 0,
     });
 
     // Add all products to redux store
     useEffect(() => {
-        if (data?.data && products_Redux.length === 0) {
+        if (data?.data && productLength === 0) {
             dispatch(addAllProducts(data?.data));
         }
-    }, [data, dispatch, products_Redux.length]);
+    }, [data, dispatch, productLength]);
 
     // scroll to top when render page
     useEffect(() => {

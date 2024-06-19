@@ -11,6 +11,7 @@ import * as ProductService from '../../services/ProductService';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { addAllProducts } from '../../redux/slides/productSlide';
+import { updateOrderItems } from '../../redux/slides/orderSlide';
 
 const HomePage = () => {
     const dispatch = useDispatch();
@@ -34,7 +35,7 @@ const HomePage = () => {
     // Add all products to redux store
     useEffect(() => {
         if (data?.data && productLength === 0) {
-            dispatch(addAllProducts(data?.data));
+            dispatch(addAllProducts(data.data));
         }
     }, [data, dispatch, productLength]);
 

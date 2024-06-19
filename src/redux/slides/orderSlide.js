@@ -1,6 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+const findProductById = (products, id) => {
+    return products.find((product) => product.id === id);
+};
 const initialState = {
+    products: [],
     orderItems: [],
     shippingAddress: {},
     paymentMethod: '',
@@ -18,11 +21,27 @@ export const orderSlide = createSlice({
     name: 'orderProduct',
     initialState,
     reducers: {
+        updateOrderItems: (state, action) => {
+            state.orderItems = action.payload;
+        },
+
         addProduct: (state, action) => {
-            const { orderItems } = action.payload;
-            const existItem = state?.orderItems?.find((item) => item?.id === orderItems.id);
-            if (existItem) {
-                existItem.quantity += orderItems?.quantity;
+            const { products, orderItems } = action.payload;
+            state.products = products;
+            const productInProducts = findProductById(state.products, orderItems.product.id);
+            if (productInProducts) {
+                // If orderItems already exists, update quantity in orderItems
+                const existItemInOrder = state.orderItems.find(
+                    (item) => item.product.id === orderItems.product.id
+                );
+                if (existItemInOrder) {
+                    existItemInOrder.quantity += orderItems.quantity;
+                } else {
+                    state.orderItems.push({
+                        ...orderItems,
+                        quantity: productInProducts.quantity + orderItems.quantity,
+                    });
+                }
             } else {
                 state.orderItems.push(orderItems);
             }
@@ -53,9 +72,6 @@ export const orderSlide = createSlice({
             return { ...initialState };
         },
 
-        updateOrderItems: (state, action) => {
-            state.orderItems = action.payload;
-        },
         updateProductInCart: (state, action) => {
             const { oldId, newId } = action.payload;
             const itemOrder = state?.orderItems?.find((item) => item?.id === oldId);

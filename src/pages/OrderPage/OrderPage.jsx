@@ -96,7 +96,7 @@ const OrderPage = () => {
                 mutation.mutate({ token: token, data: formatData });
             }
         };
-    }, [total, token]);
+    }, [total, token, mutation, formatData]);
 
     // handle checkout
     const handleCheckout = () => {

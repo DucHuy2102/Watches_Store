@@ -27,6 +27,9 @@ const ProductDetail = () => {
     // get 1 product from redux
     const product_Redux = useSelector((state) => state.product.product);
 
+    // get all products from redux
+    const products_Redux = useSelector((state) => state.product.products);
+
     // destructuring product_Redux
     const {
         brand,
@@ -197,6 +200,7 @@ const ProductDetail = () => {
                 // add product to order slide in redux
                 dispatch(
                     addProduct({
+                        products: products_Redux,
                         orderItems: {
                             id: tempIdCart, // idCart
                             product: {

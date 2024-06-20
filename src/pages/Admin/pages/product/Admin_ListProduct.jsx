@@ -45,7 +45,6 @@ const Admin_ListProduct = () => {
         keepPreviousData: true,
         enabled: productLength === 0,
     });
-    console.log(data?.data);
 
     // Add all products to redux store
     useEffect(() => {

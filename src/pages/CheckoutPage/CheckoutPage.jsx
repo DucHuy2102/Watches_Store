@@ -1,263 +1,366 @@
+import { Form, Input, Select } from 'antd';
+import { HomeOutlined, UserOutlined, TruckOutlined, PhoneOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useMutationHook } from '../../hooks/useMutationHook';
+import * as ProductService from '../../services/ProductService';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
+import { resetOrder } from '../../redux/slides/orderSlide';
+
+// validate form
+const validateMessages = {
+    required: '${label} không được bỏ trống!',
+    types: {
+        email: '${label} không đúng định dạng!',
+        number: '${label} chỉ chứa số!',
+    },
+};
+
 const CheckoutPage = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const token = localStorage.getItem('tokenUser');
+
+    // get data from redux
+    const user_Redux = useSelector((state) => state.user);
+    const orders_Redux = useSelector((state) => state.orderProduct.orderItems);
+
+    // format price
+    const priceFormat = (price) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(price);
+    };
+
+    // get total price of all product in cart
+    const totalPrice = orders_Redux.reduce((acc, order) => {
+        return acc + order.product.price * order.quantity;
+    }, 0);
+
+    const [phone, setPhone] = useState(user_Redux.phone ?? '');
+    const [firstname, setFirstName] = useState(user_Redux.firstname ?? '');
+    const [lastname, setLastName] = useState(user_Redux.lastname ?? '');
+    const fullName = `${firstname} ${lastname}`;
+    const [email, setEmail] = useState(user_Redux.email ?? '');
+    const [address, setAddress] = useState(user_Redux.address ?? '');
+
+    const mutationCheckout = useMutationHook(({ token, data }) => {
+        ProductService.createOrder(token, data);
+    });
+
+    const productItem = orders_Redux.map((item) => {
+        return item.id;
+    });
+
+    // handle checkout
+    const handleCheckout = () => {
+        mutationCheckout.mutate(
+            { token: token, data: { productItem, address } },
+            {
+                onSuccess: () => {
+                    toast.success('Đặt hàng thành công! Đang chuyển về trang chủ');
+                    setTimeout(() => {
+                        dispatch(resetOrder());
+                        navigate('/');
+                    }, 2000);
+                },
+            }
+        );
+    };
+
     return (
         <div className='bg-gray-100 min-h-screen py-8'>
             <div className='container mx-auto px-4'>
+                {/* title page */}
                 <h1 className='text-3xl text-center font-bold mb-4'>Thanh toán hóa đơn</h1>
+
+                {/* content */}
                 <div className='container py-5'>
-                    <div className='lg:flex justify-between'>
+                    <div className='lg:flex justify-between gap-2'>
+                        {/* left content */}
                         <div className='lg:w-2/3'>
                             <div className='bg-white shadow-md rounded-lg mb-4'>
+                                {/* infomation user */}
                                 <div className='px-6 py-4'>
-                                    <h4 className='text-lg font-semibold mb-2'>Billing address</h4>
-                                    <form className='space-y-4'>
-                                        <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                                            <div>
-                                                <label
-                                                    htmlFor='firstName'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    First name
-                                                </label>
-                                                <input
-                                                    type='text'
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='firstName'
-                                                    placeholder=''
-                                                    required
+                                    {/* title */}
+                                    <h4 className='text-xl font-semibold mb-5'>
+                                        Thông tin đơn hàng
+                                    </h4>
+
+                                    {/* form */}
+                                    <Form layout='vertical' validateMessages={validateMessages}>
+                                        <div className='w-full flex items-center justify-between gap-5'>
+                                            {/* fullName = firstname + lastname */}
+                                            <Form.Item
+                                                label='Họ và tên khách hàng'
+                                                className='w-[50%]'
+                                            >
+                                                <Input
+                                                    disabled
+                                                    value={fullName}
+                                                    className='w-full '
                                                 />
-                                                <div className='text-red-600 text-xs mt-1'>
-                                                    Valid first name is required.
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    htmlFor='lastName'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    Last name
-                                                </label>
-                                                <input
-                                                    type='text'
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='lastName'
-                                                    placeholder=''
-                                                    required
+                                            </Form.Item>
+
+                                            {/* email */}
+                                            <Form.Item
+                                                label='Email liên hệ'
+                                                className='text-red-500 w-[40%] text-start'
+                                            >
+                                                <Input
+                                                    disabled
+                                                    value={email}
+                                                    className='border border-gray-300 rounded'
                                                 />
-                                                <div className='text-red-600 text-xs mt-1'>
-                                                    Valid last name is required.
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    htmlFor='email'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    Email
-                                                </label>
-                                                <input
-                                                    type='email'
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='email'
-                                                    placeholder='you@example.com'
-                                                    required
+                                            </Form.Item>
+
+                                            {/* phone */}
+                                            <Form.Item
+                                                label='Số điện thoại'
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                    },
+                                                    () => ({
+                                                        validator(_, value) {
+                                                            if (isNaN(value)) {
+                                                                return Promise.reject(
+                                                                    'Số điện thoại phải là số và không chứa ký tự đặc biệt!'
+                                                                );
+                                                            } else if (
+                                                                value.length > 0 &&
+                                                                value.length !== 10
+                                                            ) {
+                                                                return Promise.reject(
+                                                                    'Số điện thoại phải có 10 số!'
+                                                                );
+                                                            }
+                                                            return Promise.resolve();
+                                                        },
+                                                    }),
+                                                ]}
+                                                className='text-red-500 w-[30%] text-start flex-grow'
+                                            >
+                                                <Input
+                                                    value={phone}
+                                                    onChange={(e) => setPhone(e.target.value)}
+                                                    className='border border-gray-300 rounded'
                                                 />
-                                                <div className='text-red-600 text-xs mt-1'>
-                                                    Please enter a valid email address for shipping
-                                                    updates.
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    htmlFor='address'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    Address
-                                                </label>
-                                                <input
-                                                    type='text'
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='address'
-                                                    placeholder='1234 Main St'
-                                                    required
-                                                />
-                                                <div className='text-red-600 text-xs mt-1'>
-                                                    Please enter your shipping address.
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    htmlFor='address2'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    Address 2{' '}
-                                                    <span className='text-gray-400'>
-                                                        (Optional)
-                                                    </span>
-                                                </label>
-                                                <input
-                                                    type='text'
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='address2'
-                                                    placeholder='Apartment or suite'
-                                                />
-                                            </div>
-                                            <div>
-                                                <label
-                                                    htmlFor='country'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    Country
-                                                </label>
-                                                <select
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='country'
-                                                    required
-                                                >
-                                                    <option value=''>Choose...</option>
-                                                    <option>India</option>
-                                                </select>
-                                                <div className='text-red-600 text-xs mt-1'>
-                                                    Please select a valid country.
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    htmlFor='state'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    State
-                                                </label>
-                                                <select
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='state'
-                                                    required
-                                                >
-                                                    <option value=''>Choose...</option>
-                                                    <option>Punjab</option>
-                                                </select>
-                                                <div className='text-red-600 text-xs mt-1'>
-                                                    Please provide a valid state.
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    htmlFor='zip'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    Zip
-                                                </label>
-                                                <input
-                                                    type='text'
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='zip'
-                                                    placeholder=''
-                                                    required
-                                                />
-                                                <div className='text-red-600 text-xs mt-1'>
-                                                    Zip code required.
-                                                </div>
-                                            </div>
+                                            </Form.Item>
                                         </div>
-                                    </form>
+
+                                        <div className='w-full flex items-center justify-between gap-5'>
+                                            {/* address */}
+                                            <Form.Item
+                                                label='Địa chỉ nhận hàng'
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message:
+                                                            'Địa chỉ nhận hàng không được bỏ trống!',
+                                                    },
+                                                ]}
+                                                className='w-[70%]'
+                                            >
+                                                <Input
+                                                    value={address}
+                                                    onChange={(e) => setAddress(e.target.value)}
+                                                    className='w-full'
+                                                />
+                                            </Form.Item>
+
+                                            {/* payment method */}
+                                            <Form.Item
+                                                label='Phương thức thanh toán'
+                                                className='flex-grow'
+                                            >
+                                                <Select>
+                                                    <Select.Option value='cash'>
+                                                        Thanh toán khi nhận hàng
+                                                    </Select.Option>
+                                                    <Select.Option value='vnpay'>
+                                                        VNPAY
+                                                    </Select.Option>
+                                                </Select>
+                                            </Form.Item>
+                                        </div>
+                                    </Form>
+                                </div>
+
+                                {/* infomation product */}
+                                <div className='px-6 py-4'>
+                                    {/* title */}
+                                    <h4 className='text-xl font-semibold mb-5'>
+                                        Thông tin sản phẩm
+                                    </h4>
+
+                                    {/* table display infomation orders */}
+                                    <table className='w-full'>
+                                        {/* header table */}
+                                        <thead>
+                                            <tr>
+                                                <th className='text-left font-semibold'>
+                                                    Sản phẩm
+                                                </th>
+                                                <th className='font-semibold text-center'>
+                                                    Đơn giá
+                                                </th>
+                                                <th className='font-semibold text-center'>
+                                                    Số lượng
+                                                </th>
+                                                <th className='font-semibold text-center'>
+                                                    Thành tiền
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        {/* body product */}
+                                        <tbody>
+                                            {orders_Redux?.map((item) => {
+                                                return (
+                                                    <tr key={item.id}>
+                                                        {/* image, name */}
+                                                        <td className='py-4'>
+                                                            <div className='flex items-center'>
+                                                                {/* image */}
+                                                                <img
+                                                                    className='h-16 w-16 mr-4'
+                                                                    src={item.product.img[0]}
+                                                                    alt='Product image'
+                                                                />
+
+                                                                {/* name */}
+                                                                <span className='w-80 font-semibold'>
+                                                                    {item.product.productName}
+                                                                </span>
+                                                            </div>
+                                                        </td>
+
+                                                        {/* price */}
+                                                        <td className='py-4 text-center'>
+                                                            {priceFormat(item.product.price)}
+                                                        </td>
+
+                                                        {/* quantity */}
+                                                        <td className='py-4 text-center'>
+                                                            {item.quantity}
+                                                        </td>
+
+                                                        {/* total price = (price * quantity) */}
+                                                        <td className='py-4 text-center'>
+                                                            {priceFormat(
+                                                                item.product.price * item.quantity
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
+
+                        {/* right content */}
                         <div className='lg:w-1/3'>
-                            <div className='bg-white shadow-md rounded-lg mb-4'>
-                                <div className='px-6 py-4'>
-                                    <h4 className='text-lg font-semibold mb-2'>Payment</h4>
-                                    <form className='space-y-4'>
-                                        <div className='grid grid-cols-1 gap-4'>
-                                            <div>
-                                                <label
-                                                    htmlFor='cc-name'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    Name on card
-                                                </label>
-                                                <input
-                                                    type='text'
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='cc-name'
-                                                    placeholder=''
-                                                    required
-                                                />
-                                                <small className='block text-xs text-gray-400'>
-                                                    Full name as displayed on card
-                                                </small>
-                                                <div className='text-red-600 text-xs mt-1'>
-                                                    Name on card is required
+                            <div className='bg-white shadow-md rounded-lg'>
+                                {/* summary user info */}
+                                <div>
+                                    <h4 className='text-lg font-semibold mb-2 px-6 pt-4'>
+                                        Địa chỉ giao hàng
+                                    </h4>
+                                    <div className='px-6 pb-4'>
+                                        <div className='flex justify-start items-center gap-10'>
+                                            <div className='flex items-center gap-2 mb-2'>
+                                                <div className='bg-blue-300 px-3 rounded-lg'>
+                                                    <UserOutlined />
                                                 </div>
+                                                <span>{fullName}</span>
                                             </div>
-                                            <div>
-                                                <label
-                                                    htmlFor='cc-number'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    Credit card number
-                                                </label>
-                                                <input
-                                                    type='text'
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='cc-number'
-                                                    placeholder=''
-                                                    required
-                                                />
-                                                <div className='text-red-600 text-xs mt-1'>
-                                                    Credit card number is required
+                                            <div className='flex items-center gap-2 mb-2'>
+                                                <div className='bg-blue-300 px-3 rounded-lg'>
+                                                    <PhoneOutlined />
                                                 </div>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    htmlFor='cc-expiration'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    Expiration
-                                                </label>
-                                                <input
-                                                    type='text'
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='cc-expiration'
-                                                    placeholder=''
-                                                    required
-                                                />
-                                                <div className='text-red-600 text-xs mt-1'>
-                                                    Expiration date required
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    htmlFor='cc-cvv'
-                                                    className='block text-sm font-medium text-gray-700'
-                                                >
-                                                    CVV
-                                                </label>
-                                                <input
-                                                    type='text'
-                                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
-                                                    id='cc-cvv'
-                                                    placeholder=''
-                                                    required
-                                                />
-                                                <div className='text-red-600 text-xs mt-1'>
-                                                    Security code required
-                                                </div>
+                                                <span>{phone}</span>
                                             </div>
                                         </div>
+                                        <div className='flex items-center gap-2 mb-2'>
+                                            <div className='bg-green-300 px-3 rounded-lg'>
+                                                <HomeOutlined />
+                                            </div>
+                                            <span>{address}</span>
+                                        </div>
+                                        <div className='flex items-center gap-2'>
+                                            <div className='bg-yellow-300 px-3 rounded-lg'>
+                                                <TruckOutlined />
+                                            </div>
+                                            <span>Được giao bởi TNT SKY</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* order summary */}
+                                <div className='px-6'>
+                                    <h4 className='text-lg font-semibold mb-2'>
+                                        Đơn hàng - {orders_Redux.length} sản phẩm
+                                    </h4>
+
+                                    {/* infomation pay */}
+                                    <div>
+                                        <hr className='border-gray-300 my-1' />
+
+                                        <div className='w-full text-lg flex justify-between'>
+                                            <span className='text-gray-500'>Tạm tính</span>
+                                            <span>{priceFormat(totalPrice)}</span>
+                                        </div>
+                                        <div className='w-full text-lg flex justify-between'>
+                                            <span className='text-gray-500'>Phí vận chuyển</span>
+                                            <span>40.000 ₫</span>
+                                        </div>
+                                        <hr className='border-gray-300 my-1' />
+                                        <div className='w-full text-lg flex justify-between'>
+                                            <span className='text-black'>Tổng tiền</span>
+                                            <span className='text-red-500'>
+                                                {priceFormat(totalPrice + 40000)}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className='text-sm text-gray-500 w-full flex justify-center items-center'>
+                                                (Đã bao gồm thuế GTGT, phí đóng gói và các chi phí
+                                                phát sinh khác)
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* button */}
+                                    <div className='mt-5 pb-5'>
                                         <button
-                                            className='w-full py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                                            type='submit'
-                                            disabled
+                                            onClick={handleCheckout}
+                                            className='bg-red-500 text-white w-full py-2 rounded-md text-lg'
                                         >
-                                            Hoàn tất thanh toán
+                                            Đặt hàng
                                         </button>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <ToastContainer
+                position='top-right'
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };

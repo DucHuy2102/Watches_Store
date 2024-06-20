@@ -38,7 +38,7 @@ const CoverImg_ProfileUser = () => {
     const mutation = useMutationHook(({ getToken, userInfo_From_Redux }) => {
         UserService.updateInfoUser(getToken, userInfo_From_Redux);
     });
-    const getToken = localStorage.getItem('tokenUSer');
+    const getToken = localStorage.getItem('tokenUser'); 
 
     const handleChangeBackgroundImage = async (event) => {
         event.preventDefault();

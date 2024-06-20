@@ -103,7 +103,7 @@ const RegisterPage = () => {
                                             reject(
                                                 'Số điện thoại phải là số và không chứa ký tự đặc biệt!'
                                             );
-                                        } else if (value.length !== 10) {
+                                        } else if (value.length > 0 && value.length !== 10) {
                                             reject('Số điện thoại phải có 10 số!');
                                         } else {
                                             resolve();

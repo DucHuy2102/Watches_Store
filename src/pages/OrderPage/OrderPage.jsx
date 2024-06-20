@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -11,7 +11,7 @@ import {
     resetOrder,
 } from '../../redux/slides/orderSlide';
 import { Modal } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import * as ProductService from '../../services/ProductService';
 
@@ -78,29 +78,34 @@ const OrderPage = () => {
         ProductService.updateOrderById(token, data)
     );
 
-    // data to update order
-    const formatData = orders.map((order) => ({
-        ...order,
-        quantity: order.quantity,
-    }));
+    // format data to send to server
+    const formatData = useMemo(() => {
+        return orders.map((order) => ({
+            ...order,
+            quantity: order.quantity,
+        }));
+    }, [orders]);
 
-    // total quantity in cart
-    const total = formatData.reduce((acc, order) => {
-        return acc + order.quantity;
-    }, 0);
+    // get total quantity of all product in cart
+    const total = useMemo(() => {
+        return formatData.reduce((acc, order) => {
+            return acc + order.quantity;
+        }, 0);
+    }, [formatData]);
 
-    // call api when total quantity change
+    // update order when total quantity change
+    const prevTotalRef = useRef();
     useEffect(() => {
-        return () => {
-            if (token) {
-                mutation.mutate({ token: token, data: formatData });
-            }
-        };
+        if (prevTotalRef.current !== total && token) {
+            mutation.mutate({ token: token, data: formatData });
+        }
+        prevTotalRef.current = total;
     }, [total, token, mutation, formatData]);
 
-    // handle checkout
+    // navigate to checkout page
+    const navigate = useNavigate();
     const handleCheckout = () => {
-        console.log('click checkout');
+        navigate('/checkout');
     };
 
     return (
@@ -271,8 +276,8 @@ const OrderPage = () => {
 
                                 {/* shippingPrice */}
                                 <div className='flex justify-between mb-2'>
-                                    <span>Tiền ship</span>
-                                    <span>27.000</span>
+                                    <span>Phí vận chuyển</span>
+                                    <span>0 ₫</span>
                                 </div>
 
                                 <hr className='my-2' />

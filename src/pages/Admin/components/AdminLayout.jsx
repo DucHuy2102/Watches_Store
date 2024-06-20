@@ -24,10 +24,13 @@ const AdminLayout = ({ children }) => {
     const [selectedKeys, setSelectedKeys] = useState([]);
 
     const items = [
+        // getItem('Quản lý sản phẩm', '1', <MdOutlineProductionQuantityLimits />),
+        // getItem('Quản lý danh mục', '2', <BiCategoryAlt />),
+        // getItem('Quản lý đơn hàng', '3', <UserOutlined />),
+        // getItem('Quản lý người dùng', '4', <RiBillLine />),
         getItem('Quản lý sản phẩm', '1', <MdOutlineProductionQuantityLimits />),
-        getItem('Quản lý danh mục', '2', <BiCategoryAlt />),
-        getItem('Quản lý đơn hàng', '3', <UserOutlined />),
-        getItem('Quản lý người dùng', '4', <RiBillLine />),
+        getItem('Quản lý đơn hàng', '2', <UserOutlined />),
+        getItem('Quản lý người dùng', '3', <RiBillLine />),
     ];
 
     const handleNavigationPage = (key) => {
@@ -35,11 +38,11 @@ const AdminLayout = ({ children }) => {
         switch (key) {
             case '1':
                 return () => navigate('/admin/product');
+            // case '2':
+            //     return () => navigate('/admin/category');
             case '2':
-                return () => navigate('/admin/category');
-            case '3':
                 return () => navigate('/admin/bill');
-            case '4':
+            case '3':
                 return () => navigate('/admin/user');
             default:
                 return () => navigate('/admin/dashboard');
@@ -83,8 +86,7 @@ const AdminLayout = ({ children }) => {
 
                     {/* footer */}
                     <Footer className='text-center font-sans font-bold'>
-                        Nguyễn Đức Huy - Huỳnh Lê Huy ©
-                        {new Date().getFullYear()} HCMUTE
+                        Nguyễn Đức Huy - Huỳnh Lê Huy ©{new Date().getFullYear()} HCMUTE
                     </Footer>
                 </Layout>
             </Layout>

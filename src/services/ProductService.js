@@ -95,3 +95,36 @@ export const updateOrderById = async (token, data) => {
     });
     return res.data;
 };
+
+// create order by user id
+export const createOrder = async (token, data) => {
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/order/create`, data, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+    return res.data;
+};
+
+// get order by user id
+export const getOrderByUserId = async (token) => {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/order`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+    return res.data;
+};
+
+// delete order by user id
+export const deleteOrderById = async (token, id) => {
+    const res = await axios.delete(`${import.meta.env.VITE_API_URL}/order/delete/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+    return res.data;
+};

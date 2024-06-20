@@ -68,7 +68,7 @@ const LoginPage = () => {
                 }
             }
         }
-    }, [data, navigate, dispatch]);
+    }, [data, dispatch]);
 
     return (
         <div className='w-full flex items-center justify-between px-20 font-Lato'>

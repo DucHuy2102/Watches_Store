@@ -28,6 +28,25 @@ const Admin_LoginPage = () => {
     // logic login admin and get data admin
     const mutation = useMutationHook((data) => UserService.loginUser(data));
     const { data } = mutation;
+
+    // handle submit login and navigate to dashboard
+    const handleSubmitLogin = () => {
+        mutation.mutate(
+            { username, password },
+            {
+                onSuccess: () => {
+                    toast.success('Đăng nhập thành công! Đang chuyển hướng...');
+                    setTimeout(() => {
+                        navigate('/admin/dashboard');
+                    }, 3000);
+                },
+                onError: () => {
+                    toast.error('Đăng nhập thất bại!');
+                },
+            }
+        );
+    };
+
     useEffect(() => {
         const handleGetAdminDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
@@ -47,25 +66,7 @@ const Admin_LoginPage = () => {
             }
         };
         fetchAPI();
-    }, [data, dispatch, navigate]);
-
-    // handle submit login and navigate to dashboard
-    const handleSubmitLogin = () => {
-        mutation.mutate(
-            { username, password },
-            {
-                onSuccess: () => {
-                    toast.success('Đăng nhập thành công! Đang chuyển hướng...');
-                    setTimeout(() => {
-                        navigate('/admin/dashboard');
-                    }, 3000);
-                },
-                onError: () => {
-                    toast.error('Đăng nhập thất bại!');
-                },
-            }
-        );
-    };
+    }, [data, dispatch]);
 
     return (
         <div className='bg-gray-200 w-screen h-screen flex flex-col justify-center items-center'>

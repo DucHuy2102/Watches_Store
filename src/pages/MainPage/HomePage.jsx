@@ -28,6 +28,7 @@ const HomePage = () => {
     const { data } = useQuery({
         queryKey: ['products'],
         queryFn: getProducts,
+        keepPreviousData: true,
         // Only fetch if products are not in redux
         enabled: productLength === 0,
     });

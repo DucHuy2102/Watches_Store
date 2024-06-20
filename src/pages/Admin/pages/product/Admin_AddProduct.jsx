@@ -76,11 +76,12 @@ const AddProduct = () => {
         style: '',
         feature: '',
         shape: '',
-        condition: '',
         genderUser: '',
         description: '',
+        condition: '',
         color: '',
         weight: '',
+        waterproof: 0,
     });
 
     // get adminToken from localStorage
@@ -462,6 +463,25 @@ const AddProduct = () => {
                         <Input
                             name='color'
                             value={stateProduct.color}
+                            onChange={handleOnChange}
+                            className='w-full'
+                        />
+                    </Form.Item>
+
+                    <Form.Item
+                        label='Kháng nước'
+                        name='waterproof'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Kháng nước không được bỏ trống!',
+                            },
+                        ]}
+                        className='col-span-2 md:col-span-1'
+                    >
+                        <Input
+                            name='waterproof'
+                            value={stateProduct.waterproof}
                             onChange={handleOnChange}
                             className='w-full'
                         />

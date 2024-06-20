@@ -5,6 +5,7 @@ const initialState = {
     isFilter: false,
     products: [],
     originalProducts: [],
+    productsAdmin: [],
     product: {
         id: '',
         productName: '',
@@ -20,7 +21,6 @@ const initialState = {
         style: '',
         feature: '',
         shape: '',
-        condition: '',
         genderUser: '',
         description: '',
         color: '',
@@ -28,6 +28,7 @@ const initialState = {
         category: '',
         discount: 0,
         waterproof: 0,
+        condition: '',
     },
 };
 
@@ -50,6 +51,7 @@ export const productSlide = createSlice({
         addAllProducts: (state, action) => {
             state.products = action.payload;
             state.originalProducts = action.payload;
+            state.productsAdmin = action.payload;
         },
         sortProducts: (state, action) => {
             const option = action.payload;

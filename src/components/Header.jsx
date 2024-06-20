@@ -58,6 +58,7 @@ const Header = () => {
     // logout demo function
     const logout = () => {
         localStorage.removeItem('tokenUser');
+        localStorage.removeItem('adminToken');
         dispatch(resetUser());
         dispatch(resetOrder());
         navigate('/');

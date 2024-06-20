@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import * as ProductService from '../../../../services/ProductService';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal, Space, Table, message } from 'antd';
 import { MdDeleteOutline } from 'react-icons/md';
 import { EditOutlined } from '@ant-design/icons';
 import { useMutationHook } from '../../../../hooks/useMutationHook';
-import { useDispatch } from 'react-redux';
-import { updateProduct } from '../../../../redux/slides/productSlide';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAllProducts, updateProduct } from '../../../../redux/slides/productSlide';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
@@ -15,6 +15,10 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 const Admin_ListProduct = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    // get data from redux
+    const products_Redux = useSelector((state) => state.product.productsAdmin);
+    const productLength = products_Redux.length;
 
     // get token from localStorage
     const token = localStorage.getItem('adminToken');
@@ -39,7 +43,16 @@ const Admin_ListProduct = () => {
         queryKey: ['products'],
         queryFn: getAllProduct,
         keepPreviousData: true,
+        enabled: productLength === 0,
     });
+    console.log(data?.data);
+
+    // Add all products to redux store
+    useEffect(() => {
+        if (data?.data && productLength === 0) {
+            dispatch(addAllProducts(data.data));
+        }
+    }, [data, dispatch, productLength]);
 
     // useMutationHook to get product by id
     const mutationNavigate = useMutationHook(async (id) => {
@@ -157,10 +170,10 @@ const Admin_ListProduct = () => {
             render: (text) => (
                 <button
                     className={`hover:cursor-pointer w-24 py-2 rounded-lg uppercase ${
-                        text === 'saling' ? 'bg-blue-500 text-white' : 'bg-gray-500 text-white'
+                        text === 'bán' ? 'bg-blue-500 text-white' : 'bg-gray-500 text-white'
                     }`}
                 >
-                    {text}
+                    {text === 'bán' ? 'đang bán' : 'hết hàng'}
                 </button>
             ),
         },
@@ -198,7 +211,7 @@ const Admin_ListProduct = () => {
         username: product.username,
         price: product.price,
         amount: product.amount,
-        stateWatch: product.state,
+        stateWatch: product.amount > 0 ? 'bán' : '',
     }));
 
     return (

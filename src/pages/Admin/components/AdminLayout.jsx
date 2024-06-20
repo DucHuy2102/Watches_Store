@@ -24,10 +24,6 @@ const AdminLayout = ({ children }) => {
     const [selectedKeys, setSelectedKeys] = useState([]);
 
     const items = [
-        // getItem('Quản lý sản phẩm', '1', <MdOutlineProductionQuantityLimits />),
-        // getItem('Quản lý danh mục', '2', <BiCategoryAlt />),
-        // getItem('Quản lý đơn hàng', '3', <UserOutlined />),
-        // getItem('Quản lý người dùng', '4', <RiBillLine />),
         getItem('Quản lý sản phẩm', '1', <MdOutlineProductionQuantityLimits />),
         getItem('Quản lý đơn hàng', '2', <UserOutlined />),
         getItem('Quản lý người dùng', '3', <RiBillLine />),
@@ -38,8 +34,6 @@ const AdminLayout = ({ children }) => {
         switch (key) {
             case '1':
                 return () => navigate('/admin/product');
-            // case '2':
-            //     return () => navigate('/admin/category');
             case '2':
                 return () => navigate('/admin/bill');
             case '3':

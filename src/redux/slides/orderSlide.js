@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-const findProductById = (products, id) => {
-    return products.find((product) => product.id === id);
-};
+
 const initialState = {
     products: [],
     orderItems: [],
@@ -28,21 +26,28 @@ export const orderSlide = createSlice({
         addProduct: (state, action) => {
             const { products, orderItems } = action.payload;
             state.products = products;
-            const productInProducts = findProductById(state.products, orderItems.product.id);
+            const productInProducts = state.products.find(
+                (product) => product.id === orderItems.product.id
+            );
+
             if (productInProducts) {
-                // If orderItems already exists, update quantity in orderItems
+                // Find if the product already exists in orderItems
                 const existItemInOrder = state.orderItems.find(
                     (item) => item.product.id === orderItems.product.id
                 );
+
                 if (existItemInOrder) {
+                    // If the product exists in orderItems, update its quantity
                     existItemInOrder.quantity += orderItems.quantity;
                 } else {
+                    // If the product does not exist in orderItems, add it with the given quantity
                     state.orderItems.push({
                         ...orderItems,
-                        quantity: productInProducts.quantity + orderItems.quantity,
+                        quantity: orderItems.quantity,
                     });
                 }
             } else {
+                // If the product is not found in the products list, push the orderItems directly
                 state.orderItems.push(orderItems);
             }
         },

@@ -1,32 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import { SiAdblock } from 'react-icons/si';
 import { MdDeleteOutline } from 'react-icons/md';
 import * as UserService from '../../../../services/UserService';
-import { Form, Input, Modal, Space, Table, message } from 'antd';
+import { Form, Input, Modal, Space, Table } from 'antd';
 import { useMutationHook } from '../../../../hooks/useMutationHook';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    addAllUser,
+    blockUser,
+    deleteUser,
+    unblockUSer,
+} from '../../../../redux/slides/adminSlide';
+import { UnlockOutlined } from '@ant-design/icons';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 const Admin_UserPage = () => {
-    // delete user
+    const dispatch = useDispatch();
+    // ---------------------------------- STATE ----------------------------------
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedUserId, setSelectedUserId] = useState('');
 
-    // block user
-    const [isModalBlockUserOpen, setIsModalBlockUserOpen] = useState(null);
-    const [message_Block, setMessage_Block] = useState('');
-    const [selectedUserId, setSelectedUserId] = useState(null);
+    // ---------------------------------- GET USERS ----------------------------------
+    const tokenAdmin = localStorage.getItem('adminToken');
+
+    // get data from redux
+    const users_Redux = useSelector((state) => state.admin.users);
+    const usersLength = users_Redux.length;
 
     // list all user
-    const tokenAdmin = localStorage.getItem('adminToken');
     const getUsers = async () => {
         const res = await UserService.getAllUser(tokenAdmin);
         return res;
     };
-    const { data, refetch } = useQuery({
+
+    // using react-query to fetch data
+    const { data } = useQuery({
         queryKey: ['users'],
         queryFn: getUsers,
-        keepPreviousData: true,
+        enabled: usersLength === 0,
     });
+
+    // add all user to Redux store
+    useEffect(() => {
+        if (data?.data && usersLength === 0) {
+            dispatch(addAllUser(data.data));
+        }
+    }, [data, dispatch, usersLength]);
+
+    // ---------------------------------- DELETE USER ----------------------------------
 
     // cancel modal delete user
     const handleCancel_Delete = () => {
@@ -45,61 +68,23 @@ const Admin_UserPage = () => {
         return UserService.deleteUser(token, id);
     });
 
-    // block user function
-    const mutationBlock = useMutationHook(({ token, id }) => {
-        return UserService.blockUser(token, id);
-    });
-
     const handleOk_Delete = async () => {
         setIsModalOpen(false);
-        try {
-            mutationDelete.mutate(
-                { token, id: selectedUserId },
-                {
-                    onSuccess: () => {
-                        message.success('Xóa người dùng thành công. Trang sẽ tự động làm mới');
-                    },
-                    onError: () => {
-                        message.error('Xóa người dùng thất bại');
-                    },
-                    onSettled: () => {
-                        if (refetch) {
-                            refetch();
-                        }
-                    },
-                }
-            );
-        } catch (error) {
-            console.error('Delete user failed:', error);
-            message.error('Lỗi hệ thống! Xóa người dùng thất bại');
-        }
+        dispatch(deleteUser({ userId: selectedUserId }));
+        toast.success('Xóa người dùng thành công!');
+        mutationDelete.mutate(
+            { token, id: selectedUserId },
+            {
+                onError: (e) => {
+                    console.log('Delete User Error:', e);
+                },
+            }
+        );
     };
 
-    const handleOk_Block = () => {
-        setIsModalBlockUserOpen(false);
-        console.log('run block user');
-        try {
-            mutationBlock.mutate(
-                { token, id: selectedUserId },
-                {
-                    onSuccess: () => {
-                        message.success('Chặn người dùng thành công. Trang sẽ tự động làm mới');
-                    },
-                    onError: () => {
-                        message.error('Chặn người dùng thất bại');
-                    },
-                    onSettled: () => {
-                        if (refetch) {
-                            refetch();
-                        }
-                    },
-                }
-            );
-        } catch (error) {
-            console.error('Block user failed:', error);
-            message.error('Lỗi hệ thống! Chặn người dùng thất bại');
-        }
-    };
+    // ---------------------------------- BLOCK USER ----------------------------------
+    const [isModalBlockUserOpen, setIsModalBlockUserOpen] = useState(false);
+    const [message_Block, setMessage_Block] = useState('');
 
     // show modal block user
     const showModal_Block = (id) => {
@@ -107,12 +92,50 @@ const Admin_UserPage = () => {
         setIsModalBlockUserOpen(true);
     };
 
-    // cancel block user
+    // close modal block user
     const handleCancel_Block = () => {
         setIsModalBlockUserOpen(false);
     };
 
-    // column table
+    // block user function
+    const mutationBlock = useMutationHook(({ token, id }) => {
+        return UserService.blockUser(token, id);
+    });
+
+    // handle block user function
+    const handleOk_Block = () => {
+        setIsModalBlockUserOpen(false);
+        dispatch(blockUser({ userId: selectedUserId }));
+        toast.success('Chặn người dùng thành công!');
+        mutationBlock.mutate(
+            { token, id: selectedUserId, message: message_Block },
+            {
+                onError: (e) => {
+                    console.log('Block User Error:', e);
+                },
+            }
+        );
+    };
+
+    // ---------------------------------- UNBLOCK USER ----------------------------------
+    const mutationUnblock = useMutationHook(({ token, id }) => {
+        return UserService.unblockUser(token, id);
+    });
+
+    const handleUnblockUser = (id) => {
+        dispatch(unblockUSer({ userId: id }));
+        mutationUnblock.mutate(
+            { token, id },
+            {
+                onError: (e) => {
+                    console.log('Unblock User Error:', e);
+                },
+            }
+        );
+        toast.success('Bỏ chặn người dùng thành công!');
+    };
+
+    // column table and render data
     const columns = [
         {
             title: 'Họ và tên',
@@ -144,10 +167,10 @@ const Admin_UserPage = () => {
             render: (text) => (
                 <button
                     className={`hover:cursor-pointer w-24 py-2 rounded-lg uppercase ${
-                        text === 'online' ? 'bg-blue-500 text-white' : 'bg-gray-500 text-white'
+                        text === 'active' ? 'bg-blue-500 text-white' : 'bg-gray-500 text-white'
                     }`}
                 >
-                    {text}
+                    {text === 'active' ? 'hoạt động' : 'đã chặn'}
                 </button>
             ),
         },
@@ -157,13 +180,23 @@ const Admin_UserPage = () => {
             align: 'center',
             render: (item, _) => (
                 <Space size='middle'>
-                    <button
-                        onClick={() => showModal_Block(item.key)}
-                        className='flex justify-center items-center gap-1 hover:cursor-pointer bg-black text-white px-2 py-2 rounded-lg'
-                    >
-                        <SiAdblock size={20} />
-                        Chặn
-                    </button>
+                    {item.state === 'active' ? (
+                        <button
+                            onClick={() => showModal_Block(item.key)}
+                            className='flex justify-center items-center gap-1 hover:cursor-pointer bg-yellow-500 text-white px-2 py-2 rounded-lg'
+                        >
+                            <SiAdblock size={20} />
+                            Chặn
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => handleUnblockUser(item.key)}
+                            className='flex justify-center items-center gap-1 hover:cursor-pointer bg-green-500 text-white px-2 py-2 rounded-lg'
+                        >
+                            <UnlockOutlined size={20} />
+                            Bỏ chặn
+                        </button>
+                    )}
                     {item.state === 'blocked' && (
                         <button
                             onClick={() => showModal_Delete(item.key)}
@@ -178,20 +211,20 @@ const Admin_UserPage = () => {
         },
     ];
 
-    // data table
-    const dataTable = data?.data.map((user, indexUser) => ({
-        key: user.id || indexUser,
+    // data to display in table
+    const dataTable = users_Redux?.map((user, indexUser) => ({
+        key: user?.id || indexUser,
         fullname: `${user.firstname} ${user.lastname}`,
         username: user.username,
         phone: user.phone,
         address: user.address,
-        state: user.state,
+        state: user.state === 'active' ? 'active' : 'blocked',
     }));
 
     return (
         <div>
-            <div className='mt-3 px-14 flex justify-center items-center'>
-                <h1 className='font-bold text-3xl mt-2 text-center'>Danh sách người dùng</h1>
+            <div className='mt-1 px-14 flex justify-center items-center'>
+                <h1 className='font-bold text-3xl text-center'>Danh sách người dùng</h1>
             </div>
             <div className='w-full'>
                 <div className='mt-5'>
@@ -225,7 +258,7 @@ const Admin_UserPage = () => {
                 style={{ textAlign: 'center' }}
                 open={isModalBlockUserOpen}
                 okButtonProps={{
-                    className: 'bg-black text-white hover:bg-red-500 hover:text-white',
+                    className: 'bg-yellow-500 text-white hover:bg-red-500 hover:text-white',
                 }}
                 onOk={handleOk_Block}
                 onCancel={handleCancel_Block}
@@ -234,20 +267,26 @@ const Admin_UserPage = () => {
                     Hành động này sẽ chặn người dùng khỏi hệ thống và người dùng không thể truy cập
                     vào hệ thống!
                 </p>
-                <Form.Item
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Bạn phải điền lí do chặn!',
-                        },
-                    ]}
-                >
+                <Form.Item>
                     <Input.TextArea
                         onChange={(e) => setMessage_Block(e.target.value)}
                         placeholder='Lí do chặn người dùng'
                     />
                 </Form.Item>
             </Modal>
+
+            {/* toast */}
+            <ToastContainer
+                position='top-right'
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as UserService from '../../services/UserService';
 import { useMutationHook } from '../../hooks/useMutationHook';
@@ -14,6 +14,15 @@ import { updateOrderItems } from '../../redux/slides/orderSlide';
 const LoginPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // autoFocus on input tag
+    const inputTagRef = useRef(null);
+    useEffect(() => {
+        if (inputTagRef.current) {
+            inputTagRef.current.focus();
+        }
+    }, []);
+
     const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
@@ -99,6 +108,7 @@ const LoginPage = () => {
                         className='text-start mt-1 mb-8'
                     >
                         <Input
+                            ref={inputTagRef}
                             onChange={(e) => setUserName(e.target.value)}
                             className='w-full mt-1 px-3 py-2 border border-gray-300 rounded'
                         />

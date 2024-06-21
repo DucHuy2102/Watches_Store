@@ -7,6 +7,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
+import { useDispatch } from 'react-redux';
+import { addProductAdmin } from '../../../../redux/slides/adminSlide';
 
 const { TextArea } = Input;
 
@@ -59,6 +61,7 @@ const uploadImages = async (fileList) => {
 
 const AddProduct = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [fileList, setFileList] = useState([]);
     const [previewImage, setPreviewImage] = useState('');
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -103,12 +106,17 @@ const AddProduct = () => {
             price: priceNumber,
             img: uploadedImages,
         };
+
+        dispatch(addProductAdmin(productData));
+        toast.success('Thêm sản phẩm thành công!');
+        setTimeout(() => {
+            navigate('/admin/product');
+        }, 1000);
         mutation.mutate(
             { adminToken, product: productData },
             {
-                onSuccess: () => {
-                    toast.success('Thêm sản phẩm thành công');
-                    navigate('/admin/product');
+                onError: (error) => {
+                    console.log('Add product failed', error);
                 },
             }
         );

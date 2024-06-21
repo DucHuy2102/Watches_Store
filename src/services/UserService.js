@@ -2,19 +2,13 @@ import axios from 'axios';
 
 // login
 export const loginUser = async (data) => {
-    const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/login`,
-        data
-    );
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, data);
     return res.data;
 };
 
 // register
 export const registerUser = async (data) => {
-    const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/register`,
-        data
-    );
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, data);
     return res.data;
 };
 
@@ -30,16 +24,12 @@ export const getUserDetail = async (access_token) => {
 
 // update user info
 export const updateInfoUser = async (access_token, data) => {
-    const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/user/editDetail`,
-        data,
-        {
-            headers: {
-                Authorization: `Bearer ${access_token}`,
-                'Content-Type': 'application/json',
-            },
-        }
-    );
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/editDetail`, data, {
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+            'Content-Type': 'application/json',
+        },
+    });
     return res.data;
 };
 
@@ -55,19 +45,13 @@ export const getAddressUser = async (access_token) => {
 
 // fortgot password
 export const forgotPassword = async (data) => {
-    const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/forgotPassword`,
-        data
-    );
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgotPassword`, data);
     return res.data;
 };
 
 // reset password
 export const resetPassword = async (data) => {
-    const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/resetPassword`,
-        data
-    );
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/resetPassword`, data);
     return res.data;
 };
 
@@ -83,8 +67,22 @@ export const getAllUser = async (access_token) => {
 
 // delete user
 export const deleteUser = async (access_token, id) => {
-    const res = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/user/delete/${id}`,
+    const res = await axios.delete(`${import.meta.env.VITE_API_URL}/user/delete/${id}`, {
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+    return res.data;
+};
+
+// block user
+export const blockUser = async (access_token, id, message) => {
+    const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/user/blockUser/${id}?message=${encodeURIComponent(
+            message
+        )}`,
+        null,
         {
             headers: {
                 Authorization: `Bearer ${access_token}`,
@@ -95,17 +93,13 @@ export const deleteUser = async (access_token, id) => {
     return res.data;
 };
 
-// block user
-export const blockUser = async (access_token, id) => {
-    const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/user/blockUser/${id}`,
-        null,
-        {
-            headers: {
-                Authorization: `Bearer ${access_token}`,
-                'Content-Type': 'application/json',
-            },
-        }
-    );
+// unblock user
+export const unblockUser = async (access_token, id) => {
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/unBlockUser/${id}`, null, {
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+            'Content-Type': 'application/json',
+        },
+    });
     return res.data;
 };

@@ -11,10 +11,11 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-// import from './slides/userSlide';
+// import from './slides/...';
 import userReducer from './slides/userSlide';
 import productReducer from './slides/productSlide';
 import orderReducer from './slides/orderSlide';
+import adminReducer from './slides/adminSlide';
 
 const persistConfig = {
     key: 'root',
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
     user: userReducer,
     product: productReducer,
     orderProduct: orderReducer,
+    admin: adminReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

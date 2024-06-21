@@ -14,6 +14,7 @@ const CardItem_Product = (props) => {
 
     // get data from props
     const { id, genderUser, img, price, productName, size } = props.product;
+    // console.log('props.product', props.product);
 
     // go to product detail page
     const go_ProductDetail_Page = (id) => {

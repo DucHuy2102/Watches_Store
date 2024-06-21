@@ -1,15 +1,19 @@
-import { useQuery } from '@tanstack/react-query';
 import * as ProductService from '../../../../services/ProductService';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Modal, Space, Table, message } from 'antd';
+import { Modal, Space, Table } from 'antd';
 import { MdDeleteOutline } from 'react-icons/md';
 import { EditOutlined } from '@ant-design/icons';
 import { useMutationHook } from '../../../../hooks/useMutationHook';
 import { useDispatch, useSelector } from 'react-redux';
-import { addAllProducts, updateProduct } from '../../../../redux/slides/productSlide';
+import {
+    addAllProducts,
+    removeProductAdmin,
+    updateProduct,
+} from '../../../../redux/slides/adminSlide';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
+import { useQuery } from '@tanstack/react-query';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 const Admin_ListProduct = () => {
@@ -17,8 +21,29 @@ const Admin_ListProduct = () => {
     const dispatch = useDispatch();
 
     // get data from redux
-    const products_Redux = useSelector((state) => state.product.productsAdmin);
+    const products_Redux = useSelector((state) => state.admin.productsAdmin);
     const productLength = products_Redux.length;
+
+    // Function to get all products from API
+    const getProducts = async () => {
+        const res = await ProductService.getAllProduct();
+        return res;
+    };
+
+    // Fetch data from API using react-query
+    const { data } = useQuery({
+        queryKey: ['products'],
+        queryFn: getProducts,
+        // Only fetch if products are not in redux
+        enabled: productLength === 0,
+    });
+
+    // Add all products to redux store
+    useEffect(() => {
+        if (data?.data && productLength === 0) {
+            dispatch(addAllProducts(data.data));
+        }
+    }, [data, dispatch, productLength]);
 
     // get token from localStorage
     const token = localStorage.getItem('adminToken');
@@ -32,52 +57,15 @@ const Admin_ListProduct = () => {
         return () => navigate(path);
     };
 
-    // get all product
-    const getAllProduct = async () => {
-        const res = await ProductService.getAllProduct();
-        return res;
-    };
-
-    // useQuery to get all product
-    const { data, refetch } = useQuery({
-        queryKey: ['products'],
-        queryFn: getAllProduct,
-        keepPreviousData: true,
-        enabled: productLength === 0,
-    });
-
-    // Add all products to redux store
-    useEffect(() => {
-        if (data?.data && productLength === 0) {
-            dispatch(addAllProducts(data.data));
-        }
-    }, [data, dispatch, productLength]);
-
-    // useMutationHook to get product by id
-    const mutationNavigate = useMutationHook(async (id) => {
-        try {
-            const res = await ProductService.getProductById(id);
-            if (res.code === 200) {
-                dispatch(updateProduct(res.data));
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    });
-
     // handle edit product
     const handleEditProduct = (id) => {
-        mutationNavigate.mutate(id, {
-            onSuccess: () => {
-                toast.success('Chuyển đến trang Sửa thông tin sản phẩm');
-                setTimeout(() => {
-                    navigate(`/admin/product/edit/${id}`);
-                }, 3000);
-            },
-            onError: () => {
-                console.log('Get product by id failed');
-            },
-        });
+        const product = products_Redux.find((product) => product.id === id);
+        if (product) {
+            dispatch(updateProduct(product));
+            navigate(`/admin/product/edit/${id}`);
+        } else {
+            console.error(`Product with id ${id} not found`);
+        }
     };
 
     // show modal when click delete button
@@ -94,26 +82,12 @@ const Admin_ListProduct = () => {
     // onClick delete button
     const handleOk = () => {
         setIsModalOpen(false);
+        dispatch(removeProductAdmin({ idProduct: selectedProductId }));
+        toast.success('Xóa sản phẩm thành công!');
         try {
-            mutationDelete.mutate(
-                { token, id: selectedProductId },
-                {
-                    onSuccess: () => {
-                        toast.success('Xóa sản phẩm thành công. Trang sẽ tự động làm mới');
-                    },
-                    onError: () => {
-                        toast.error('Xóa sản phẩm thất bại');
-                    },
-                    onSettled: () => {
-                        if (refetch) {
-                            refetch();
-                        }
-                    },
-                }
-            );
+            mutationDelete.mutate({ token, id: selectedProductId });
         } catch (error) {
             console.error('Delete product failed:', error);
-            toast.error('Lỗi hệ thống! Xóa sản phẩm thất bại');
         }
     };
 
@@ -202,7 +176,7 @@ const Admin_ListProduct = () => {
     ];
 
     // data for table
-    const dataTable = data?.data.map((product, indexProduct) => ({
+    const dataTable = products_Redux.map((product, indexProduct) => ({
         key: product.id || indexProduct,
         name: product.productName,
         brand: product.brand,

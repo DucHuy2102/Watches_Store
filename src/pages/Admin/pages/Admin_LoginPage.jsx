@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Form, Input, message } from 'antd';
+import { Form, Input } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutationHook } from '../../../hooks/useMutationHook';
 import * as UserService from '../../../services/UserService';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from '../../../redux/slides/userSlide';
 import { jwtDecode } from 'jwt-decode';
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,6 +13,8 @@ const Admin_LoginPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const inputTagRef = useRef(null);
+    const userRedux = useSelector((state) => state.user);
+    console.log('userRedux', userRedux);
 
     // state username and password
     const [username, setUserName] = useState('');

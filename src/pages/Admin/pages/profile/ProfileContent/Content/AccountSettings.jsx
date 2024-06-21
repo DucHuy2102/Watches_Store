@@ -14,21 +14,6 @@ function AccountSettings() {
     const [email, setEmail] = useState(dataAdmin_Redux.email ?? '');
     const [address, setAddress] = useState(dataAdmin_Redux.address ?? '');
 
-    // const handleFormSubmit = (e) => {
-    //     e.preventDefault();
-    //     dispatch(
-    //         updateUser({
-    //             ...dataAdmin_Redux,
-    //             username,
-    //             phone,
-    //             firstname,
-    //             lastname,
-    //             email,
-    //             address,
-    //         })
-    //     );
-    // };
-
     useEffect(() => {
         const user = {
             username,

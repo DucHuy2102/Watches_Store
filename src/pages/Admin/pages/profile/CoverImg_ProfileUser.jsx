@@ -40,33 +40,6 @@ const CoverImg_ProfileUser = () => {
     });
     const getToken = localStorage.getItem('adminToken');
 
-    // const handleChangeBackgroundImage = async (event) => {
-    //     event.preventDefault();
-    //     const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
-    //     const selected = event.target.files[0];
-    //     let reader = new FileReader();
-    //     reader.onloadend = () => setBackgroundImg(reader.result);
-    //     reader.readAsDataURL(selected);
-
-    //     if (selected && ALLOWED_TYPES.includes(selected.type)) {
-    //         const formData = new FormData();
-    //         formData.append('file', selected);
-    //         formData.append('upload_preset', 'backgroundAdmin');
-
-    //         const res = await Axios.post(
-    //             'https://api.cloudinary.com/v1_1/dajzl4hdt/image/upload',
-    //             formData
-    //         );
-    //         const response = res.data;
-    //         dispatch(updateUser({ ...adminProfile_Redux, backgroundImg: response.secure_url }));
-    //         mutation.mutate({
-    //             getToken,
-    //             userInfo_From_Redux: { ...adminProfile_Redux, backgroundImg: response.secure_url },
-    //         });
-    //     } else {
-    //         onOpen();
-    //     }
-    // };
     const handleChangeBackgroundImage = async (event) => {
         event.preventDefault();
         const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];

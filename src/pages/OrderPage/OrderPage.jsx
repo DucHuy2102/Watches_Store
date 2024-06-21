@@ -25,6 +25,7 @@ const OrderPage = () => {
 
     // get orders from redux
     const orders = useSelector((state) => state.orderProduct.orderItems);
+    console.log(orders);
     const amountProduct = orders?.length;
 
     // get total price of all product in cart

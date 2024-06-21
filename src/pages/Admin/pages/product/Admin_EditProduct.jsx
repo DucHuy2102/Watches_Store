@@ -5,9 +5,10 @@ import * as ProductService from '../../../../services/ProductService';
 import { useMutationHook } from '../../../../hooks/useMutationHook';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
+import { editProductAdmin } from '../../../../redux/slides/adminSlide';
 
 const { TextArea } = Input;
 
@@ -60,6 +61,7 @@ const uploadImages = async (fileList) => {
 
 const Admin_EditProduct = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     // get token from localStorage
     const adminToken = localStorage.getItem('adminToken');
@@ -102,12 +104,16 @@ const Admin_EditProduct = () => {
             price: priceNumber,
             img: uploadedImages,
         };
+        dispatch(editProductAdmin({ idProduct: product_Redux.id, product: productData }));
+        toast.success('Cập nhật sản phẩm thành công');
+        setTimeout(() => {
+            navigate('/admin/product');
+        }, 1000);
         mutation.mutate(
             { adminToken, product: productData },
             {
-                onSuccess: () => {
-                    toast.success('Cập nhật sản phẩm thành công');
-                    navigate('/admin/product');
+                onError: (error) => {
+                    console.log('Edit product failed', error);
                 },
             }
         );

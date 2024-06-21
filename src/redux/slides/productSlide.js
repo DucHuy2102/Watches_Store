@@ -39,20 +39,25 @@ export const productSlide = createSlice({
         updateSearch: (state, action) => {
             state.search = action.payload;
         },
+
         clearSearch: (state) => {
             state.search = [];
         },
+
         updateProduct: (state, action) => {
             state.product = { ...state.product, ...action.payload };
         },
+
         resetProduct: (state) => {
             state.product = { ...initialState.product };
         },
+
         addAllProducts: (state, action) => {
             state.products = action.payload;
             state.originalProducts = action.payload;
             state.productsAdmin = action.payload;
         },
+
         sortProducts: (state, action) => {
             const option = action.payload;
             if (option === undefined || option === 'undefined') {
@@ -71,6 +76,7 @@ export const productSlide = createSlice({
                 );
             }
         },
+
         filterProducts: (state, action) => {
             const filters = action.payload;
             let count = 0;
@@ -103,9 +109,26 @@ export const productSlide = createSlice({
                 state.isFilter = true;
             }
         },
+
         clearFilter: (state) => {
             state.isFilter = false;
             state.products = state.originalProducts;
+        },
+
+        addProductAdmin: (state, action) => {
+            state.productsAdmin = [...state.productsAdmin, action.payload];
+        },
+
+        editProductAdmin: (state, action) => {
+            const { idProduct, product } = action.payload;
+            state.productsAdmin = state.productsAdmin.map((item) =>
+                item?.id === idProduct ? product : item
+            );
+        },
+
+        removeProductAdmin: (state, action) => {
+            const { idProduct } = action.payload;
+            state.productsAdmin = state.productsAdmin.filter((item) => item?.id !== idProduct);
         },
     },
 });
@@ -119,6 +142,9 @@ export const {
     addAllProducts,
     filterProducts,
     clearFilter,
+    removeProductAdmin,
+    addProductAdmin,
+    editProductAdmin,
 } = productSlide.actions;
 
 export default productSlide.reducer;

@@ -65,21 +65,10 @@ const Admin_BillPage = () => {
 
     // ---------------------- STATE ----------------------
     const users_Redux = useSelector((state) => state.admin.users);
-    const idUser_Redux = useSelector((state) => state.admin.orderDetail);
-
-    const dataOrderDetail_Redux = useSelector((state) => state.admin.orderDetail.productItems);
+    console.log('idUser_Redux', users_Redux);
     const orders_Redux = useSelector((state) => state.admin.orders);
+    console.log('orders_Redux', orders_Redux);
     const ordersLength = orders_Redux.length;
-
-    // get total price order
-    const totalPriceOrder = useMemo(() => {
-        return dataOrderDetail_Redux?.reduce((acc, order) => {
-            return acc + order.product.price * order.quantity;
-        }, 0);
-    }, [dataOrderDetail_Redux]);
-
-    // get value user
-    const valueUser = users_Redux.find((user) => user?.id === idUser_Redux.user);
 
     // state to control modal
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -112,6 +101,15 @@ const Admin_BillPage = () => {
         return ProductService.getOrderDetail(token, orderId);
     });
 
+    const { data: dataOrderDetail } = mutationGetDetailOrder;
+    const dataTableOrderDetail = dataOrderDetail?.data?.productItems;
+    console.log('dataTableOrderDetail', dataOrderDetail);
+
+    // get value user
+    const valueUser = users_Redux.find((user) => user?.id === dataOrderDetail?.data.user);
+
+    const totalPrice = dataOrderDetail?.data?.totalPrice;
+
     // get detail order by id
     const handleGetDetailOrder = (orderId) => {
         console.log(orderId);
@@ -119,8 +117,7 @@ const Admin_BillPage = () => {
             mutationGetDetailOrder.mutate(
                 { token: adminToken, orderId },
                 {
-                    onSuccess: (data) => {
-                        dispatch(addOrderDetail(data?.data));
+                    onSuccess: () => {
                         setIsModalVisible(true);
                     },
                 }
@@ -461,17 +458,19 @@ const Admin_BillPage = () => {
         },
     ];
 
-    // data order detail
-    const dataOrderTable = dataOrderDetail_Redux?.map((item, indexorder) => ({
-        key: item?.id || indexorder,
-        productName: item.product.productName,
-        price: item.product.price,
-        quantity: item.quantity,
-        color: item.product.color,
-        brand: item.product.brand,
-        origin: item.product.origin,
-        feature: item.product.feature,
-    }));
+    // // data order detail
+    const dataOrderTable = dataTableOrderDetail
+        ? dataTableOrderDetail.map((item, indexorder) => ({
+              key: item?.id || indexorder,
+              productName: item.product.productName,
+              price: item.product.price,
+              quantity: item.quantity,
+              color: item.product.color,
+              brand: item.product.brand,
+              origin: item.product.origin,
+              feature: item.product.feature,
+          }))
+        : [];
 
     // ---------------------- FUNCTION CLOSE MODAL ----------------------
     // close modal order detail
@@ -484,7 +483,9 @@ const Admin_BillPage = () => {
         <div>
             {/* title page */}
             <div className='mt-1 px-14 flex justify-center items-center'>
-                <h1 className='font-bold text-3xl text-center'>Danh sách đơn hàng</h1>
+                <h1 className='font-bold text-3xl text-center'>
+                    Danh sách đơn hàng - {ordersLength} Sản phẩm
+                </h1>
             </div>
 
             {/* content page */}
@@ -579,7 +580,7 @@ const Admin_BillPage = () => {
                                     <div>
                                         <span className='text-lg text-red-500'>
                                             <span className='text-black'>Tổng tiền hóa đơn:</span>{' '}
-                                            {priceFormat(totalPriceOrder)}
+                                            {priceFormat(totalPrice)}
                                         </span>
                                     </div>
                                     <button

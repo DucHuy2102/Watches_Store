@@ -173,7 +173,9 @@ export const adminSlide = createSlice({
             state.orderDetail = action.payload;
         },
 
-        resetOrderDetail: (state) => {},
+        resetOrderDetail: (state) => {
+            state.orderDetail = [];
+        },
 
         cancelOrder: (state, action) => {
             const { orderId } = action.payload;

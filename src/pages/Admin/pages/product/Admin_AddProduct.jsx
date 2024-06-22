@@ -111,6 +111,7 @@ const AddProduct = () => {
         toast.success('Thêm sản phẩm thành công!');
         setTimeout(() => {
             navigate('/admin/product');
+            window.location.reload();
         }, 1000);
         mutation.mutate(
             { adminToken, product: productData },
@@ -130,7 +131,7 @@ const AddProduct = () => {
 
     // Handle radio change
     const handleRadioChange = (e) => {
-        setStateProduct((prev) => ({ ...prev, state: e.target.value }));
+        setStateProduct((prev) => ({ ...prev, condition: e.target.value }));
     };
 
     // Handle change image
@@ -542,26 +543,29 @@ const AddProduct = () => {
                         getValueFromEvent={normFile}
                         className='col-span-2'
                     >
-                        <Upload
-                            beforeUpload={() => false}
-                            listType='picture-card'
-                            fileList={fileList}
-                            onPreview={handlePreview}
-                            onChange={handleChange}
-                        >
-                            {fileList.length >= 10 ? null : uploadButton}
-                        </Upload>
-                        {previewImage && (
-                            <Image
-                                wrapperStyle={{ display: 'none' }}
-                                preview={{
-                                    visible: previewOpen,
-                                    onVisibleChange: (visible) => setPreviewOpen(visible),
-                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                                }}
-                                src={previewImage}
-                            />
-                        )}
+                        <>
+                            <Upload
+                                beforeUpload={() => false}
+                                listType='picture-card'
+                                fileList={fileList}
+                                onPreview={handlePreview}
+                                onChange={handleChange}
+                            >
+                                {fileList.length >= 10 ? null : uploadButton}
+                            </Upload>
+                            {previewImage && (
+                                <Image
+                                    wrapperStyle={{ display: 'none' }}
+                                    preview={{
+                                        visible: previewOpen,
+                                        onVisibleChange: (visible) => setPreviewOpen(visible),
+                                        afterOpenChange: (visible) =>
+                                            !visible && setPreviewImage(''),
+                                    }}
+                                    src={previewImage}
+                                />
+                            )}
+                        </>
                     </Form.Item>
 
                     <Form.Item>

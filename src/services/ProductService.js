@@ -128,3 +128,55 @@ export const deleteOrderById = async (token, id) => {
     });
     return res.data;
 };
+
+// get all orders
+export const getAllOrders = async (token) => {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/order/getAll`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+    return res.data;
+};
+
+// get detail order by orderId
+export const getOrderDetail = async (token, orderId) => {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/order/orderDetail/${orderId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+    return res.data;
+};
+
+// accept order
+export const acceptOrder = async (token, orderId) => {
+    const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/order/approvalOrder?orderId=${orderId}`,
+        null,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+    return res.data;
+};
+
+// cancel order
+export const cancelOrder = async (token, orderId) => {
+    const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/order/cancelOrder?orderId=${orderId}`,
+        null,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+    return res.data;
+};

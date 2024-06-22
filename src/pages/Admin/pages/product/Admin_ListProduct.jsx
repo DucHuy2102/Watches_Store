@@ -1,6 +1,6 @@
 import * as ProductService from '../../../../services/ProductService';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Modal, Space, Table } from 'antd';
 import { MdDeleteOutline } from 'react-icons/md';
 import { EditOutlined } from '@ant-design/icons';
@@ -19,6 +19,7 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 const Admin_ListProduct = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const prevTotalProductRef = useRef(0);
 
     // get data from redux
     const products_Redux = useSelector((state) => state.admin.productsAdmin);
@@ -34,15 +35,15 @@ const Admin_ListProduct = () => {
     const { data } = useQuery({
         queryKey: ['products'],
         queryFn: getProducts,
-        // Only fetch if products are not in redux
-        enabled: productLength === 0,
+        enabled: true,
     });
 
     // Add all products to redux store
     useEffect(() => {
-        if (data?.data && productLength === 0) {
+        if (prevTotalProductRef.current !== productLength && data?.data) {
             dispatch(addAllProducts(data.data));
         }
+        prevTotalProductRef.current = productLength;
     }, [data, dispatch, productLength]);
 
     // get token from localStorage
@@ -83,7 +84,10 @@ const Admin_ListProduct = () => {
     const handleOk = () => {
         setIsModalOpen(false);
         dispatch(removeProductAdmin({ idProduct: selectedProductId }));
-        toast.success('Xóa sản phẩm thành công!');
+        toast.success('Xóa sản phẩm thành công! Trang tự động làm mới sau 2 giây');
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
         try {
             mutationDelete.mutate({ token, id: selectedProductId });
         } catch (error) {

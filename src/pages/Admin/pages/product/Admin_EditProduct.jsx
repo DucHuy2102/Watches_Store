@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
-import { editProductAdmin } from '../../../../redux/slides/adminSlide';
+import { editProductAdmin, resetProduct } from '../../../../redux/slides/adminSlide';
 
 const { TextArea } = Input;
 
@@ -67,7 +67,7 @@ const Admin_EditProduct = () => {
     const adminToken = localStorage.getItem('adminToken');
 
     // get product from redux
-    const product_Redux = useSelector((state) => state?.product.product);
+    const product_Redux = useSelector((state) => state?.admin.product);
 
     // state for product and fileList
     const [stateProduct, setStateProduct] = useState(product_Redux);
@@ -105,6 +105,7 @@ const Admin_EditProduct = () => {
             img: uploadedImages,
         };
         dispatch(editProductAdmin({ idProduct: product_Redux.id, product: productData }));
+        dispatch(resetProduct());
         toast.success('Cập nhật sản phẩm thành công');
         setTimeout(() => {
             navigate('/admin/product');
@@ -474,6 +475,25 @@ const Admin_EditProduct = () => {
                     </Form.Item>
 
                     <Form.Item
+                        label='Kháng nước'
+                        name='waterproof'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Kháng nước không được bỏ trống!',
+                            },
+                        ]}
+                        className='col-span-2 md:col-span-1'
+                    >
+                        <Input
+                            name='waterproof'
+                            value={stateProduct.waterproof}
+                            onChange={handleOnChange}
+                            className='w-full'
+                        />
+                    </Form.Item>
+
+                    <Form.Item
                         label='Trạng thái'
                         name='condition'
                         rules={[
@@ -520,30 +540,33 @@ const Admin_EditProduct = () => {
                         getValueFromEvent={normFile}
                         className='col-span-2'
                     >
-                        <Upload
-                            beforeUpload={() => false}
-                            listType='picture-card'
-                            fileList={fileList}
-                            onPreview={handlePreview}
-                            onChange={handleChange}
-                        >
-                            {fileList.length >= 10 ? null : uploadButton}
-                        </Upload>
-                        {previewImage && (
-                            <Image
-                                key={
-                                    fileList.find((file) => file.url === previewImage)?.uid ||
-                                    'preview'
-                                }
-                                wrapperStyle={{ display: 'none' }}
-                                preview={{
-                                    visible: previewOpen,
-                                    onVisibleChange: (visible) => setPreviewOpen(visible),
-                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
-                                }}
-                                src={previewImage}
-                            />
-                        )}
+                        <>
+                            <Upload
+                                beforeUpload={() => false}
+                                listType='picture-card'
+                                fileList={fileList}
+                                onPreview={handlePreview}
+                                onChange={handleChange}
+                            >
+                                {fileList.length >= 10 ? null : uploadButton}
+                            </Upload>
+                            {previewImage && (
+                                <Image
+                                    key={
+                                        fileList.find((file) => file.url === previewImage)?.uid ||
+                                        'preview'
+                                    }
+                                    wrapperStyle={{ display: 'none' }}
+                                    preview={{
+                                        visible: previewOpen,
+                                        onVisibleChange: (visible) => setPreviewOpen(visible),
+                                        afterOpenChange: (visible) =>
+                                            !visible && setPreviewImage(''),
+                                    }}
+                                    src={previewImage}
+                                />
+                            )}
+                        </>
                     </Form.Item>
 
                     <Button

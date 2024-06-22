@@ -3,8 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     search: [],
     users: [],
+    orders: [],
     productsAdmin: [],
     originalProducts: [],
+    orderDetail: [],
     isFilter: false,
     product: {
         id: '',
@@ -50,6 +52,8 @@ export const adminSlide = createSlice({
 
         resetProduct: (state) => {
             state.product = { ...initialState.product };
+            state.productsAdmin = [];
+            state.originalProducts = [];
         },
 
         addAllProducts: (state, action) => {
@@ -134,8 +138,8 @@ export const adminSlide = createSlice({
             state.users = action.payload;
         },
 
-        resetAllUser: () => {
-            return { ...initialState };
+        resetAllUser: (state) => {
+            state.users = [];
         },
 
         blockUser: (state, action) => {
@@ -155,6 +159,34 @@ export const adminSlide = createSlice({
         deleteUser: (state, action) => {
             const { userId } = action.payload;
             state.users = state.users.filter((user) => user?.id !== userId);
+        },
+
+        addOrder: (state, action) => {
+            state.orders = action.payload;
+        },
+
+        resetOrder: (state) => {
+            state.orders = [];
+        },
+
+        addOrderDetail: (state, action) => {
+            state.orderDetail = action.payload;
+        },
+
+        resetOrderDetail: (state) => {},
+
+        cancelOrder: (state, action) => {
+            const { orderId } = action.payload;
+            state.orders = state.orders.map((order) =>
+                order.id === orderId ? { ...order, state: 'cancel' } : order
+            );
+        },
+
+        acceptOrder: (state, action) => {
+            const { orderId } = action.payload;
+            state.orders = state.orders.map((order) =>
+                order.id === orderId ? { ...order, state: 'shipping' } : order
+            );
         },
     },
 });
@@ -176,6 +208,13 @@ export const {
     blockUser,
     unblockUSer,
     deleteUser,
+    addOrder,
+    resetOrder,
+    addOrderDetail,
+    resetOrderDetail,
+    cancelOrder,
+    acceptOrder,
+    resetUser,
 } = adminSlide.actions;
 
 export default adminSlide.reducer;

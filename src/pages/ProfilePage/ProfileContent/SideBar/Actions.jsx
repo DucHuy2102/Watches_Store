@@ -20,7 +20,7 @@ export default function Actions() {
         <VStack py={8} px={5} spacing={3}>
             <Link
                 to={'/listProductUser'}
-                className='w-[18vw] text-center hover:border-none border border-gray-300 font-medium px-3 py-2 rounded-lg hover:bg-[#e2e8f0] hover:text-black transition-colors duration-300 ease-in-out'
+                className='w-[18vw] text-center hover:border-gray-300 border border-gray-300 font-medium px-3 py-2 rounded-lg hover:bg-[#e2e8f0] hover:text-black transition-colors duration-300'
             >
                 Xem danh sách sản phẩm
             </Link>

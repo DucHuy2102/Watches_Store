@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { resetUser } from '../../../redux/slides/userSlide';
+import { resetAllUser } from '../../../redux/slides/adminSlide';
+import { resetOrder, resetOrderDetail, resetProduct } from '../../../redux/slides/adminSlide';
 
 const Admin_HeaderComponent = () => {
     const accountRef = useRef(null);
@@ -22,7 +23,10 @@ const Admin_HeaderComponent = () => {
     // handle logout admin
     const handleLogoutAdmin = () => {
         localStorage.removeItem('adminToken');
-        dispatch(resetUser());
+        dispatch(resetAllUser());
+        dispatch(resetOrderDetail());
+        dispatch(resetProduct());
+        dispatch(resetOrder());
         navigate('/admin');
     };
 

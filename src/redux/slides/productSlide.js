@@ -5,7 +5,6 @@ const initialState = {
     isFilter: false,
     products: [],
     originalProducts: [],
-    productsAdmin: [],
     product: {
         id: '',
         productName: '',
@@ -55,7 +54,6 @@ export const productSlide = createSlice({
         addAllProducts: (state, action) => {
             state.products = action.payload;
             state.originalProducts = action.payload;
-            state.productsAdmin = action.payload;
         },
 
         sortProducts: (state, action) => {
@@ -114,22 +112,6 @@ export const productSlide = createSlice({
             state.isFilter = false;
             state.products = state.originalProducts;
         },
-
-        addProductAdmin: (state, action) => {
-            state.productsAdmin = [...state.productsAdmin, action.payload];
-        },
-
-        editProductAdmin: (state, action) => {
-            const { idProduct, product } = action.payload;
-            state.productsAdmin = state.productsAdmin.map((item) =>
-                item?.id === idProduct ? product : item
-            );
-        },
-
-        removeProductAdmin: (state, action) => {
-            const { idProduct } = action.payload;
-            state.productsAdmin = state.productsAdmin.filter((item) => item?.id !== idProduct);
-        },
     },
 });
 
@@ -142,9 +124,6 @@ export const {
     addAllProducts,
     filterProducts,
     clearFilter,
-    removeProductAdmin,
-    addProductAdmin,
-    editProductAdmin,
 } = productSlide.actions;
 
 export default productSlide.reducer;

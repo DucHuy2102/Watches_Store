@@ -26,6 +26,7 @@ const CheckoutPage = () => {
     // get data from redux
     const user_Redux = useSelector((state) => state.user);
     const orders_Redux = useSelector((state) => state.orderProduct.orderItems);
+    console.log('orders_Redux', orders_Redux);
 
     // format price
     const priceFormat = (price) => {
@@ -55,13 +56,16 @@ const CheckoutPage = () => {
         return item.id;
     });
 
+    const [paymentMethod, setPaymentMethod] = useState('cash on delivery'); // ['cash on delivery', 'vnpay']
+
     // handle checkout
     const handleCheckout = () => {
+        console.log(productItem, address, paymentMethod);
         mutationCheckout.mutate(
-            { token: token, data: { productItem, address } },
+            { token: token, data: { productItem, address, paymentMethod } },
             {
                 onSuccess: () => {
-                    toast.success('Đặt hàng thành công! Đang chuyển về trang chủ');
+                    toast.success('Đặt hàng thành công! Đơn hàng của bạn đang được xử lý!');
                     setTimeout(() => {
                         dispatch(resetOrder());
                         navigate('/');
@@ -176,9 +180,11 @@ const CheckoutPage = () => {
                                             <Form.Item
                                                 label='Phương thức thanh toán'
                                                 className='flex-grow'
+                                                value={paymentMethod}
+                                                onChange={(value) => setPaymentMethod(value)}
                                             >
                                                 <Select>
-                                                    <Select.Option value='cash'>
+                                                    <Select.Option value='cash on delivery'>
                                                         Thanh toán khi nhận hàng
                                                     </Select.Option>
                                                     <Select.Option value='vnpay'>

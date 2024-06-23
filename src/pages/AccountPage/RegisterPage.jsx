@@ -73,7 +73,9 @@ const RegisterPage = () => {
                 >
                     {/* username */}
                     <Form.Item
-                        label={<label className='text-lg'>Tên người dùng</label>}
+                        label={
+                            <label className='text-lg font-PlayfairDisplay'>Tên người dùng</label>
+                        }
                         name='Tên người dùng'
                         rules={[
                             {
@@ -90,7 +92,9 @@ const RegisterPage = () => {
 
                     {/* phone */}
                     <Form.Item
-                        label={<label className='text-lg'>Số điện thoại</label>}
+                        label={
+                            <label className='text-lg font-PlayfairDisplay'>Số điện thoại</label>
+                        }
                         name='Số điện thoại'
                         rules={[
                             {
@@ -122,7 +126,9 @@ const RegisterPage = () => {
 
                     {/* email */}
                     <Form.Item
-                        label={<label className='text-lg'>Email liên hệ</label>}
+                        label={
+                            <label className='text-lg font-PlayfairDisplay'>Email liên hệ</label>
+                        }
                         name='Email liên hệ'
                         rules={[
                             {
@@ -140,7 +146,7 @@ const RegisterPage = () => {
 
                     {/* password */}
                     <Form.Item
-                        label={<label className='text-lg'>Mật khẩu</label>}
+                        label={<label className='text-lg font-PlayfairDisplay'>Mật khẩu</label>}
                         name='Mật khẩu'
                         rules={[
                             {
@@ -157,7 +163,11 @@ const RegisterPage = () => {
 
                     {/* confirm password */}
                     <Form.Item
-                        label={<label className='text-lg'>Xác thực mật khẩu</label>}
+                        label={
+                            <label className='text-lg font-PlayfairDisplay'>
+                                Xác thực mật khẩu
+                            </label>
+                        }
                         name='Xác thực mật khẩu'
                         dependencies={['password']}
                         rules={[

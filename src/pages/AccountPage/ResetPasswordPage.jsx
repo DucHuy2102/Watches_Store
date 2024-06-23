@@ -70,7 +70,7 @@ const ResetPasswordPage = () => {
                 >
                     {/* codePassword */}
                     <Form.Item
-                        label={<label className='text-lg'>Mã code</label>}
+                        label={<label className='text-lg font-PlayfairDisplay'>Mã code</label>}
                         name='codePassword'
                         rules={[
                             {
@@ -88,7 +88,7 @@ const ResetPasswordPage = () => {
 
                     {/* newPass */}
                     <Form.Item
-                        label={<label className='text-lg'>Mật khẩu</label>}
+                        label={<label className='text-lg font-PlayfairDisplay'>Mật khẩu</label>}
                         name='password'
                         rules={[
                             {
@@ -106,7 +106,11 @@ const ResetPasswordPage = () => {
 
                     {/* confirm password */}
                     <Form.Item
-                        label={<label className='text-lg'>Xác nhận mật khẩu</label>}
+                        label={
+                            <label className='text-lg font-PlayfairDisplay'>
+                                Xác nhận mật khẩu
+                            </label>
+                        }
                         name='confirmPassword'
                         dependencies={['password']}
                         rules={[

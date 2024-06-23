@@ -15,6 +15,14 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import * as ProductService from '../../services/ProductService';
 
+// format price
+const priceFormat = (price) => {
+    return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    }).format(price);
+};
+
 const OrderPage = () => {
     const dispatch = useDispatch();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,21 +33,13 @@ const OrderPage = () => {
 
     // get orders from redux
     const orders = useSelector((state) => state.orderProduct.orderItems);
-    console.log(orders);
+    console.log('orders', orders);
     const amountProduct = orders?.length;
 
     // get total price of all product in cart
     const totalPrice = orders.reduce((acc, order) => {
         return acc + order.product.price * order.quantity;
     }, 0);
-
-    // format price
-    const priceFormat = (price) => {
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-        }).format(price);
-    };
 
     // handle change quantity
     const handleChangeQuantity = (type, idProduct) => {
@@ -103,7 +103,6 @@ const OrderPage = () => {
         prevTotalRef.current = total;
     }, [total, token, mutation, formatData]);
 
-    // navigate to checkout page
     const navigate = useNavigate();
     const handleCheckout = () => {
         navigate('/checkout');

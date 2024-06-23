@@ -61,7 +61,9 @@ const ForgotPasswordPage = () => {
                     validateMessages={validateMessages}
                 >
                     <Form.Item
-                        label={<label className='text-lg'>Email liên hệ</label>}
+                        label={
+                            <label className='text-lg font-PlayfairDisplay'>Email liên hệ</label>
+                        }
                         name='Email liên hệ'
                         rules={[
                             {
@@ -93,7 +95,7 @@ const ForgotPasswordPage = () => {
                 <div className='text-lg flex'>
                     <p className='font-PlayfairDisplay'>Bạn muốn quay về trang đăng nhập?</p>
                     <Link
-                        to='/register'
+                        to='/login'
                         className='font-PlayfairDisplay text-lg pl-2 text-gray-400 hover:text-black font-bold transition duration-200'
                     >
                         Trang đăng nhập

@@ -12,7 +12,6 @@ const ProductPage = () => {
     // Get all products from redux
     const products_Redux = useSelector((state) => state.product.products);
     const productsLength = products_Redux.length;
-    console.log(productsLength);
 
     // Get search data from redux
     const searchProduct_Redux = useSelector((state) => state.product.search);

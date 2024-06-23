@@ -97,7 +97,9 @@ const LoginPage = () => {
                 >
                     {/* username */}
                     <Form.Item
-                        label={<label className='text-lg'>Tên đăng nhập</label>}
+                        label={
+                            <label className='text-lg font-PlayfairDisplay'>Tên đăng nhập</label>
+                        }
                         name='username'
                         rules={[
                             {
@@ -116,7 +118,7 @@ const LoginPage = () => {
 
                     {/* password */}
                     <Form.Item
-                        label={<label className='text-lg'>Mật khẩu</label>}
+                        label={<label className='text-lg font-PlayfairDisplay'>Mật khẩu</label>}
                         name='password'
                         rules={[
                             {

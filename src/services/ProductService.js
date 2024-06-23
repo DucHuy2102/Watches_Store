@@ -168,15 +168,11 @@ export const acceptOrder = async (token, orderId) => {
 
 // cancel order
 export const cancelOrder = async (token, orderId) => {
-    const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/order/cancelOrder?orderId=${orderId}`,
-        null,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        }
-    );
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/order/cancel/${orderId}`, null, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
     return res.data;
 };

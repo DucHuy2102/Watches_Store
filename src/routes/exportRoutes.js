@@ -15,6 +15,7 @@ import {
     ProfilePage,
     Admin_LoginPage,
     BlogDetail,
+    ListOrders,
 } from '../pages/exportPages';
 
 export const routes = [
@@ -56,6 +57,11 @@ export const routes = [
     {
         path: '/order',
         component: OrderPage,
+        isShowHeader: true,
+    },
+    {
+        path: '/list-orders',
+        component: ListOrders,
         isShowHeader: true,
     },
     {

@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     products: [],
     orderItems: [],
+    orderDetail: [],
     shippingAddress: {},
     paymentMethod: '',
     itemsPrice: 0,
@@ -84,6 +85,15 @@ export const orderSlide = createSlice({
                 itemOrder.id = newId;
             }
         },
+
+        addOrderDetail: (state, action) => {
+            state.orderDetail = action.payload;
+        },
+
+        cancelOrder: (state, action) => {
+            const { orderId } = action.payload;
+            state.orderDetail = state.orderDetail.filter((order) => order.id !== orderId);
+        },
     },
 });
 
@@ -95,6 +105,8 @@ export const {
     resetOrder,
     updateOrderItems,
     updateProductInCart,
+    addOrderDetail,
+    cancelOrder,
 } = orderSlide.actions;
 
 export default orderSlide.reducer;

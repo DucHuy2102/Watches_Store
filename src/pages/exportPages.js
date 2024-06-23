@@ -14,6 +14,7 @@ export { default as NotFoundPage } from './MainPage/NotFoundPage';
 
 // order
 export { default as OrderPage } from './OrderPage/OrderPage';
+export { default as ListOrders } from './OrderPage/ListOrders';
 
 // checkout
 export { default as CheckoutPage } from './CheckoutPage/CheckoutPage';

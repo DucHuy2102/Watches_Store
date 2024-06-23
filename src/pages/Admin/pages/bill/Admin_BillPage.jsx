@@ -112,7 +112,6 @@ const Admin_BillPage = () => {
 
     // get detail order by id
     const handleGetDetailOrder = (orderId) => {
-        console.log(orderId);
         if (orderId) {
             mutationGetDetailOrder.mutate(
                 { token: adminToken, orderId },

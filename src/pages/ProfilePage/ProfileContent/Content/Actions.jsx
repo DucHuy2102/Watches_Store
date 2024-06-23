@@ -29,7 +29,15 @@ function Actions() {
     };
     return (
         <>
-            <Box mt={5} py={5} px={8} borderTopWidth={1} borderColor='brand.light'>
+            <Box
+                mt={5}
+                py={5}
+                px={0}
+                display='flex'
+                justifyContent='flex-end'
+                borderTopWidth={1}
+                borderColor='brand.light'
+            >
                 <Button onClick={handleUpdateUser}>Lưu thay đổi</Button>
             </Box>
         </>

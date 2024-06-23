@@ -1,14 +1,18 @@
 import { useEffect, useRef } from 'react';
 import { Button, Input, InputGroup, InputRightAddon, useClipboard, VStack } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { PhoneOutlined } from '@ant-design/icons';
+import { useMutationHook } from '../../../../hooks/useMutationHook';
+import * as ProductService from '../../../../services/ProductService';
+import { useDispatch } from 'react-redux';
+import { addOrderDetail } from '../../../../redux/slides/orderSlide';
+import { toast } from 'react-toastify';
 
 const value = 'https://DucHuy.github.io';
 
 export default function Actions() {
     const { hasCopied, onCopy } = useClipboard(value);
-
     const profileUrl = useRef(null);
-
     useEffect(() => {
         if (hasCopied) {
             profileUrl.current.focus();
@@ -16,15 +20,50 @@ export default function Actions() {
         }
     });
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    // ----------------- GET ORDER BY UDER_ID -----------------
+    const token = localStorage.getItem('tokenUser');
+
+    // mutation get order by user id
+    const mutation = useMutationHook((token) => ProductService.getOrderByUserId(token));
+    const { data, isPending } = mutation;
+    console.log(data?.data);
+
+    isPending && toast.info('Đang tải dữ liệu...');
+
+    // handle submit login and navigate to dashboard
+    const handleGetOrderById = () => {
+        mutation.mutate(token, {
+            onSuccess: (data) => {
+                dispatch(addOrderDetail(data?.data));
+                navigate('/list-orders');
+            },
+            onError: (error) => {
+                console.log('Get order by user id failed', error);
+            },
+        });
+    };
+
     return (
         <VStack py={8} px={5} spacing={3}>
-            <Link
-                to={'/listProductUser'}
+            <button
+                onClick={handleGetOrderById}
                 className='w-[18vw] text-center hover:border-gray-300 border border-gray-300 font-medium px-3 py-2 rounded-lg hover:bg-[#e2e8f0] hover:text-black transition-colors duration-300'
             >
-                Xem danh sách sản phẩm
-            </Link>
-            <InputGroup>
+                Danh sách đơn hàng
+            </button>
+
+            <span className='w-full font-bold'>Thông tin liên hệ:</span>
+            <div className='bg-gray-200 cursor-pointer rounded-lg w-full flex flex-col justify-center items-center py-5 space-y-1'>
+                <div className='flex justify-center items-center gap-2'>
+                    <PhoneOutlined className='text-xl' />
+                    <span className='font-bold text-lg'>Hotline</span>
+                </div>
+                <span>1900-0809</span>
+                <span className='italic'>1000 đ/phút, 8h-21h kể cả thứ 7, CN</span>
+            </div>
+            {/* <InputGroup>
                 <Input
                     ref={profileUrl}
                     type='url'
@@ -42,7 +81,7 @@ export default function Actions() {
                         </svg>
                     </Button>
                 </InputRightAddon>
-            </InputGroup>
+            </InputGroup> */}
         </VStack>
     );
 }

@@ -44,6 +44,7 @@ const Content_ProfilePage = () => {
                     {/* account */}
                     <TabPanel>
                         <AccountSettings />
+                        <Actions />
                     </TabPanel>
 
                     {/* company */}
@@ -58,7 +59,7 @@ const Content_ProfilePage = () => {
                 </TabPanels>
             </Tabs>
 
-            <Actions />
+            {/* <Actions />  */}
         </Box>
     );
 };

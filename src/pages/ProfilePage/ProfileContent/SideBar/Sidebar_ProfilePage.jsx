@@ -17,7 +17,7 @@ function Sidebar_ProfilePage() {
             style={{ transform: 'translateY(-100px)' }}
         >
             <Profile />
-            <Data />
+            {/* <Data /> */}
             <Actions />
         </Box>
     );

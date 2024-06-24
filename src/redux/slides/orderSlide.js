@@ -27,7 +27,6 @@ export const orderSlide = createSlice({
         addProduct: (state, action) => {
             const { products, orderItems } = action.payload;
             state.products = products;
-            // state.orderItems = orderItems;
             const productInProducts = state.products.find(
                 (product) => product.id === orderItems.product.id
             );

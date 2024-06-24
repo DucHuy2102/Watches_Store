@@ -56,7 +56,7 @@ const CheckoutPage = () => {
         return item.id;
     });
 
-    const [paymentMethod, setPaymentMethod] = useState('cash on delivery'); // ['cash on delivery', 'vnpay']
+    const [paymentMethod, setPaymentMethod] = useState('cash'); // ['cash', 'vnpay']
 
     // handle checkout
     const handleCheckout = () => {
@@ -184,7 +184,7 @@ const CheckoutPage = () => {
                                                 onChange={(value) => setPaymentMethod(value)}
                                             >
                                                 <Select>
-                                                    <Select.Option value='cash on delivery'>
+                                                    <Select.Option value='cash'>
                                                         Thanh toán khi nhận hàng
                                                     </Select.Option>
                                                     <Select.Option value='vnpay'>

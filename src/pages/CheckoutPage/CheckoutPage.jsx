@@ -9,6 +9,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 import { resetOrder } from '../../redux/slides/orderSlide';
 
+// format price
+const priceFormat = (price) => {
+    return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    }).format(price);
+};
+
 // validate form
 const validateMessages = {
     required: '${label} không được bỏ trống!',
@@ -26,21 +34,13 @@ const CheckoutPage = () => {
     // get data from redux
     const user_Redux = useSelector((state) => state.user);
     const orders_Redux = useSelector((state) => state.orderProduct.orderItems);
-    console.log('orders_Redux', orders_Redux);
-
-    // format price
-    const priceFormat = (price) => {
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-        }).format(price);
-    };
 
     // get total price of all product in cart
-    const totalPrice = orders_Redux.reduce((acc, order) => {
+    const totalPrice = orders_Redux?.data.reduce((acc, order) => {
         return acc + order.product.price * order.quantity;
     }, 0);
 
+    // state for user info (phone, firstname, lastname, email, address)
     const [phone, setPhone] = useState(user_Redux.phone ?? '');
     const [firstname, setFirstName] = useState(user_Redux.firstname ?? '');
     const [lastname, setLastName] = useState(user_Redux.lastname ?? '');
@@ -48,31 +48,87 @@ const CheckoutPage = () => {
     const [email, setEmail] = useState(user_Redux.email ?? '');
     const [address, setAddress] = useState(user_Redux.address ?? '');
 
+    // state for payment method
+    const [paymentMethod, setPaymentMethod] = useState(''); // ['cash', 'vnpay']
+
+    // function when isBuyNow === false
     const mutationCheckout = useMutationHook(({ token, data }) => {
-        ProductService.createOrder(token, data);
+        return ProductService.createOrder(token, data);
     });
 
-    const productItem = orders_Redux.map((item) => {
-        return item.id;
-    });
+    // get all id product in cart
+    const productItem = orders_Redux.data.map((item) => item.id);
 
-    const [paymentMethod, setPaymentMethod] = useState('cash'); // ['cash', 'vnpay']
+    // function when isBuyNow === true
+    const mutationBuyNow = useMutationHook(({ token, data }) =>
+        ProductService.buyNowProduct(token, data)
+    );
 
     // handle checkout
     const handleCheckout = () => {
-        console.log(productItem, address, paymentMethod);
-        mutationCheckout.mutate(
-            { token: token, data: { productItem, address, paymentMethod } },
-            {
-                onSuccess: () => {
-                    toast.success('Đặt hàng thành công! Đơn hàng của bạn đang được xử lý!');
-                    setTimeout(() => {
-                        dispatch(resetOrder());
-                        navigate('/');
-                    }, 2000);
+        console.log({ productItem: productItem, address: address, paymentMethod: paymentMethod });
+        if (orders_Redux?.isBuyNow) {
+            mutationBuyNow.mutate(
+                {
+                    token: token,
+                    data: {
+                        product: orders_Redux.data[0].product.id,
+                        quantity: orders_Redux.data[0].quantity,
+                        address: address,
+                        paymentMethod: paymentMethod,
+                    },
                 },
-            }
-        );
+                {
+                    onSuccess: (data) => {
+                        let isDone = 0;
+                        if (paymentMethod === 'vnpay') {
+                            toast.success('Đặt hàng thành công! Đang chuyển hướng trang!');
+                            window.open(data?.data);
+                            isDone++;
+                        } else {
+                            toast.success('Đặt hàng thành công! Đơn hàng của bạn đang được xử lý!');
+                            isDone++;
+                        }
+                        if (isDone > 0) {
+                            dispatch(resetOrder());
+                            setTimeout(() => {
+                                navigate('/');
+                            }, 2000);
+                        }
+                    },
+                }
+            );
+        } else {
+            mutationCheckout.mutate(
+                {
+                    token: token,
+                    data: {
+                        productItem: productItem,
+                        address: address,
+                        paymentMethod: paymentMethod,
+                    },
+                },
+                {
+                    onSuccess: (data) => {
+                        let isDone = 0;
+                        if (paymentMethod === 'vnpay') {
+                            toast.success('Đặt hàng thành công! Đang chuyển hướng trang!');
+                            window.open(data?.data);
+                            isDone++;
+                        } else {
+                            toast.success('Đặt hàng thành công! Đơn hàng của bạn đang được xử lý!');
+                            isDone++;
+                        }
+                        if (isDone > 0) {
+                            dispatch(resetOrder());
+                            setTimeout(() => {
+                                navigate('/');
+                            }, 2000);
+                        }
+                    },
+                }
+            );
+        }
     };
 
     return (
@@ -180,10 +236,11 @@ const CheckoutPage = () => {
                                             <Form.Item
                                                 label='Phương thức thanh toán'
                                                 className='flex-grow'
-                                                value={paymentMethod}
-                                                onChange={(value) => setPaymentMethod(value)}
                                             >
-                                                <Select>
+                                                <Select
+                                                    value={paymentMethod}
+                                                    onChange={(value) => setPaymentMethod(value)}
+                                                >
                                                     <Select.Option value='cash'>
                                                         Thanh toán khi nhận hàng
                                                     </Select.Option>
@@ -225,7 +282,7 @@ const CheckoutPage = () => {
 
                                         {/* body product */}
                                         <tbody>
-                                            {orders_Redux?.map((item) => {
+                                            {orders_Redux?.data.map((item) => {
                                                 return (
                                                     <tr key={item.id}>
                                                         {/* image, name */}

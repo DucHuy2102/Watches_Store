@@ -188,7 +188,6 @@ const ProductDetail = () => {
 
     // handle add to cart
     const handleAddToCart = () => {
-        // data to add to cart
         const dataAddToCart = {
             product: product_Redux.id,
             quantity: quantityProduct,
@@ -197,14 +196,13 @@ const ProductDetail = () => {
         if (tokenUser) {
             if (quantityProduct !== 0) {
                 const tempIdCart = 'tempId_' + new Date().getTime();
-                // add product to order slide in redux
                 dispatch(
                     addProduct({
                         products: products_Redux,
                         orderItems: {
-                            id: tempIdCart, // idCart
+                            id: tempIdCart,
                             product: {
-                                id: product_Redux.id, // idProduct
+                                id: product_Redux.id,
                                 productName: productName,
                                 img: img,
                                 price: price,
@@ -215,27 +213,34 @@ const ProductDetail = () => {
                 );
                 toast.success('Đã thêm vào giỏ hàng!');
 
-                // call mutationAddToCart to add product to cart in database
-                mutationAddToCart.mutate(
-                    {
-                        token: tokenUser,
-                        productAddToCart: dataAddToCart,
-                    },
-                    {
-                        onSuccess: (data) => {
-                            const idCart = data?.data;
-                            dispatch(
-                                updateProductInCart({
-                                    oldId: tempIdCart,
-                                    newId: idCart,
-                                })
-                            );
+                const retryMutation = (retries) => {
+                    mutationAddToCart.mutate(
+                        {
+                            token: tokenUser,
+                            productAddToCart: dataAddToCart,
                         },
-                        onError: () => {
-                            toast.error('Có lỗi xảy ra! Vui lòng thử lại sau!');
-                        },
-                    }
-                );
+                        {
+                            onSuccess: (data) => {
+                                const idCart = data?.data;
+                                dispatch(
+                                    updateProductInCart({
+                                        oldId: tempIdCart,
+                                        newId: idCart,
+                                    })
+                                );
+                            },
+                            onError: () => {
+                                if (retries > 0) {
+                                    setTimeout(() => retryMutation(retries - 1), 1000);
+                                } else {
+                                    toast.error('Có lỗi xảy ra! Vui lòng thử lại sau!');
+                                }
+                            },
+                        }
+                    );
+                };
+
+                retryMutation(3);
             } else {
                 toast.error('Vui lòng chọn số lượng sản phẩm!');
             }
@@ -270,7 +275,7 @@ const ProductDetail = () => {
                         </Swiper>
                     </div>
 
-                    {/* info product */}
+                    {/* info product & button: buy now and add to cart */}
                     <div className='lg:col-span-2'>
                         {/* name product */}
                         <h2 className='text-2xl font-extrabold text-black'>{productName}</h2>
@@ -287,52 +292,6 @@ const ProductDetail = () => {
                                 </span>
                             </p>
                         </div>
-
-                        {/* stars */}
-                        {/* <div className='flex space-x-2 mt-2'>
-                            <p className='text-lg'>Xếp hạng:</p>
-                            <svg
-                                className='w-5 fill-[#F7FD04]'
-                                viewBox='0 0 14 13'
-                                fill='none'
-                                xmlns='http://www.w3.org/2000/svg'
-                            >
-                                <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                            </svg>
-                            <svg
-                                className='w-5 fill-[#F7FD04]'
-                                viewBox='0 0 14 13'
-                                fill='none'
-                                xmlns='http://www.w3.org/2000/svg'
-                            >
-                                <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                            </svg>
-                            <svg
-                                className='w-5 fill-[#F7FD04]'
-                                viewBox='0 0 14 13'
-                                fill='none'
-                                xmlns='http://www.w3.org/2000/svg'
-                            >
-                                <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                            </svg>
-                            <svg
-                                className='w-5 fill-[#F7FD04]'
-                                viewBox='0 0 14 13'
-                                fill='none'
-                                xmlns='http://www.w3.org/2000/svg'
-                            >
-                                <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                            </svg>
-                            <svg
-                                className='w-5 fill-gray-200'
-                                viewBox='0 0 14 13'
-                                fill='none'
-                                xmlns='http://www.w3.org/2000/svg'
-                            >
-                                <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                            </svg>
-                            <h4 className='text-black text-base'>500 Lượt đánh giá</h4>
-                        </div> */}
 
                         {/* brand & condition */}
                         <div className='flex gap-10 items-center'>

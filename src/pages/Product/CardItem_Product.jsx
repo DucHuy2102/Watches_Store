@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateProduct } from '../../redux/slides/productSlide';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import { updateOrderItems } from '../../redux/slides/orderSlide';
 
@@ -64,15 +64,15 @@ const CardItem_Product = (props) => {
         }
     };
 
+    // handle buy now product and navigate to checkout page
     const handleBuyNow = () => {
         const valueDispatch = [
             {
-                id: idProduct,
                 product: propertiesProduct,
                 quantity: quantityProduct,
             },
         ];
-        dispatch(updateOrderItems(valueDispatch));
+        dispatch(updateOrderItems({ data: valueDispatch, isBuyNow: true }));
         setShowProductDetail(false);
         navigate('/checkout');
     };

@@ -63,7 +63,7 @@ const LoginPage = () => {
             const ordersData = response?.data;
 
             // dispatch ordersData to redux
-            dispatch(updateOrderItems(ordersData));
+            dispatch(updateOrderItems({ data: ordersData, isBuyNow: false }));
         };
 
         if (data?.code === 200) {

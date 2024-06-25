@@ -154,7 +154,7 @@ export const getOrderDetail = async (token, orderId) => {
 // accept order
 export const acceptOrder = async (token, orderId) => {
     const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/order/approvalOrder?orderId=${orderId}`,
+        `${import.meta.env.VITE_API_URL}/order/delivered/${orderId}`,
         null,
         {
             headers: {
@@ -169,6 +169,17 @@ export const acceptOrder = async (token, orderId) => {
 // cancel order
 export const cancelOrder = async (token, orderId) => {
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/order/cancel/${orderId}`, null, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+    return res.data;
+};
+
+// buy now product
+export const buyNowProduct = async (token, data) => {
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/order/buyNow`, data, {
         headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

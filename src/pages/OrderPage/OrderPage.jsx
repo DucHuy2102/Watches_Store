@@ -33,11 +33,10 @@ const OrderPage = () => {
 
     // get orders from redux
     const orders = useSelector((state) => state.orderProduct.orderItems);
-    console.log('orders', orders);
-    const amountProduct = orders?.length;
+    const amountProduct = orders?.data.length;
 
     // get total price of all product in cart
-    const totalPrice = orders.reduce((acc, order) => {
+    const totalPrice = orders.data.reduce((acc, order) => {
         return acc + order.product.price * order.quantity;
     }, 0);
 
@@ -81,7 +80,7 @@ const OrderPage = () => {
 
     // format data to send to server
     const formatData = useMemo(() => {
-        return orders.map((order) => ({
+        return orders.data.map((order) => ({
             ...order,
             quantity: order.quantity,
         }));
@@ -163,7 +162,7 @@ const OrderPage = () => {
 
                                     {/* body product */}
                                     <tbody>
-                                        {orders.map((order, index) => {
+                                        {orders.data.map((order, index) => {
                                             return (
                                                 <tr key={index}>
                                                     {/* image, name */}

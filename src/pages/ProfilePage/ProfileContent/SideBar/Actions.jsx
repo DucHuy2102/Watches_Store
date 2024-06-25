@@ -27,12 +27,11 @@ export default function Actions() {
 
     // mutation get order by user id
     const mutation = useMutationHook((token) => ProductService.getOrderByUserId(token));
-    const { data, isPending } = mutation;
-    console.log(data?.data);
+    const { isPending } = mutation;
 
     isPending && toast.info('Đang tải dữ liệu...');
 
-    // handle submit login and navigate to dashboard
+    // handle get all orders and navigate to list orders page
     const handleGetOrderById = () => {
         mutation.mutate(token, {
             onSuccess: (data) => {

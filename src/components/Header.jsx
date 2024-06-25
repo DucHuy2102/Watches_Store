@@ -28,7 +28,7 @@ const Header = () => {
     const dataUSer = useSelector((state) => state.user);
     const products = useSelector((state) => state.product.products);
     const orders = useSelector((state) => state.orderProduct.orderItems);
-    const amountProduct = orders?.length;
+    const amountProduct = orders?.data.length;
 
     // state for click button
     const [clickButtonAccount, setClickButtonAccount] = useState(false);

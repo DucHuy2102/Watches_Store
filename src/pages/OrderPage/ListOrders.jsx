@@ -2,7 +2,7 @@ import { Space, Table, Modal } from 'antd';
 import { CheckCircleOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { cancelOrder } from '../../redux/slides/orderSlide';
+import { acceptOrder, cancelOrder } from '../../redux/slides/orderSlide';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import * as ProductService from '../../services/ProductService';
 
@@ -49,25 +49,38 @@ const ListOrders = () => {
 
     // Get order detail from Redux
     const order_Redux = useSelector((state) => state.orderProduct.orderDetail);
+    console.log('order_Redux', order_Redux);
 
-    // Handle actions
-    const [modalVisible, setModalVisible] = useState(false);
+    // state for modal
+    const [modalCancelVisible, setModalCancelVisible] = useState(false);
+    const [modalAcceptVisible, setModalAcceptVisible] = useState(false);
     const [orderToCancel, setOrderToCancel] = useState(null);
-    const [orderDetail, setOrderDetail] = useState(null);
+    const [orderToAccept, setOrderToAccept] = useState(null);
+    const [idOrderDetail, setIdOrderDetail] = useState(null);
+
+    // get idOrder when click on button view detail
+    const handleGetInfoDetail = (orderId) => {
+        if (orderId) {
+            setIdOrderDetail(orderId);
+        } else {
+            console.log('error', orderId);
+        }
+    };
 
     // close modal order detail
     const handleCloseModalOrderDetail = () => {
-        setOrderDetail(null);
+        setIdOrderDetail(null);
         scrollToTop();
     };
 
+    // ------------------------ CANCEL ORDER ------------------------
     // handle get idOrder when click on button cancel order
     const hanleCancelOrder = (idOrder) => {
         setOrderToCancel(idOrder);
-        setModalVisible(true);
+        setModalCancelVisible(true);
     };
 
-    // function cancel order
+    // mutation cancel order
     const mutationCancelOrder = useMutationHook(({ token, idOrder }) =>
         ProductService.cancelOrder(token, idOrder)
     );
@@ -76,7 +89,7 @@ const ListOrders = () => {
     const handleConfirmCancelOrder = () => {
         if (orderToCancel) {
             dispatch(cancelOrder({ orderId: orderToCancel }));
-            setModalVisible(false);
+            setModalCancelVisible(false);
             mutationCancelOrder.mutate(
                 { token, idOrder: orderToCancel },
                 {
@@ -88,12 +101,30 @@ const ListOrders = () => {
         }
     };
 
-    // Get order detail
-    const handleGetInfoDetail = (orderId) => {
-        if (orderId) {
-            setOrderDetail(orderId);
-        } else {
-            console.log('error', orderId);
+    // ------------------------ ACCEPT ORDER ------------------------
+    // handle get idOrder when click on button accept order
+    const handleAcceptOrder = (idOrder) => {
+        setOrderToAccept(idOrder);
+        setModalAcceptVisible(true);
+    };
+
+    // mutation cancel order
+    const mutationAcceptOrder = useMutationHook(({ token, idOrder }) =>
+        ProductService.acceptOrder(token, idOrder)
+    );
+
+    const handleConfirmAcceptOrder = () => {
+        if (orderToAccept) {
+            dispatch(acceptOrder({ orderId: orderToAccept }));
+            setModalAcceptVisible(false);
+            mutationAcceptOrder.mutate(
+                { token, idOrder: orderToAccept },
+                {
+                    onSuccess: () => {
+                        console.log('Accept order success');
+                    },
+                }
+            );
         }
     };
 
@@ -129,6 +160,12 @@ const ListOrders = () => {
                         >
                             <EyeOutlined /> Xem chi tiết
                         </button>
+                        <button
+                            onClick={() => handleAcceptOrder(item.idOrder)}
+                            className='flex gap-2 justify-center items-center rounded-lg bg-blue-500 w-32 px-1 py-2'
+                        >
+                            <CheckCircleOutlined /> Nhận hàng
+                        </button>
                     </Space>
                 );
             case 'complete':
@@ -139,9 +176,6 @@ const ListOrders = () => {
                             className='flex gap-2 justify-center items-center rounded-lg bg-green-500 w-32 px-1 py-2'
                         >
                             <EyeOutlined /> Xem chi tiết
-                        </button>
-                        <button className='flex gap-2 justify-center items-center rounded-lg bg-blue-500 w-32 px-1 py-2'>
-                            <CheckCircleOutlined /> Nhận hàng
                         </button>
                     </Space>
                 );
@@ -248,7 +282,7 @@ const ListOrders = () => {
 
     // ------------------------ TABLE ORDER DETAIL ------------------------
     // format data to map for table order detail
-    const dataOrderDetail = order_Redux.filter((item) => item.id === orderDetail);
+    const dataOrderDetail = order_Redux.filter((item) => item.id === idOrderDetail);
     const totalPriceOrder = dataOrderDetail[0]?.totalPrice;
 
     // Table columns order detail
@@ -373,10 +407,10 @@ const ListOrders = () => {
 
     // scroll to modal order detail
     useEffect(() => {
-        if (orderDetail && orderDetailRef.current) {
+        if (idOrderDetail && orderDetailRef.current) {
             orderDetailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-    }, [orderDetail]);
+    }, [idOrderDetail]);
 
     // scroll to top page when click on button close modal order detail
     const scrollToTop = () => {
@@ -391,7 +425,7 @@ const ListOrders = () => {
                 </span>
                 <Table columns={columns} dataSource={dataTable} pagination={false} />
             </div>
-            {orderDetail ? (
+            {idOrderDetail ? (
                 <div ref={orderDetailRef}>
                     <span className='w-full text-2xl py-5 font-bold flex justify-center items-center'>
                         Chi tiết đơn hàng
@@ -423,16 +457,41 @@ const ListOrders = () => {
                 </div>
             ) : null}
 
-            {/* modal cancel order */}
+            {/* modal accept order */}
             <Modal
-                title='Xác nhận hủy đơn hàng'
-                open={modalVisible}
-                onCancel={() => setModalVisible(false)}
+                title='Xác nhận đã nhận đơn hàng'
+                open={modalAcceptVisible}
+                onCancel={() => setModalAcceptVisible(false)}
                 footer={[
                     <button
                         className='rounded-md w-20 py-1 border border-gray-400 hover:bg-gray-400 transition duration-300 hover:text-white cursor-pointer'
                         key='cancel'
-                        onClick={() => setModalVisible(false)}
+                        onClick={() => setModalAcceptVisible(false)}
+                    >
+                        Hủy
+                    </button>,
+                    <button
+                        className='bg-blue-400 text-white ml-5 rounded-md w-20 py-1 border border-blue-400 transition duration-300 cursor-pointer'
+                        key='ok'
+                        onClick={handleConfirmAcceptOrder}
+                    >
+                        Xác nhận
+                    </button>,
+                ]}
+            >
+                <p>Cảm ơn quý khách hàng đã lựa chọn dịch vụ của chúng tôi.</p>
+            </Modal>
+
+            {/* modal cancel order */}
+            <Modal
+                title='Xác nhận hủy đơn hàng'
+                open={modalCancelVisible}
+                onCancel={() => setModalCancelVisible(false)}
+                footer={[
+                    <button
+                        className='rounded-md w-20 py-1 border border-gray-400 hover:bg-gray-400 transition duration-300 hover:text-white cursor-pointer'
+                        key='cancel'
+                        onClick={() => setModalCancelVisible(false)}
                     >
                         Hủy
                     </button>,

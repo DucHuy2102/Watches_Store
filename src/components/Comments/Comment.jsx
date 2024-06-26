@@ -21,6 +21,7 @@ const Comment = ({ idProduct }) => {
 
     // ----------------------- DISPLAY COMMENT ---------------------------
     const dataComment = useSelector((state) => state.comment.commentValue);
+    const dataCommentLength = dataComment.length;
     const haveComment = dataComment.length > 0;
 
     // format date to dd/mm/yyyy
@@ -122,38 +123,42 @@ const Comment = ({ idProduct }) => {
 
     return (
         <div className='p-5 bg-white rounded-lg shadow-md'>
-            <h3 className='text-xl font-bold text-gray-800 mb-4'>10 Lượt đánh giá</h3>
+            <h3 className='text-xl font-bold text-gray-800 mb-4'>
+                {dataCommentLength} Lượt đánh giá
+            </h3>
             <div className='w-full flex flex-col'>
                 {/* post comment */}
-                <div className='w-full'>
-                    <div className='flex flex-col items-center'>
-                        <div className='w-full flex items-center mb-4'>
-                            <div className='flex flex-col items-center w-1/4'>
-                                <span className='text-gray-600 mb-2'>Đánh giá sản phẩm</span>
-                                <Rating
-                                    count={5}
-                                    size={24}
-                                    activeColor='#ffd700'
-                                    value={rating}
-                                    onChange={(newRating) => setRating(newRating)}
+                {token && (
+                    <div className='w-full'>
+                        <div className='flex flex-col items-center'>
+                            <div className='w-full flex items-center mb-4'>
+                                <div className='flex flex-col items-center w-1/4'>
+                                    <span className='text-gray-600 mb-2'>Đánh giá sản phẩm</span>
+                                    <Rating
+                                        count={5}
+                                        size={24}
+                                        activeColor='#ffd700'
+                                        value={rating}
+                                        onChange={(newRating) => setRating(newRating)}
+                                    />
+                                </div>
+                                <input
+                                    value={commentValue}
+                                    onChange={(e) => setCommentValue(e.target.value)}
+                                    type='text'
+                                    placeholder='Cho chúng tôi biết suy nghĩ của bạn về sản phẩm'
+                                    className='h-12 w-full rounded-l-lg border border-gray-300 px-4 text-gray-700'
                                 />
+                                <button
+                                    onClick={handlePostComment}
+                                    className='w-20 h-12 bg-blue-500 rounded-r-lg text-white hover:bg-blue-600 transition-colors'
+                                >
+                                    Gửi
+                                </button>
                             </div>
-                            <input
-                                value={commentValue}
-                                onChange={(e) => setCommentValue(e.target.value)}
-                                type='text'
-                                placeholder='Cho chúng tôi biết suy nghĩ của bạn về sản phẩm'
-                                className='h-12 w-full rounded-l-lg border border-gray-300 px-4 text-gray-700'
-                            />
-                            <button
-                                onClick={handlePostComment}
-                                className='w-20 h-12 bg-blue-500 rounded-r-lg text-white hover:bg-blue-600 transition-colors'
-                            >
-                                Gửi
-                            </button>
                         </div>
                     </div>
-                </div>
+                )}
 
                 {/* see comment */}
                 <div className='w-full mt-5'>
@@ -183,20 +188,26 @@ const Comment = ({ idProduct }) => {
                                                 <p className='text-xs ml-2 font-semibold text-gray-600'>
                                                     {formatDate(comment.createdOn)}
                                                 </p>
-                                                <Button
-                                                    onClick={() => handleEditComment(comment)}
-                                                    icon={<EditOutlined />}
-                                                    className='text-gray-400 hover:text-gray-600'
-                                                >
-                                                    Sửa
-                                                </Button>
-                                                <Button
-                                                    onClick={() => handleDeleteComment(comment.id)}
-                                                    icon={<DeleteOutlined />}
-                                                    className='text-gray-400 hover:text-red-600'
-                                                >
-                                                    Xóa
-                                                </Button>
+                                                {token && (
+                                                    <Button
+                                                        onClick={() => handleEditComment(comment)}
+                                                        icon={<EditOutlined />}
+                                                        className='text-gray-400 hover:text-gray-600'
+                                                    >
+                                                        Sửa
+                                                    </Button>
+                                                )}
+                                                {token && (
+                                                    <Button
+                                                        onClick={() =>
+                                                            handleDeleteComment(comment.id)
+                                                        }
+                                                        icon={<DeleteOutlined />}
+                                                        className='text-gray-400 hover:text-red-600'
+                                                    >
+                                                        Xóa
+                                                    </Button>
+                                                )}
                                             </div>
                                             <p className='text-sm mt-2 text-gray-700'>
                                                 {comment.content}
@@ -251,19 +262,6 @@ const Comment = ({ idProduct }) => {
                     className='w-full h-40 border border-gray-300 rounded p-2'
                 />
             </Modal>
-
-            {/* toast
-            <ToastContainer
-                position='top-right'
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            /> */}
         </div>
     );
 };

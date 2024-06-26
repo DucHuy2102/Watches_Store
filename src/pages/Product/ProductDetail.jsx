@@ -252,7 +252,7 @@ const ProductDetail = () => {
         }
     };
 
-    // ------------------- COMMENTS ---------------------------
+    // ------------------- GET COMMENT PRODUCT BY ID ---------------------------
     useEffect(() => {
         const fetchComments = async () => {
             try {

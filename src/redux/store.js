@@ -16,6 +16,7 @@ import userReducer from './slides/userSlide';
 import productReducer from './slides/productSlide';
 import orderReducer from './slides/orderSlide';
 import adminReducer from './slides/adminSlide';
+import commentReducer from './slides/commentSlide';
 
 const persistConfig = {
     key: 'root',
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
     product: productReducer,
     orderProduct: orderReducer,
     admin: adminReducer,
+    comment: commentReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

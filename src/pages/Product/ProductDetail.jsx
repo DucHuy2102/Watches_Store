@@ -11,6 +11,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
+import { Comment } from '../../components/exportComponents';
+import * as CommentService from '../../services/CommentService';
+import { addCommentToRedux } from '../../redux/slides/commentSlide';
 
 const ProductDetail = () => {
     const dispatch = useDispatch();
@@ -249,6 +252,20 @@ const ProductDetail = () => {
         }
     };
 
+    // ------------------- COMMENTS ---------------------------
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                const res = await CommentService.getCommentByIdProduct(product_Redux.id);
+                dispatch(addCommentToRedux(res?.data));
+            } catch (error) {
+                console.error('Fetch comments error:', error);
+            }
+        };
+
+        fetchComments();
+    }, [dispatch, product_Redux.id]);
+
     return (
         <div className='font-Lato bg-white'>
             <div className='p-6 lg:max-w-7xl max-w-4xl mx-auto'>
@@ -452,155 +469,8 @@ const ProductDetail = () => {
                 </div>
 
                 {/* comments */}
-                <div className='mt-5 shadow-md p-6'>
-                    <h3 className='text-lg font-bold text-black'>(10) Lượt đánh giá</h3>
-                    <div className='grid md:grid-cols-2 gap-12 mt-2'>
-                        <div>
-                            <div className='space-y-3'>
-                                <div className='flex items-center'>
-                                    <p className='text-md text-black font-bold'>5.0</p>
-                                    <svg
-                                        className='w-5 fill-yellow-400 ml-1'
-                                        viewBox='0 0 14 13'
-                                        fill='none'
-                                        xmlns='http://www.w3.org/2000/svg'
-                                    >
-                                        <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                                    </svg>
-                                    <div className='bg-gray-400 rounded w-full h-2 ml-3'>
-                                        <div className='w-2/3 h-full rounded bg-black'></div>
-                                    </div>
-                                    <p className='text-sm text-black font-bold ml-3'>66%</p>
-                                </div>
-                                <div className='flex items-center'>
-                                    <p className='text-sm text-black font-bold'>4.0</p>
-                                    <svg
-                                        className='w-5 fill-yellow-400 ml-1'
-                                        viewBox='0 0 14 13'
-                                        fill='none'
-                                        xmlns='http://www.w3.org/2000/svg'
-                                    >
-                                        <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                                    </svg>
-                                    <div className='bg-gray-400 rounded w-full h-2 ml-3'>
-                                        <div className='w-1/3 h-full rounded bg-black'></div>
-                                    </div>
-                                    <p className='text-sm text-black font-bold ml-3'>33%</p>
-                                </div>
-                                <div className='flex items-center'>
-                                    <p className='text-sm text-black font-bold'>3.0</p>
-                                    <svg
-                                        className='w-5 fill-yellow-400 ml-1'
-                                        viewBox='0 0 14 13'
-                                        fill='none'
-                                        xmlns='http://www.w3.org/2000/svg'
-                                    >
-                                        <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                                    </svg>
-                                    <div className='bg-gray-400 rounded w-full h-2 ml-3'>
-                                        <div className='w-1/6 h-full rounded bg-black'></div>
-                                    </div>
-                                    <p className='text-sm text-black font-bold ml-3'>16%</p>
-                                </div>
-                                <div className='flex items-center'>
-                                    <p className='text-sm text-black font-bold'>2.0</p>
-                                    <svg
-                                        className='w-5 fill-yellow-400 ml-1'
-                                        viewBox='0 0 14 13'
-                                        fill='none'
-                                        xmlns='http://www.w3.org/2000/svg'
-                                    >
-                                        <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                                    </svg>
-                                    <div className='bg-gray-400 rounded w-full h-2 ml-3'>
-                                        <div className='w-1/12 h-full rounded bg-black'></div>
-                                    </div>
-                                    <p className='text-sm text-black font-bold ml-3'>8%</p>
-                                </div>
-                                <div className='flex items-center'>
-                                    <p className='text-sm text-black font-bold'>1.0</p>
-                                    <svg
-                                        className='w-5 fill-yellow-400 ml-1'
-                                        viewBox='0 0 14 13'
-                                        fill='none'
-                                        xmlns='http://www.w3.org/2000/svg'
-                                    >
-                                        <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                                    </svg>
-                                    <div className='bg-gray-400 rounded w-full h-2 ml-3'>
-                                        <div className='w-[6%] h-full rounded bg-black'></div>
-                                    </div>
-                                    <p className='text-sm text-black font-bold ml-3'>6%</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className=''>
-                            <div className='flex items-start'>
-                                <img
-                                    src='https://readymadeui.com/team-2.webp'
-                                    className='w-12 h-12 rounded-full border-2 border-white'
-                                />
-                                <div className='ml-3'>
-                                    <h4 className='text-sm font-bold text-black'>John Doe</h4>
-                                    <div className='flex space-x-1 mt-1'>
-                                        <svg
-                                            className='w-4 fill-yellow-400'
-                                            viewBox='0 0 14 13'
-                                            fill='none'
-                                            xmlns='http://www.w3.org/2000/svg'
-                                        >
-                                            <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                                        </svg>
-                                        <svg
-                                            className='w-4 fill-yellow-400'
-                                            viewBox='0 0 14 13'
-                                            fill='none'
-                                            xmlns='http://www.w3.org/2000/svg'
-                                        >
-                                            <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                                        </svg>
-                                        <svg
-                                            className='w-4 fill-yellow-400'
-                                            viewBox='0 0 14 13'
-                                            fill='none'
-                                            xmlns='http://www.w3.org/2000/svg'
-                                        >
-                                            <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                                        </svg>
-                                        <svg
-                                            className='w-4 fill-[#CED5D8]'
-                                            viewBox='0 0 14 13'
-                                            fill='none'
-                                            xmlns='http://www.w3.org/2000/svg'
-                                        >
-                                            <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                                        </svg>
-                                        <svg
-                                            className='w-4 fill-[#CED5D8]'
-                                            viewBox='0 0 14 13'
-                                            fill='none'
-                                            xmlns='http://www.w3.org/2000/svg'
-                                        >
-                                            <path d='M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z' />
-                                        </svg>
-                                        <p className='text-xs !ml-2 font-semibold text-black'>
-                                            2 mins ago
-                                        </p>
-                                    </div>
-                                    <p className='text-sm mt-4 text-black'>
-                                        Lorem ipsum dolor sit amet, consectetur adipisci elit, sed
-                                        eiusmod tempor incidunt ut labore et dolore magna aliqua.
-                                    </p>
-                                </div>
-                            </div>
-                            <button
-                                type='button'
-                                className='w-full mt-10 px-4 py-2.5 bg-transparent hover:bg-gray-50 border border-black text-black font-bold rounded'
-                            >
-                                Đọc thêm bình luận
-                            </button>
-                        </div>
-                    </div>
+                <div className='mt-5'>
+                    <Comment idProduct={product_Redux.id} />
                 </div>
             </div>
 

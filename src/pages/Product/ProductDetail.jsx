@@ -141,7 +141,7 @@ const ProductDetail = () => {
     }, [price]);
 
     // format discount price
-    const discountPrice = discount !== 0 ? price - (price * discount) / 100 : 0;
+    const discountPrice = discount !== 0 ? price * ((100 - discount) / 100) : 0;
     const discountPriceFormat = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',

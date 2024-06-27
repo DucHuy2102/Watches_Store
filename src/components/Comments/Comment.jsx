@@ -169,13 +169,17 @@ const Comment = ({ idProduct }) => {
                                 .map((comment, index) => (
                                     <div key={index} className='flex items-start space-x-3 mb-4'>
                                         <img
-                                            src={comment.user.avatarImg}
+                                            src={
+                                                comment.user?.avatarImg
+                                                    ? comment.user?.avatarImg
+                                                    : 'https://i.imgur.com/HeIi0wU.png'
+                                            }
                                             alt='User Avatar'
                                             className='w-12 h-12 rounded-full border-2 border-gray-200'
                                         />
                                         <div>
                                             <h4 className='text-sm font-bold text-gray-800'>
-                                                {comment.user.username}
+                                                {comment.user?.username}
                                             </h4>
                                             <div className='flex items-center space-x-1 mt-1'>
                                                 <Rating

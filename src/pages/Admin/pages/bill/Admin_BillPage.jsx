@@ -103,10 +103,12 @@ const Admin_BillPage = () => {
 
     const { data: dataOrderDetail } = mutationGetDetailOrder;
     const dataTableOrderDetail = dataOrderDetail?.data?.productItems;
-    console.log('dataTableOrderDetail', dataOrderDetail);
 
     // get value user
-    const valueUser = users_Redux.find((user) => user?.id === dataOrderDetail?.data.user);
+    const valueUser = users_Redux.find((user) => user?.id === dataOrderDetail?.data.user.id);
+    console.log('valueUser', valueUser);
+    console.log('users_Redux', users_Redux);
+    console.log('dataTableOrderDetail', dataOrderDetail);
 
     const totalPrice = dataOrderDetail?.data?.totalPrice;
 

@@ -1,4 +1,4 @@
-import { Header, Footer } from './exportComponents';
+import { Header, Footer } from '../exportComponents';
 
 const Default = ({ children }) => {
     return (

@@ -1,13 +1,17 @@
-export { default as Header } from './Header';
-export { default as DefaultComponent } from './Default';
-export { default as Footer } from './Footer';
-export { default as Carousel } from './Carousel';
-export { default as ShopNow } from './ShopNow';
-export { default as ReadMoreToBlogs } from './ReadMoreToBlogs';
-export { default as Sort_Filter } from './Sort_Filter';
-export { default as PaginationComponent } from './PaginationComponent';
-export { default as Comment_Component } from './Comment';
-export { default as PolicyComponent } from './PolicyComponent';
-export { default as SayThanks } from './SayThanks';
-export { default as TheReviews } from './TheReviews';
-export { default as Comment } from './Comments/Comment';
+// component page
+export { default as ShopNow } from './Component_Page/ShopNow';
+export { default as SayThanks } from './Component_Page/SayThanks';
+export { default as TheReviews } from './Component_Page/TheReviews';
+export { default as ReadMoreToBlogs } from './Component_Page/ReadMoreToBlogs';
+export { default as PolicyComponent } from './Component_Page/PolicyComponent';
+
+// component comment
+export { default as Comment } from './Component_Comment/Comment';
+
+// component utils
+export { default as Header } from './Utils_Component/Header';
+export { default as Footer } from './Utils_Component/Footer';
+export { default as Carousel } from './Utils_Component/Carousel';
+export { default as Sort_Filter } from './Utils_Component/Sort_Filter';
+export { default as DefaultComponent } from './Utils_Component/Default';
+export { default as PaginationComponent } from './Utils_Component/PaginationComponent';

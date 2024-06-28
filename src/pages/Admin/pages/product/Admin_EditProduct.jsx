@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Radio, Upload, Image, message } from 'antd';
+import { Button, Form, Input, Radio, Upload, Image, message, Select } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import * as ProductService from '../../../../services/ProductService';
 import { useMutationHook } from '../../../../hooks/useMutationHook';
@@ -94,7 +94,7 @@ const Admin_EditProduct = () => {
     });
 
     // add product function
-    const handleAddProduct = async () => {
+    const handleEditProduct = async () => {
         const uploadedImages = await uploadImages(fileList);
         const amountNumber = parseInt(stateProduct.amount);
         const priceNumber = parseInt(stateProduct.price);
@@ -105,14 +105,14 @@ const Admin_EditProduct = () => {
             img: uploadedImages,
         };
         dispatch(editProductAdmin({ idProduct: product_Redux.id, product: productData }));
-        dispatch(resetProduct());
+        // dispatch(resetProduct());
         toast.success('Cập nhật sản phẩm thành công');
-        setTimeout(() => {
-            navigate('/admin/product');
-        }, 1000);
         mutation.mutate(
             { adminToken, product: productData },
             {
+                onSuccess: () => {
+                    navigate('/admin/product');
+                },
                 onError: (error) => {
                     console.log('Edit product failed', error);
                 },
@@ -127,8 +127,8 @@ const Admin_EditProduct = () => {
     };
 
     // Handle radio change
-    const handleRadioChange = (e) => {
-        setStateProduct((prev) => ({ ...prev, state: e.target.value }));
+    const handleSelectChange = (value) => {
+        setStateProduct((prev) => ({ ...prev, state: value }));
     };
 
     // Handle change image
@@ -164,8 +164,14 @@ const Admin_EditProduct = () => {
             <h1 className='font-bold text-2xl mt-5 pl-14 mb-5'>Sửa thông tin đồng hồ</h1>
 
             {/* form */}
-            <Form initialValues={stateProduct} onFinish={handleAddProduct} className='px-14'>
+            <Form
+                initialValues={stateProduct}
+                onFinish={handleEditProduct}
+                className='px-14'
+                layout='vertical'
+            >
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                    {/* product name */}
                     <Form.Item
                         label='Tên đồng hồ'
                         name='productName'
@@ -175,7 +181,6 @@ const Admin_EditProduct = () => {
                                 message: 'Tên đồng hồ không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             ref={inputTagRef}
@@ -186,7 +191,28 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
-                    <div className='flex items-center justify-between gap-5'>
+                    {/* brand */}
+                    <Form.Item
+                        label='Hãng đồng hồ'
+                        name='brand'
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Hãng đồng hồ không được bỏ trống!',
+                            },
+                        ]}
+                    >
+                        <Input
+                            name='brand'
+                            value={stateProduct.brand}
+                            onChange={handleOnChange}
+                            className='w-full'
+                        />
+                    </Form.Item>
+
+                    {/* price & amount */}
+                    <div className='w-full flex items-center justify-between gap-5'>
+                        {/* price */}
                         <Form.Item
                             label='Giá đồng hồ (VNĐ)'
                             name='price'
@@ -207,15 +233,17 @@ const Admin_EditProduct = () => {
                                     },
                                 }),
                             ]}
-                            className='col-span-2 md:col-span-1 w-[25vw]'
+                            className='w-full'
                         >
                             <Input
                                 name='price'
                                 value={stateProduct.price}
                                 onChange={handleOnChange}
+                                className='text-right'
                             />
                         </Form.Item>
 
+                        {/* amount */}
                         <Form.Item
                             label='Số lượng'
                             name='amount'
@@ -236,45 +264,74 @@ const Admin_EditProduct = () => {
                                     },
                                 }),
                             ]}
-                            className='col-span-2 md:col-span-1 w-[20vw]'
+                            className='w-full'
                         >
                             <Input
                                 name='amount'
                                 value={stateProduct.amount}
                                 onChange={handleOnChange}
+                                className='text-right'
                             />
                         </Form.Item>
                     </div>
 
-                    <Form.Item
-                        label='Hãng đồng hồ'
-                        name='brand'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Hãng đồng hồ không được bỏ trống!',
-                            },
-                        ]}
-                        className='col-span-2 md:col-span-1'
-                    >
-                        <Input
-                            name='brand'
-                            value={stateProduct.brand}
-                            onChange={handleOnChange}
+                    {/* condition & discount percent */}
+                    <div className='w-full flex items-center justify-between gap-5'>
+                        {/* condition */}
+                        <Form.Item
+                            label='Trạng thái'
+                            name='condition'
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Trạng thái không được bỏ trống!',
+                                },
+                            ]}
                             className='w-full'
-                        />
-                    </Form.Item>
+                        >
+                            <Select
+                                allowClear
+                                onChange={handleSelectChange}
+                                value={stateProduct.condition}
+                            >
+                                <Select.Option value='Mới'>Hàng mới nhập</Select.Option>
+                                <Select.Option value='Đã sử dụng'>
+                                    Hàng đã qua sử dụng
+                                </Select.Option>
+                            </Select>
+                        </Form.Item>
 
+                        {/* discount percent */}
+                        <Form.Item
+                            label='Giảm giá (%)'
+                            name='discount'
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Giảm giá không được bỏ trống!',
+                                },
+                            ]}
+                            className='w-full'
+                        >
+                            <Input
+                                name='discount'
+                                value={stateProduct.discount}
+                                onChange={handleOnChange}
+                                className='w-full'
+                            />
+                        </Form.Item>
+                    </div>
+
+                    {/* origin */}
                     <Form.Item
-                        label='Xuất xứ đồng hồ'
+                        label='Xuất xứ'
                         name='origin'
                         rules={[
                             {
                                 required: true,
-                                message: 'Xuất xứ đồng hồ không được bỏ trống!',
+                                message: 'Xuất xứ không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='origin'
@@ -284,16 +341,16 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
+                    {/* size product */}
                     <Form.Item
-                        label='Kích thước đồng hồ'
+                        label='Kích thước'
                         name='size'
                         rules={[
                             {
                                 required: true,
-                                message: 'Kích thước đồng hồ không được bỏ trống!',
+                                message: 'Kích thước không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='size'
@@ -303,16 +360,16 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
+                    {/* thichness */}
                     <Form.Item
-                        label='Độ dày đồng hồ'
+                        label='Độ dày'
                         name='thickness'
                         rules={[
                             {
                                 required: true,
-                                message: 'Độ dày đồng hồ không được bỏ trống!',
+                                message: 'Độ dày không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='thickness'
@@ -322,16 +379,16 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
+                    {/* wireMaterial */}
                     <Form.Item
-                        label='Chất liệu dây đồng hồ'
+                        label='Chất liệu dây'
                         name='wireMaterial'
                         rules={[
                             {
                                 required: true,
-                                message: 'Chất liệu dây đồng hồ không được bỏ trống!',
+                                message: 'Chất liệu dây không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='wireMaterial'
@@ -341,16 +398,16 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
+                    {/* shellMaterial */}
                     <Form.Item
-                        label='Chất liệu vỏ đồng hồ'
+                        label='Chất liệu vỏ'
                         name='shellMaterial'
                         rules={[
                             {
                                 required: true,
-                                message: 'Chất liệu vỏ đồng hồ không được bỏ trống!',
+                                message: 'Chất liệu vỏ không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='shellMaterial'
@@ -360,6 +417,7 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
+                    {/* style */}
                     <Form.Item
                         label='Phong cách đồng hồ'
                         name='style'
@@ -369,7 +427,6 @@ const Admin_EditProduct = () => {
                                 message: 'Phong cách đồng hồ không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='style'
@@ -379,16 +436,16 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
+                    {/* feature */}
                     <Form.Item
-                        label='Tính năng đồng hồ'
+                        label='Tính năng'
                         name='feature'
                         rules={[
                             {
                                 required: true,
-                                message: 'Tính năng đồng hồ không được bỏ trống!',
+                                message: 'Tính năng không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='feature'
@@ -398,6 +455,7 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
+                    {/* shape */}
                     <Form.Item
                         label='Hình dáng đồng hồ'
                         name='shape'
@@ -407,7 +465,6 @@ const Admin_EditProduct = () => {
                                 message: 'Hình dáng đồng hồ không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='shape'
@@ -417,6 +474,7 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
+                    {/* weight */}
                     <Form.Item
                         label='Trọng lượng đồng hồ'
                         name='weight'
@@ -426,7 +484,6 @@ const Admin_EditProduct = () => {
                                 message: 'Trọng lượng đồng hồ không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='weight'
@@ -436,6 +493,7 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
+                    {/* genderUser */}
                     <Form.Item
                         label='Đối tượng sử dụng'
                         name='genderUser'
@@ -445,7 +503,6 @@ const Admin_EditProduct = () => {
                                 message: 'Đối tượng sử dụng không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='genderUser'
@@ -455,6 +512,7 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
+                    {/* color */}
                     <Form.Item
                         label='Màu sắc'
                         name='color'
@@ -464,7 +522,6 @@ const Admin_EditProduct = () => {
                                 message: 'Màu sắc không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='color'
@@ -474,6 +531,7 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
 
+                    {/* waterproof */}
                     <Form.Item
                         label='Kháng nước'
                         name='waterproof'
@@ -483,7 +541,6 @@ const Admin_EditProduct = () => {
                                 message: 'Kháng nước không được bỏ trống!',
                             },
                         ]}
-                        className='col-span-2 md:col-span-1'
                     >
                         <Input
                             name='waterproof'
@@ -491,27 +548,6 @@ const Admin_EditProduct = () => {
                             onChange={handleOnChange}
                             className='w-full'
                         />
-                    </Form.Item>
-
-                    <Form.Item
-                        label='Trạng thái'
-                        name='condition'
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Trạng thái không được bỏ trống!',
-                            },
-                        ]}
-                        className='col-span-2 md:col-span-1'
-                    >
-                        <Radio.Group
-                            className='ml-14'
-                            onChange={handleRadioChange}
-                            value={stateProduct.condition}
-                        >
-                            <Radio value='Mới'>Mới</Radio>
-                            <Radio value='Đã sử dụng'>Đã sử dụng</Radio>
-                        </Radio.Group>
                     </Form.Item>
                 </div>
                 <Form.Item

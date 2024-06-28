@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, Input, InputGroup, InputRightAddon, useClipboard, VStack } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { PhoneOutlined } from '@ant-design/icons';
@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 const value = 'https://DucHuy.github.io';
 
 export default function Actions() {
+    const [hasPendingToast, setHasPendingToast] = useState(false);
     const { hasCopied, onCopy } = useClipboard(value);
     const profileUrl = useRef(null);
     useEffect(() => {
@@ -29,7 +30,13 @@ export default function Actions() {
     const mutation = useMutationHook((token) => ProductService.getOrderByUserId(token));
     const { isPending } = mutation;
 
-    isPending && toast.info('Đang tải dữ liệu...');
+    // isPending && toast.info('Đang tải dữ liệu...');
+    useEffect(() => {
+        if (isPending && !hasPendingToast) {
+            toast.info('Đang tải dữ liệu...');
+            setHasPendingToast(true);
+        }
+    }, [isPending, hasPendingToast]);
 
     // handle get all orders and navigate to list orders page
     const handleGetOrderById = () => {

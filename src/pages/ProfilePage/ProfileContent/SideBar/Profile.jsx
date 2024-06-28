@@ -62,7 +62,10 @@ function Profile() {
             dispatch(updateUser({ ...userProfile_From_Redux, avatarImg: response.secure_url }));
             mutation.mutate({
                 getToken,
-                userInfo_From_Redux: { ...userProfile_From_Redux, avatarImg: response.secure_url },
+                userInfo_From_Redux: {
+                    ...userProfile_From_Redux,
+                    avatarImg: response.secure_url,
+                },
             });
         } else {
             onOpen();

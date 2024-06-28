@@ -9,70 +9,70 @@ import * as UserService from '../../../services/UserService';
 // data for the chart
 const chartdata = [
     {
-        date: 'Jan 22',
-        'Lượt truy cập': 2890,
-        'Số lượng đơn hàng': 2338,
+        date: 'Tháng 01',
+        'Lượt truy cập (lượt/tháng)': 3250,
+        'Số lượng đơn hàng (đơn/tháng)': 1615,
     },
     {
-        date: 'Feb 22',
-        'Lượt truy cập': 2756,
-        'Số lượng đơn hàng': 2103,
+        date: 'Tháng 02',
+        'Lượt truy cập (lượt/tháng)': 4505,
+        'Số lượng đơn hàng (đơn/tháng)': 1802,
     },
     {
-        date: 'Mar 22',
-        'Lượt truy cập': 3322,
-        'Số lượng đơn hàng': 2194,
+        date: 'Tháng 03',
+        'Lượt truy cập (lượt/tháng)': 5583,
+        'Số lượng đơn hàng (đơn/tháng)': 1955,
     },
     {
-        date: 'Apr 22',
-        'Lượt truy cập': 3470,
-        'Số lượng đơn hàng': 2108,
+        date: 'Tháng 04',
+        'Lượt truy cập (lượt/tháng)': 4267,
+        'Số lượng đơn hàng (đơn/tháng)': 1757,
     },
     {
-        date: 'May 22',
-        'Lượt truy cập': 3475,
-        'Số lượng đơn hàng': 1812,
+        date: 'Tháng 05',
+        'Lượt truy cập (lượt/tháng)': 5203,
+        'Số lượng đơn hàng (đơn/tháng)': 1853,
     },
     {
-        date: 'Jun 22',
-        'Lượt truy cập': 3129,
-        'Số lượng đơn hàng': 1726,
+        date: 'Tháng 06',
+        'Lượt truy cập (lượt/tháng)': 4705,
+        'Số lượng đơn hàng (đơn/tháng)': 1705,
     },
     {
-        date: 'Jul 22',
-        'Lượt truy cập': 3490,
-        'Số lượng đơn hàng': 1982,
+        date: 'Tháng 07',
+        'Lượt truy cập (lượt/tháng)': 5407,
+        'Số lượng đơn hàng (đơn/tháng)': 1907,
     },
     {
-        date: 'Aug 22',
-        'Lượt truy cập': 2903,
-        'Số lượng đơn hàng': 2012,
+        date: 'Tháng 08',
+        'Lượt truy cập (lượt/tháng)': 5309,
+        'Số lượng đơn hàng (đơn/tháng)': 1855,
     },
     {
-        date: 'Sep 22',
-        'Lượt truy cập': 2643,
-        'Số lượng đơn hàng': 2342,
+        date: 'Tháng 09',
+        'Lượt truy cập (lượt/tháng)': 5107,
+        'Số lượng đơn hàng (đơn/tháng)': 1803,
     },
     {
-        date: 'Oct 22',
-        'Lượt truy cập': 2837,
-        'Số lượng đơn hàng': 2473,
+        date: 'Tháng 10',
+        'Lượt truy cập (lượt/tháng)': 5601,
+        'Số lượng đơn hàng (đơn/tháng)': 1957,
     },
     {
-        date: 'Nov 22',
-        'Lượt truy cập': 2954,
-        'Số lượng đơn hàng': 3848,
+        date: 'Tháng 11',
+        'Lượt truy cập (lượt/tháng)': 6003,
+        'Số lượng đơn hàng (đơn/tháng)': 2003,
     },
     {
-        date: 'Dec 22',
-        'Lượt truy cập': 3239,
-        'Số lượng đơn hàng': 3736,
+        date: 'Tháng 12',
+        'Lượt truy cập (lượt/tháng)': 6509,
+        'Số lượng đơn hàng (đơn/tháng)': 2107,
     },
 ];
 
 // value formatter
 const valueFormatter = function (number) {
-    return '$ ' + new Intl.NumberFormat('us').format(number).toString();
+    return new Intl.NumberFormat('vi-VN').format(number);
 };
 
 const Admin_DashboardPage = () => {
@@ -136,7 +136,7 @@ const Admin_DashboardPage = () => {
             <div className='flex justify-between items-center px-16'>
                 {/* title page */}
                 <h1 className='text-3xl font-PlayfairDisplay font-bold text-center'>
-                    Trang quản lý hệ thống
+                    Trang quản lý cửa hàng
                 </h1>
 
                 {/* date */}
@@ -153,14 +153,14 @@ const Admin_DashboardPage = () => {
             <Admin_OverViewComponent />
 
             {/* chart */}
-            <div className='mt-2'>
+            <div className='bg-white p-6 rounded-lg shadow-lg mt-8'>
                 <AreaChart
-                    className='mt-4 h-72'
+                    className='h-80'
                     data={chartdata}
                     index='date'
-                    yAxisWidth={65}
-                    categories={['Lượt truy cập', 'Số lượng đơn hàng']}
-                    colors={['indigo', 'cyan']}
+                    yAxisWidth={70}
+                    categories={['Lượt truy cập (lượt/tháng)', 'Số lượng đơn hàng (đơn/tháng)']}
+                    colors={['yellow', 'blue']}
                     valueFormatter={valueFormatter}
                 />
             </div>

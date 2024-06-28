@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { filterProducts, sortProducts } from '../redux/slides/productSlide';
+import { filterProducts, sortProducts } from '../../redux/slides/productSlide';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Modal, Select, Table } from 'antd';
 import { MdDelete } from 'react-icons/md';
@@ -151,24 +151,20 @@ const Sort_Filter = () => {
 
             {/* name page */}
             <div className='w-full text-center'>
-                <p className='font-bold text-xl'>Sản phẩm</p>
+                <p className='font-bold text-2xl'>Sản phẩm</p>
             </div>
 
             {/* sort and filter */}
             <div className='flex items-center justify-end gap-2'>
                 {/* filter */}
                 <Input
-                    placeholder='Bộ lọc'
-                    value={selectedFilters.length > 0 ? `Bộ lọc: ${selectedFilters.length}` : ''}
+                    placeholder='Bộ lọc sản phẩm'
+                    value={
+                        selectedFilters.length > 0 ? `Tiêu chí lọc: ${selectedFilters.length}` : ''
+                    }
                     onClick={showModal}
                     readOnly
-                    style={{
-                        width: 100,
-                        height: 40,
-                        cursor: 'pointer',
-                        paddingLeft: '15px',
-                        textAlign: 'left',
-                    }}
+                    className='w-[10vw] h-[5vh] outline-none cursor-pointer text-left'
                 />
 
                 {/* modal filter */}
@@ -177,7 +173,7 @@ const Sort_Filter = () => {
                     style={{ textAlign: 'center' }}
                     open={isModalVisible}
                     okText='Lọc'
-                    cancelText='Hủy bỏ'
+                    cancelText='Hủy'
                     onOk={handleOk}
                     onCancel={handleCancel}
                     okButtonProps={{

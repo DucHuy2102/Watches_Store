@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addNewComment, deleteCommentRedux, editComment } from '../../redux/slides/commentSlide';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 
 const Comment = ({ idProduct }) => {
@@ -83,7 +83,7 @@ const Comment = ({ idProduct }) => {
         CommentService.editComment(token, data)
     );
 
-    // handle save edit comment
+    // handle edit comment
     const handleSaveEdit = () => {
         mutationEditComment.mutate(
             {
@@ -181,7 +181,7 @@ const Comment = ({ idProduct }) => {
                                             <h4 className='text-sm font-bold text-gray-800'>
                                                 {comment.user?.username}
                                             </h4>
-                                            <div className='flex items-center space-x-1 mt-1'>
+                                            <div className='flex items-center space-x-2 mt-1'>
                                                 <Rating
                                                     count={5}
                                                     size={16}
@@ -261,7 +261,10 @@ const Comment = ({ idProduct }) => {
                 <textarea
                     value={commentToEdit?.content || ''}
                     onChange={(e) =>
-                        setCommentToEdit({ ...commentToEdit, content: e.target.value })
+                        setCommentToEdit((prevComment) => ({
+                            ...prevComment,
+                            content: e.target.value,
+                        }))
                     }
                     className='w-full h-40 border border-gray-300 rounded p-2'
                 />

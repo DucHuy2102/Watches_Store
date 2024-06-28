@@ -73,7 +73,7 @@ const Admin_LoginPage = () => {
             {/* title page */}
             <h1 className='text-3xl mb-2 font-bold'>Chào mừng đến với trang</h1>
             <h1 className='h-14 text-4xl mb-5 font-bold text-transparent bg-gradient-to-r from-sky-500 to-red-500 bg-clip-text'>
-                Quản lý hệ thống
+                Quản lý cửa hàng
             </h1>
 
             {/* form */}

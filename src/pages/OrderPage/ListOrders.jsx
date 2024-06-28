@@ -113,6 +113,7 @@ const ListOrders = () => {
         ProductService.acceptOrder(token, idOrder)
     );
 
+    // handle accept order and update state
     const handleConfirmAcceptOrder = () => {
         if (orderToAccept) {
             dispatch(acceptOrder({ orderId: orderToAccept }));
@@ -283,6 +284,13 @@ const ListOrders = () => {
     // ------------------------ TABLE ORDER DETAIL ------------------------
     // format data to map for table order detail
     const dataOrderDetail = order_Redux.filter((item) => item.id === idOrderDetail);
+
+    // Calculate discount value and total price order
+    const discountValue = dataOrderDetail.flatMap((order) =>
+        order.productItems.map((item) => {
+            return (item.product.price * item.quantity * item.product.discount) / 100;
+        })
+    );
     const totalPriceOrder = dataOrderDetail[0]?.totalPrice;
 
     // Table columns order detail
@@ -425,6 +433,8 @@ const ListOrders = () => {
                 </span>
                 <Table columns={columns} dataSource={dataTable} pagination={false} />
             </div>
+
+            {/* detail order */}
             {idOrderDetail ? (
                 <div ref={orderDetailRef}>
                     <span className='w-full text-2xl py-5 font-bold flex justify-center items-center'>
@@ -437,12 +447,16 @@ const ListOrders = () => {
                         footer={() => (
                             <div className='w-full flex flex-col justify-center items-end gap-2'>
                                 <div className='flex flex-col'>
+                                    <span className='text-lg text-red-500 flex justify-end gap-2'>
+                                        <span className='text-black'>Giảm giá:</span>{' '}
+                                        {priceFormat(discountValue)}
+                                    </span>
                                     <span className='text-lg text-red-500'>
                                         <span className='text-black'>Tổng tiền hóa đơn:</span>{' '}
                                         {priceFormat(totalPriceOrder)}
                                     </span>
-                                    <span className='flex justify-end'>
-                                        (Đã được tính giảm giá)
+                                    <span className='text-md flex justify-end italic'>
+                                        <span>(Đã bao gồm phí giảm giá)</span>
                                     </span>
                                 </div>
                                 <button

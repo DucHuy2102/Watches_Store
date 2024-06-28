@@ -9,13 +9,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Badge } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateSearch } from '../redux/slides/productSlide';
-import { resetOrder } from '../redux/slides/orderSlide';
-import { resetUser } from '../redux/slides/userSlide';
+import { updateSearch } from '../../redux/slides/productSlide';
+import { resetOrder } from '../../redux/slides/orderSlide';
+import { resetUser } from '../../redux/slides/userSlide';
 
 // style
 const styleButton =
-    'transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-center py-1 text-start text-lg border border-gray-400 rounded-lg';
+    'transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[10vw] h-10 flex items-center justify-center py-1 text-start text-lg border border-gray-400 rounded-lg';
 const styleButtonPage =
     'transition-all duration-300 hover:rounded-lg hover:py-1 hover:text-white hover:px-3 ease-in-out hover:bg-black text-gray-400 text-xl';
 
@@ -23,6 +23,7 @@ const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const accountRef = useRef(null);
+    const token = localStorage.getItem('tokenUser');
 
     // get data from Redux
     const dataUSer = useSelector((state) => state.user);
@@ -89,16 +90,14 @@ const Header = () => {
     };
 
     return (
-        <nav className='w-full h-16 px-10 flex items-center flex-grow shadow-lg'>
+        <nav className='w-full h-16 px-10 flex items-center justify-between shadow-lg'>
             {/* name website */}
-            <div>
-                <Link to='/' className='text-3xl font-bold font-PlayfairDisplay'>
-                    Watc<span className='text-yellow-400 text-4xl'>H</span>es
-                </Link>
-            </div>
+            <Link to='/' className='text-4xl font-bold font-PlayfairDisplay'>
+                Watc<span className='text-yellow-400 text-4xl'>H</span>es
+            </Link>
 
             {/* pages */}
-            <div className='w-[25rem] flex items-center justify-center gap-4 font-PlayfairDisplay'>
+            <div className='w-[25vw] flex items-center justify-center gap-4 font-PlayfairDisplay'>
                 <Link to='/' className={styleButtonPage}>
                     Trang chủ
                 </Link>
@@ -111,53 +110,58 @@ const Header = () => {
             </div>
 
             {/* search input */}
-            <div className='w-[10rem] flex-grow relative'>
+            <div className='w-[30vw] flex-grow'>
                 <input
                     onChange={handleSearchChange}
                     onKeyDown={handleKeyPress}
                     type='text'
                     value={searchValue}
                     placeholder='Tên đồng hồ...'
-                    className='h-9 border text-lg border-gray-400 px-3 py-1 rounded-lg w-[95%] font-PlayfairDisplay'
+                    className='h-10 border text-lg border-gray-400 px-3 py-1 rounded-lg w-full font-PlayfairDisplay'
                 />
             </div>
 
             {/* buttons: account & cart */}
-            <div className='flex gap-2 font-PlayfairDisplay' ref={accountRef}>
+            <div
+                className='w-[20vw] flex justify-end flex-grow gap-2 font-PlayfairDisplay'
+                ref={accountRef}
+            >
                 {/* button account */}
-                {dataUSer?.username ? (
+                {dataUSer?.username && token ? (
                     // login success
                     <>
                         <div
                             onClick={() => setClickButtonAccount(!clickButtonAccount)}
-                            className={`${styleButton} cursor-pointer mr-2 w-[10rem] rounded-lg flex justify-center items-center text-lg gap-1`}
+                            className={`${styleButton} relative cursor-pointer w-[10vw] rounded-lg flex justify-center items-center text-lg gap-1 transition-all duration-300`}
                         >
-                            Chào:
-                            <span className='text-blue-500 font-medium hover:text-white'>
-                                {dataUSer?.username}
-                            </span>
+                            <img
+                                src={
+                                    dataUSer?.avatarImg
+                                        ? dataUSer?.avatarImg
+                                        : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
+                                }
+                                alt='Image-User'
+                                className='w-8 h-8 object-cover rounded-full'
+                            />
+                            <span className='pl-2 font-bold'>{dataUSer.username}</span>
                         </div>
 
-                        {/* click vào button */}
                         {clickButtonAccount && (
-                            <div className='absolute bg-white rounded-lg top-14 z-10 h-[80px] flex flex-col justify-center items-center gap-1'>
-                                {/* Quản lý tài khoản */}
+                            <div className='absolute bg-white rounded-lg shadow-lg top-14 right-[202px] z-10 w-[10vw] flex flex-col justify-center items-start'>
                                 <Link
                                     to={`/profile`}
                                     onClick={() => setClickButtonAccount(false)}
-                                    className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-center py-1 text-start text-lg border border-gray-300 rounded-lg'
+                                    className='transition-all duration-200 ease-in-out hover:bg-black hover:text-white w-full flex items-center justify-center rounded-lg px-4 py-2 text-lg border-b border-gray-300'
                                 >
                                     <FontAwesomeIcon icon={faUserGear} className='mr-2' />
                                     Tài khoản
                                 </Link>
-
-                                {/* Đăng xuất */}
                                 <button
                                     onClick={() => {
                                         logout();
                                         setClickButtonAccount(false);
                                     }}
-                                    className='transition-all duration-300 ease-in-out hover:bg-black hover:text-white w-[9vw] flex items-center justify-center py-1 text-start text-lg border border-gray-300 rounded-lg'
+                                    className='transition-all duration-200 ease-in-out hover:bg-black hover:text-white w-full flex items-center justify-center rounded-lg px-4 py-2 text-lg'
                                 >
                                     <FontAwesomeIcon icon={faCircleArrowLeft} className='mr-2' />
                                     Đăng xuất
@@ -167,16 +171,14 @@ const Header = () => {
                     </>
                 ) : (
                     // not login
-                    <>
-                        <Link
-                            to='/login'
-                            onClick={() => setClickButtonWithoutAccount(!clickButtonWithoutAccount)}
-                            className={`${styleButton} relative`}
-                        >
-                            <FontAwesomeIcon icon={faUser} className='mr-2' />
-                            Đăng nhập
-                        </Link>
-                    </>
+                    <Link
+                        to='/login'
+                        onClick={() => setClickButtonWithoutAccount(!clickButtonWithoutAccount)}
+                        className={`${styleButton}`}
+                    >
+                        <FontAwesomeIcon icon={faUser} className='mr-2' />
+                        Đăng nhập
+                    </Link>
                 )}
 
                 {/* button shopping cart */}

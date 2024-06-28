@@ -118,18 +118,18 @@ const OrderPage = () => {
                 {/* content order page */}
                 {amountProduct === 0 ? (
                     // no product in cart
-                    <div className='flex flex-col items-center justify-center'>
+                    <div className='flex flex-col items-center justify-center mt-20'>
                         {/* icon cart */}
-                        <GiShoppingCart size={200} className='text-blue-500' />
+                        <GiShoppingCart size={200} className='text-blue-500 mb-8' />
 
                         {/* no product in cart */}
-                        <div className='text-center text-lg font-semibold'>
+                        <div className='text-center text-2xl font-semibold text-gray-700 mb-6'>
                             <p>Không có sản phẩm nào trong giỏ hàng của bạn</p>
                         </div>
 
                         {/* button go to products */}
-                        <Link to='/products' className='mt-4'>
-                            <button className='bg-white text-black border border-black hover:bg-blue-500 hover:border-blue-500 hover:text-white transition duration-300 px-4 py-2 rounded-md'>
+                        <Link to='/products' className='mt-6'>
+                            <button className='bg-blue-500 text-white border border-transparent hover:bg-blue-600 transition duration-300 px-6 py-3 rounded-md shadow-lg'>
                                 Mua sắm ngay
                             </button>
                         </Link>

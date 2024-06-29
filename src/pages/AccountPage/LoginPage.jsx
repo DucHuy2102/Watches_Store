@@ -36,7 +36,7 @@ const LoginPage = () => {
             { username, password },
             {
                 onSuccess: () => {
-                    toast.success('Đăng nhập thành công! Đang chuyển hướng...');
+                    toast.success('Đăng nhập thành công!');
                     setTimeout(() => {
                         navigate('/');
                     }, 3000);
@@ -51,9 +51,9 @@ const LoginPage = () => {
     // get user detail after login success
     useEffect(() => {
         // handle get user detail
-        const handleGetUserDetail = async (access_token) => {
-            const res = await UserService.getUserDetail(access_token);
-            dispatch(updateUser({ ...res?.data, access_token: access_token }));
+        const handleGetUserDetail = async (token) => {
+            const res = await UserService.getUserDetail(token);
+            dispatch(updateUser({ ...res?.data }));
         };
 
         // handle load orders by user id
@@ -67,13 +67,13 @@ const LoginPage = () => {
         };
 
         if (data?.code === 200) {
-            const access_token = data?.data?.token;
-            localStorage.setItem('tokenUser', access_token);
-            if (access_token) {
-                const decode = jwtDecode(access_token);
+            const token = data?.data?.token;
+            localStorage.setItem('tokenUser', token);
+            if (token) {
+                const decode = jwtDecode(token);
                 if (decode?.sub) {
                     handleGetOrderUser();
-                    handleGetUserDetail(access_token);
+                    handleGetUserDetail(token);
                 }
             }
         }

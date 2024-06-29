@@ -65,10 +65,8 @@ const Admin_BillPage = () => {
 
     // ---------------------- STATE ----------------------
     const users_Redux = useSelector((state) => state.admin.users);
-    console.log('idUser_Redux', users_Redux);
     const orders_Redux = useSelector((state) => state.admin.orders);
-    console.log('orders_Redux', orders_Redux);
-    const ordersLength = orders_Redux.length;
+    const reloadFetch = orders_Redux?.needReload;
 
     // state to control modal
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -76,7 +74,7 @@ const Admin_BillPage = () => {
 
     // ---------------------- FUNCTION GET ALL ORDERS ----------------------
     // function get all orders
-    const getOrders = async () => {
+    const getAllOrders = async () => {
         const res = await ProductService.getAllOrders(adminToken);
         return res;
     };
@@ -84,14 +82,14 @@ const Admin_BillPage = () => {
     // using react-query to fetch data
     const { data } = useQuery({
         queryKey: ['orders'],
-        queryFn: getOrders,
-        enabled: ordersLength === 0,
+        queryFn: getAllOrders,
+        enabled: reloadFetch === true,
     });
 
     // useEffect to dispatch data to redux
     useEffect(() => {
-        if (data) {
-            dispatch(addOrder(data?.data));
+        if (data?.data) {
+            dispatch(addOrder({ data: data.data, needReload: false }));
         }
     }, [data, dispatch]);
 
@@ -105,10 +103,7 @@ const Admin_BillPage = () => {
     const dataTableOrderDetail = dataOrderDetail?.data?.productItems;
 
     // get value user
-    const valueUser = users_Redux.find((user) => user?.id === dataOrderDetail?.data.user.id);
-    console.log('valueUser', valueUser);
-    console.log('users_Redux', users_Redux);
-    console.log('dataTableOrderDetail', dataOrderDetail);
+    const valueUser = users_Redux?.data.find((user) => user?.id === dataOrderDetail?.data.user.id);
 
     const totalPrice = dataOrderDetail?.data?.totalPrice;
 
@@ -379,8 +374,8 @@ const Admin_BillPage = () => {
 
     // data all orders
     const dataTable = orders_Redux
-        ? orders_Redux
-              ?.filter((order) => order?.state === selectedStatus)
+        ? orders_Redux?.data
+              .filter((order) => order?.state === selectedStatus)
               .map((order, indexorder) => ({
                   key: order?.id || indexorder,
                   indexTable: indexorder + 1,
@@ -393,7 +388,6 @@ const Admin_BillPage = () => {
                   action: order.state,
               }))
         : [];
-
     // column display order detail
     const columnOrder = [
         {
@@ -484,9 +478,7 @@ const Admin_BillPage = () => {
         <div>
             {/* title page */}
             <div className='mt-1 px-14 flex justify-center items-center'>
-                <h1 className='font-bold text-3xl text-center'>
-                    Danh sách đơn hàng - {ordersLength} Sản phẩm
-                </h1>
+                <h1 className='font-bold text-3xl text-center'>Danh sách đơn hàng</h1>
             </div>
 
             {/* content page */}

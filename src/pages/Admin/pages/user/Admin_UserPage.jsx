@@ -10,7 +10,7 @@ import {
     addAllUser,
     blockUser,
     deleteUser,
-    unblockUSer,
+    unblockUser,
 } from '../../../../redux/slides/adminSlide';
 import { UnlockOutlined } from '@ant-design/icons';
 import { ToastContainer, toast } from 'react-toastify';
@@ -18,18 +18,18 @@ import 'react-toastify/ReactToastify.css';
 
 const Admin_UserPage = () => {
     const dispatch = useDispatch();
-    // ---------------------------------- STATE ----------------------------------
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedUserId, setSelectedUserId] = useState('');
-
-    // ---------------------------------- GET USERS ----------------------------------
     const tokenAdmin = localStorage.getItem('adminToken');
 
+    // ---------------------------------- STATE ----------------------------------
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedUserId, setSelectedUserId] = useState(null);
+
+    // ---------------------------------- GET USERS ----------------------------------
     // get data from redux
     const users_Redux = useSelector((state) => state.admin.users);
-    const usersLength = users_Redux.length;
+    const needReload = users_Redux.needReload;
 
-    // list all user
+    // function to get all users
     const getUsers = async () => {
         const res = await UserService.getAllUser(tokenAdmin);
         return res;
@@ -39,18 +39,17 @@ const Admin_UserPage = () => {
     const { data } = useQuery({
         queryKey: ['users'],
         queryFn: getUsers,
-        enabled: usersLength === 0,
+        enabled: needReload === true,
     });
 
     // add all user to Redux store
     useEffect(() => {
-        if (data?.data && usersLength === 0) {
-            dispatch(addAllUser(data.data));
+        if (data?.data) {
+            dispatch(addAllUser({ data: data.data, needReload: false }));
         }
-    }, [data, dispatch, usersLength]);
+    }, [data, dispatch, needReload]);
 
     // ---------------------------------- DELETE USER ----------------------------------
-
     // cancel modal delete user
     const handleCancel_Delete = () => {
         setIsModalOpen(false);
@@ -63,7 +62,6 @@ const Admin_UserPage = () => {
     };
 
     // delete user function
-    const token = localStorage.getItem('adminToken');
     const mutationDelete = useMutationHook(({ token, id }) => {
         return UserService.deleteUser(token, id);
     });
@@ -73,7 +71,7 @@ const Admin_UserPage = () => {
         dispatch(deleteUser({ userId: selectedUserId }));
         toast.success('Xóa người dùng thành công!');
         mutationDelete.mutate(
-            { token, id: selectedUserId },
+            { token: tokenAdmin, id: selectedUserId },
             {
                 onError: (e) => {
                     console.log('Delete User Error:', e);
@@ -83,8 +81,8 @@ const Admin_UserPage = () => {
     };
 
     // ---------------------------------- BLOCK USER ----------------------------------
-    const [isModalBlockUserOpen, setIsModalBlockUserOpen] = useState(false);
     const [message_Block, setMessage_Block] = useState('');
+    const [isModalBlockUserOpen, setIsModalBlockUserOpen] = useState(false);
 
     // show modal block user
     const showModal_Block = (id) => {
@@ -97,20 +95,21 @@ const Admin_UserPage = () => {
         setIsModalBlockUserOpen(false);
     };
 
-    // block user function
-    const mutationBlock = useMutationHook(({ token, id }) => {
-        return UserService.blockUser(token, id);
+    // function block user
+    const mutationBlock = useMutationHook(({ access_token, id, message }) => {
+        return UserService.blockUser(access_token, id, message);
     });
 
-    // handle block user function
+    // click button block user
     const handleOk_Block = () => {
         setIsModalBlockUserOpen(false);
         dispatch(blockUser({ userId: selectedUserId }));
         toast.success('Chặn người dùng thành công!');
         mutationBlock.mutate(
-            { token, id: selectedUserId, message: message_Block },
+            { access_token: tokenAdmin, id: selectedUserId, message: message_Block },
             {
                 onError: (e) => {
+                    toast.error('Lỗi hệ thống! Vui lòng thử lại sau');
                     console.log('Block User Error:', e);
                 },
             }
@@ -118,23 +117,27 @@ const Admin_UserPage = () => {
     };
 
     // ---------------------------------- UNBLOCK USER ----------------------------------
+    // function unblock user
     const mutationUnblock = useMutationHook(({ token, id }) => {
         return UserService.unblockUser(token, id);
     });
 
+    // click button unblock user
     const handleUnblockUser = (id) => {
-        dispatch(unblockUSer({ userId: id }));
+        dispatch(unblockUser({ userId: id }));
+        toast.success('Bỏ chặn người dùng thành công!');
         mutationUnblock.mutate(
-            { token, id },
+            { token: tokenAdmin, id },
             {
                 onError: (e) => {
+                    toast.error('Lỗi hệ thống! Vui lòng thử lại sau');
                     console.log('Unblock User Error:', e);
                 },
             }
         );
-        toast.success('Bỏ chặn người dùng thành công!');
     };
 
+    // ---------------------------------- TABLE ----------------------------------
     // column table and render data
     const columns = [
         {
@@ -212,20 +215,25 @@ const Admin_UserPage = () => {
     ];
 
     // data to display in table
-    const dataTable = users_Redux?.map((user, indexUser) => ({
-        key: user?.id || indexUser,
-        fullname: `${user.firstname} ${user.lastname}`,
-        username: user.username,
-        phone: user.phone,
-        address: user.address,
-        state: user.state === 'active' ? 'active' : 'blocked',
-    }));
+    const dataTable = users_Redux?.data
+        .filter((user) => user.username !== 'admin')
+        .map((user, indexUser) => ({
+            key: user?.id || indexUser,
+            fullname: `${user.firstname} ${user.lastname}`,
+            username: user.username,
+            phone: user.phone,
+            address: user.address,
+            state: user.state === 'active' ? 'active' : 'blocked',
+        }));
 
     return (
         <div>
+            {/* title page */}
             <div className='mt-1 px-14 flex justify-center items-center'>
                 <h1 className='font-bold text-3xl text-center'>Danh sách người dùng</h1>
             </div>
+
+            {/* table */}
             <div className='w-full'>
                 <div className='mt-5'>
                     <Table columns={columns} dataSource={dataTable} pagination={false} />

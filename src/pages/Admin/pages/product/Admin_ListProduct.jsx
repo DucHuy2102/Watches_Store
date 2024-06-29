@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     addAllProducts,
     removeProductAdmin,
-    updateProduct,
+    getDetailProduct,
 } from '../../../../redux/slides/adminSlide';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
@@ -19,32 +19,6 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 const Admin_ListProduct = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const prevTotalProductRef = useRef(0);
-
-    // get data from redux
-    const products_Redux = useSelector((state) => state.admin.productsAdmin);
-    const productLength = products_Redux.length;
-
-    // Function to get all products from API
-    const getProducts = async () => {
-        const res = await ProductService.getAllProduct();
-        return res;
-    };
-
-    // Fetch data from API using react-query
-    const { data } = useQuery({
-        queryKey: ['products'],
-        queryFn: getProducts,
-        enabled: true,
-    });
-
-    // Add all products to redux store
-    useEffect(() => {
-        if (prevTotalProductRef.current !== productLength && data?.data) {
-            dispatch(addAllProducts(data.data));
-        }
-        prevTotalProductRef.current = productLength;
-    }, [data, dispatch, productLength]);
 
     // get token from localStorage
     const token = localStorage.getItem('adminToken');
@@ -53,22 +27,53 @@ const Admin_ListProduct = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState(null);
 
-    // go to add product page
+    // navigate to Add_Product_Page
     const handleGoToAddProduct = (path) => {
         return () => navigate(path);
     };
 
+    // get data from redux
+    const products_Redux = useSelector((state) => state.admin.productsAdmin);
+    const reloadFetch = products_Redux?.needReload;
+
+    // ------------------------------- GET ALL PRODUCTS & DISPATCH TO REDUX STORE -------------------------------
+    // Function to get all products from API
+    const getProducts = async () => {
+        const res = await ProductService.getAllProduct();
+        return res;
+    };
+
+    // Fetch data from API using react-query
+    const { data, isLoading } = useQuery({
+        queryKey: ['products'],
+        queryFn: getProducts,
+        enabled: reloadFetch === true,
+    });
+
+    // Add all products to redux store after fetching data
+    useEffect(() => {
+        if (data?.data && reloadFetch) {
+            dispatch(addAllProducts({ data: data.data, needReload: false }));
+        }
+    }, [data, dispatch, reloadFetch]);
+
+    if (isLoading) {
+        toast.info('Đang tải dữ liệu, vui lòng đợi trong giây lát!');
+    }
+
+    // ---------------------------------- EDIT PRODUCT ----------------------------------
     // handle edit product
     const handleEditProduct = (id) => {
-        const product = products_Redux.find((product) => product.id === id);
+        const product = products_Redux?.data?.find((product) => product.id === id);
         if (product) {
-            dispatch(updateProduct(product));
+            dispatch(getDetailProduct(product));
             navigate(`/admin/product/edit/${id}`);
         } else {
             console.error(`Product with id ${id} not found`);
         }
     };
 
+    // ---------------------------------- DELETE PRODUCT ----------------------------------
     // show modal when click delete button
     const showModal = (id) => {
         setSelectedProductId(id);
@@ -80,19 +85,22 @@ const Admin_ListProduct = () => {
         return ProductService.deleteProduct(token, id);
     });
 
-    // onClick delete button
+    // click delete button
     const handleOk = () => {
         setIsModalOpen(false);
-        dispatch(removeProductAdmin({ idProduct: selectedProductId }));
-        toast.success('Xóa sản phẩm thành công! Trang tự động làm mới sau 2 giây');
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-        try {
-            mutationDelete.mutate({ token, id: selectedProductId });
-        } catch (error) {
-            console.error('Delete product failed:', error);
-        }
+        mutationDelete.mutate(
+            { token, id: selectedProductId },
+            {
+                onSuccess: () => {
+                    dispatch(removeProductAdmin({ idProduct: selectedProductId }));
+                    toast.success('Xóa sản phẩm thành công! Trang tự động làm mới!');
+                },
+                onError: (error) => {
+                    toast.error('Xóa sản phẩm thất bại! Vui lòng thử lại sau!');
+                    console.error('Error when admin delete product:', error);
+                },
+            }
+        );
     };
 
     // onClick cancel button in modal
@@ -100,6 +108,7 @@ const Admin_ListProduct = () => {
         setIsModalOpen(false);
     };
 
+    // ---------------------------------- TABLE ----------------------------------
     // column for table
     const columns = [
         {
@@ -147,10 +156,10 @@ const Admin_ListProduct = () => {
             render: (text) => (
                 <button
                     className={`hover:cursor-pointer w-24 py-2 rounded-lg uppercase ${
-                        text === 'bán' ? 'bg-blue-500 text-white' : 'bg-gray-500 text-white'
+                        text === 'saling' ? 'bg-blue-500 text-white' : 'bg-gray-500 text-white'
                     }`}
                 >
-                    {text === 'bán' ? 'đang bán' : 'hết hàng'}
+                    {text === 'saling' ? 'đang bán' : 'hết hàng'}
                 </button>
             ),
         },
@@ -179,8 +188,10 @@ const Admin_ListProduct = () => {
         },
     ];
 
+    console.log('products_Redux:', products_Redux.data);
+
     // data for table
-    const dataTable = products_Redux.map((product, indexProduct) => ({
+    const dataTable = products_Redux?.data?.map((product, indexProduct) => ({
         key: product.id || indexProduct,
         name: product.productName,
         brand: product.brand,
@@ -188,7 +199,7 @@ const Admin_ListProduct = () => {
         username: product.username,
         price: product.price,
         amount: product.amount,
-        stateWatch: product.amount > 0 ? 'bán' : '',
+        stateWatch: product.state,
     }));
 
     return (

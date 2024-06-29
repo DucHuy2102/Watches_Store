@@ -35,6 +35,7 @@ export const productSlide = createSlice({
     name: 'product',
     initialState,
     reducers: {
+        // ----------------- SEARCH -----------------
         updateSearch: (state, action) => {
             state.search = action.payload;
         },
@@ -43,6 +44,7 @@ export const productSlide = createSlice({
             state.search = [];
         },
 
+        // ----------------- PRODUCT -----------------
         updateProduct: (state, action) => {
             state.product = { ...state.product, ...action.payload };
         },
@@ -56,6 +58,12 @@ export const productSlide = createSlice({
             state.originalProducts = action.payload;
         },
 
+        resetAllProducts: (state) => {
+            state.products = [];
+            state.originalProducts = [];
+        },
+
+        // ----------------- FILTER & SORT -----------------
         sortProducts: (state, action) => {
             const option = action.payload;
             if (option === undefined || option === 'undefined') {
@@ -124,6 +132,7 @@ export const {
     addAllProducts,
     filterProducts,
     clearFilter,
+    resetAllProducts,
 } = productSlide.actions;
 
 export default productSlide.reducer;

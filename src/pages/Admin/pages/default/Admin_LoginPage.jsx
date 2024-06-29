@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Form, Input } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import { useMutationHook } from '../../../hooks/useMutationHook';
-import * as UserService from '../../../services/UserService';
+import { useMutationHook } from '../../../../hooks/useMutationHook';
+import * as UserService from '../../../../services/UserService';
 import { useDispatch } from 'react-redux';
-import { updateUser } from '../../../redux/slides/userSlide';
+import { updateUser } from '../../../../redux/slides/userSlide';
 import { jwtDecode } from 'jwt-decode';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
@@ -25,17 +25,18 @@ const Admin_LoginPage = () => {
         }
     }, []);
 
+    // ------------------ handle login admin ------------------
     // logic login admin and get data admin
     const mutation = useMutationHook((data) => UserService.loginUser(data));
     const { data } = mutation;
 
-    // handle submit login and navigate to dashboard
+    // submit login and navigate to dashboard
     const handleSubmitLogin = () => {
         mutation.mutate(
             { username, password },
             {
                 onSuccess: () => {
-                    toast.success('Đăng nhập thành công! Đang chuyển hướng...');
+                    toast.success('Đăng nhập thành công!');
                     setTimeout(() => {
                         navigate('/admin/dashboard');
                     }, 3000);
@@ -47,10 +48,11 @@ const Admin_LoginPage = () => {
         );
     };
 
+    // ------------------ get admin infomation detail ------------------
     useEffect(() => {
         const handleGetAdminDetail = async (access_token) => {
             const res = await UserService.getUserDetail(access_token);
-            dispatch(updateUser({ ...res?.data, access_token: access_token }));
+            dispatch(updateUser({ ...res?.data }));
         };
 
         const fetchAPI = () => {

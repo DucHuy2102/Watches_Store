@@ -1,15 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { BiCategoryAlt } from 'react-icons/bi';
 import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
 import { RiBillLine } from 'react-icons/ri';
 import { Layout, Menu } from 'antd';
 import Admin_HeaderComponent from './Admin_HeaderComponent';
 import { useNavigate } from 'react-router-dom';
-import * as ProductService from '../../../services/ProductService';
-import { useQuery } from '@tanstack/react-query';
-import { addAllProducts } from '../../../redux/slides/adminSlide';
-import { useDispatch, useSelector } from 'react-redux';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -46,33 +41,6 @@ const AdminLayout = ({ children }) => {
                 return () => navigate('/admin/dashboard');
         }
     };
-
-    // ----------------- Get Product And Dispatch To Redux -------------------
-    const dispatch = useDispatch();
-
-    // get data from redux
-    const products_Redux = useSelector((state) => state.admin.productsAdmin);
-    const productLength = products_Redux.length;
-
-    // get all product
-    const getAllProduct = async () => {
-        const res = await ProductService.getAllProduct();
-        return res;
-    };
-
-    // useQuery to get all product
-    const { data } = useQuery({
-        queryKey: ['products'],
-        queryFn: getAllProduct,
-        enabled: productLength === 0,
-    });
-
-    // Add all products to redux store
-    useEffect(() => {
-        if (data?.data && productLength === 0) {
-            dispatch(addAllProducts(data.data));
-        }
-    }, [data, dispatch, productLength]);
 
     return (
         <>

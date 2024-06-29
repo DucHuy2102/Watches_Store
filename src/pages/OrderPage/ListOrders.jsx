@@ -1,4 +1,4 @@
-import { Space, Table, Modal } from 'antd';
+import { Space, Table, Modal, Empty } from 'antd';
 import { CheckCircleOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -49,7 +49,7 @@ const ListOrders = () => {
 
     // Get order detail from Redux
     const order_Redux = useSelector((state) => state.orderProduct.orderDetail);
-    console.log('order_Redux', order_Redux);
+    const orderLength = order_Redux.length;
 
     // state for modal
     const [modalCancelVisible, setModalCancelVisible] = useState(false);
@@ -429,9 +429,32 @@ const ListOrders = () => {
         <div className='p-5'>
             <div className='w-full min-h-[60vh] bg-white shadow-md rounded-lg p-5'>
                 <span className='w-full mb-3 text-2xl font-bold flex justify-center items-center'>
-                    Tất cả đơn hàng
+                    {orderLength > 0 ? (
+                        <span>
+                            <span className='text-blue-500'>{orderLength}</span> đơn hàng của bạn
+                        </span>
+                    ) : (
+                        <span>Không có đơn hàng nào!</span>
+                    )}
+                    {/* Tất cả đơn hàng */}
                 </span>
-                <Table columns={columns} dataSource={dataTable} pagination={false} />
+                <Table
+                    columns={columns}
+                    dataSource={dataTable}
+                    pagination={false}
+                    locale={{
+                        emptyText: (
+                            <Empty
+                                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                description={
+                                    <span>
+                                        <strong>Đơn hàng của bạn hiện đang trống!</strong>
+                                    </span>
+                                }
+                            />
+                        ),
+                    }}
+                />
             </div>
 
             {/* detail order */}

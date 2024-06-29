@@ -1,13 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    search: [],
-    users: [],
-    orders: [],
-    productsAdmin: [],
-    originalProducts: [],
+    productsAdmin: {
+        data: [],
+        needReload: true,
+    },
+    users: {
+        data: [],
+        needReload: true,
+    },
+    orders: {
+        data: [],
+        needReload: true,
+    },
     orderDetail: [],
-    isReload: false,
     product: {
         id: '',
         productName: '',
@@ -38,90 +44,93 @@ export const adminSlide = createSlice({
     name: 'admin',
     initialState,
     reducers: {
-        updateProduct: (state, action) => {
-            state.product = { ...state.product, ...action.payload };
+        // ---------------------------- PRODUCT ----------------------------
+        addAllProducts: (state, action) => {
+            const { data, needReload } = action.payload;
+            state.productsAdmin.data = data;
+            state.productsAdmin.needReload = needReload;
         },
-
+        getDetailProduct: (state, action) => {
+            state.product = action.payload;
+        },
         resetProduct: (state) => {
             state.product = { ...initialState.product };
-            state.productsAdmin = [];
-            state.originalProducts = [];
+            state.productsAdmin = {
+                ...state.productsAdmin,
+                data: [],
+                needReload: true,
+            };
         },
-
-        addAllProducts: (state, action) => {
-            state.originalProducts = action.payload;
-            state.productsAdmin = action.payload;
+        addNewProductAdmin: (state, action) => {
+            const { needReload } = action.payload;
+            state.productsAdmin.needReload = needReload;
         },
-
-        addProductAdmin: (state, action) => {
-            state.productsAdmin = [...state.productsAdmin, action.payload];
-        },
-
-        editProductAdmin: (state, action) => {
-            const { idProduct, product } = action.payload;
-            state.productsAdmin = state.productsAdmin.map((item) =>
-                item?.id === idProduct ? product : item
-            );
-        },
-
         removeProductAdmin: (state, action) => {
             const { idProduct } = action.payload;
-            state.productsAdmin = state.productsAdmin.filter((item) => item?.id !== idProduct);
+            state.productsAdmin.data = state.productsAdmin.data.filter(
+                (item) => item?.id !== idProduct
+            );
+            state.productsAdmin.needReload = true;
         },
 
+        // ---------------------------- USER ----------------------------
         addAllUser: (state, action) => {
-            state.users = action.payload;
+            const { data, needReload } = action.payload;
+            state.users.data = data;
+            state.users.needReload = needReload;
         },
-
         resetAllUser: (state) => {
-            state.users = [];
+            state.users = {
+                ...state.users,
+                data: [],
+                needReload: true,
+            };
         },
-
         blockUser: (state, action) => {
             const { userId } = action.payload;
-            state.users = state.users.map((user) => {
+            state.users.data = state.users.data.map((user) => {
                 return user?.id === userId ? { ...user, state: 'blocked' } : user;
             });
         },
-
-        unblockUSer: (state, action) => {
+        unblockUser: (state, action) => {
             const { userId } = action.payload;
-            state.users = state.users.map((user) => {
+            state.users.data = state.users.data.map((user) => {
                 return user?.id === userId ? { ...user, state: 'active' } : user;
             });
         },
-
         deleteUser: (state, action) => {
             const { userId } = action.payload;
-            state.users = state.users.filter((user) => user?.id !== userId);
+            state.users.data = state.users.data.filter((user) => user?.id !== userId);
         },
 
+        // ---------------------------- ORDER ----------------------------
         addOrder: (state, action) => {
-            state.orders = action.payload;
+            const { data, needReload } = action.payload;
+            state.orders.data = data;
+            state.orders.needReload = needReload;
         },
-
         resetOrder: (state) => {
-            state.orders = [];
+            state.orders = {
+                ...state.orders,
+                data: [],
+                needReload: true,
+            };
         },
-
         addOrderDetail: (state, action) => {
             state.orderDetail = action.payload;
         },
-
         resetOrderDetail: (state) => {
             state.orderDetail = [];
         },
-
         cancelOrder: (state, action) => {
             const { orderId } = action.payload;
-            state.orders = state.orders.map((order) =>
+            state.orders.data = state.orders.data.map((order) =>
                 order.id === orderId ? { ...order, state: 'cancel' } : order
             );
         },
-
         acceptOrder: (state, action) => {
             const { orderId } = action.payload;
-            state.orders = state.orders.map((order) =>
+            state.orders.data = state.orders.data.map((order) =>
                 order.id === orderId ? { ...order, state: 'shipping' } : order
             );
         },
@@ -129,16 +138,15 @@ export const adminSlide = createSlice({
 });
 
 export const {
-    updateProduct,
-    resetProduct,
     addAllProducts,
+    getDetailProduct,
+    resetProduct,
+    addNewProductAdmin,
     removeProductAdmin,
-    addProductAdmin,
-    editProductAdmin,
     addAllUser,
     resetAllUser,
     blockUser,
-    unblockUSer,
+    unblockUser,
     deleteUser,
     addOrder,
     resetOrder,

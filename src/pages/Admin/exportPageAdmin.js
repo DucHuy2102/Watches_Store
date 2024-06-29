@@ -3,9 +3,9 @@ export { default as Admin_HeaderComponent } from './components/Admin_HeaderCompo
 export { default as AdminLayout } from './components/AdminLayout';
 
 // pages
-export { default as Admin_DashboardPage } from './pages/Admin_DashboardPage';
-export { default as Admin_LoginPage } from './pages/Admin_LoginPage';
-export { default as Admin_NotFoundPage } from './pages/Admin_NotFoundPage';
+export { default as Admin_DashboardPage } from './pages/default/Admin_DashboardPage';
+export { default as Admin_LoginPage } from './pages/default/Admin_LoginPage';
+export { default as Admin_NotFoundPage } from './pages/default/Admin_NotFoundPage';
 
 // product
 export { default as Admin_AddProduct } from './pages/product/Admin_AddProduct';

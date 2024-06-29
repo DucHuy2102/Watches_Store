@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
-import { editProductAdmin, resetProduct } from '../../../../redux/slides/adminSlide';
+import { resetProduct } from '../../../../redux/slides/adminSlide';
 
 const { TextArea } = Input;
 
@@ -59,15 +59,32 @@ const uploadImages = async (fileList) => {
     return uploadedImages.filter((url) => url !== null);
 };
 
+// Upload button
+const uploadButton = (
+    <div>
+        <PlusOutlined />
+        <div>Thêm ảnh</div>
+    </div>
+);
+
 const Admin_EditProduct = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const inputTagRef = useRef(null);
+
+    // autoFocus: Focus on the first input tag when the page is loaded
+    useEffect(() => {
+        if (inputTagRef.current) {
+            inputTagRef.current.focus();
+        }
+    }, []);
 
     // get token from localStorage
     const adminToken = localStorage.getItem('adminToken');
 
     // get product from redux
     const product_Redux = useSelector((state) => state?.admin.product);
+    console.log('product_Redux:', product_Redux);
 
     // state for product and fileList
     const [stateProduct, setStateProduct] = useState(product_Redux);
@@ -88,45 +105,14 @@ const Admin_EditProduct = () => {
         setFileList(initialFileList);
     }, [product_Redux]);
 
-    // useMutationHook to edit product
-    const mutation = useMutationHook(({ adminToken, product }) => {
-        return ProductService.editProduct(adminToken, product);
-    });
-
-    // add product function
-    const handleEditProduct = async () => {
-        const uploadedImages = await uploadImages(fileList);
-        const amountNumber = parseInt(stateProduct.amount);
-        const priceNumber = parseInt(stateProduct.price);
-        const productData = {
-            ...stateProduct,
-            amount: amountNumber,
-            price: priceNumber,
-            img: uploadedImages,
-        };
-        dispatch(editProductAdmin({ idProduct: product_Redux.id, product: productData }));
-        // dispatch(resetProduct());
-        toast.success('Cập nhật sản phẩm thành công');
-        mutation.mutate(
-            { adminToken, product: productData },
-            {
-                onSuccess: () => {
-                    navigate('/admin/product');
-                },
-                onError: (error) => {
-                    console.log('Edit product failed', error);
-                },
-            }
-        );
-    };
-
+    // ---------------------------------- HANDLE CHANGED ----------------------------------
     // Handle input change
     const handleOnChange = (e) => {
         const { name, value } = e.target;
         setStateProduct((prev) => ({ ...prev, [name]: value }));
     };
 
-    // Handle radio change
+    // Handle select change
     const handleSelectChange = (value) => {
         setStateProduct((prev) => ({ ...prev, state: value }));
     };
@@ -143,21 +129,42 @@ const Admin_EditProduct = () => {
         setPreviewOpen(true);
     };
 
-    // Upload button
-    const uploadButton = (
-        <div>
-            <PlusOutlined />
-            <div>Thêm ảnh</div>
-        </div>
-    );
+    // ---------------------------------- EDIT PRODUCT ----------------------------------
+    // useMutationHook to edit product
+    const mutation = useMutationHook(({ adminToken, product }) => {
+        return ProductService.editProduct(adminToken, product);
+    });
 
-    // autoFocus: Focus on the first input tag when the page is loaded
-    const inputTagRef = useRef(null);
-    useEffect(() => {
-        if (inputTagRef.current) {
-            inputTagRef.current.focus();
-        }
-    }, []);
+    // add product function
+    const handleEditProduct = async () => {
+        const uploadedImages = await uploadImages(fileList);
+        const amountNumber = parseInt(stateProduct.amount);
+        const priceNumber = parseInt(stateProduct.price);
+
+        // format product data
+        const productData = {
+            ...stateProduct,
+            amount: amountNumber,
+            price: priceNumber,
+            img: uploadedImages,
+        };
+
+        mutation.mutate(
+            { adminToken, product: productData },
+            {
+                onSuccess: () => {
+                    dispatch(resetProduct());
+                    toast.success('Cập nhật sản phẩm thành công');
+                    navigate('/admin/product');
+                },
+                onError: (error) => {
+                    toast.error('Lỗi hệ thống! Vui lòng thử lại sau.');
+                    console.log('Error when admin edit product:', error);
+                    navigate('/admin/product');
+                },
+            }
+        );
+    };
 
     return (
         <>
@@ -550,6 +557,8 @@ const Admin_EditProduct = () => {
                         />
                     </Form.Item>
                 </div>
+
+                {/* description */}
                 <Form.Item
                     label='Mô tả'
                     name='description'
@@ -568,7 +577,10 @@ const Admin_EditProduct = () => {
                         onChange={handleOnChange}
                     />
                 </Form.Item>
+
+                {/* images & button submit */}
                 <div className='flex items-center justify-between'>
+                    {/* images */}
                     <Form.Item
                         label='Ảnh sản phẩm'
                         name='img'
@@ -576,35 +588,35 @@ const Admin_EditProduct = () => {
                         getValueFromEvent={normFile}
                         className='col-span-2'
                     >
-                        <>
-                            <Upload
-                                beforeUpload={() => false}
-                                listType='picture-card'
-                                fileList={fileList}
-                                onPreview={handlePreview}
-                                onChange={handleChange}
-                            >
-                                {fileList.length >= 10 ? null : uploadButton}
-                            </Upload>
-                            {previewImage && (
-                                <Image
-                                    key={
-                                        fileList.find((file) => file.url === previewImage)?.uid ||
-                                        'preview'
-                                    }
-                                    wrapperStyle={{ display: 'none' }}
-                                    preview={{
-                                        visible: previewOpen,
-                                        onVisibleChange: (visible) => setPreviewOpen(visible),
-                                        afterOpenChange: (visible) =>
-                                            !visible && setPreviewImage(''),
-                                    }}
-                                    src={previewImage}
-                                />
-                            )}
-                        </>
+                        <Upload
+                            beforeUpload={() => false}
+                            listType='picture-card'
+                            fileList={fileList}
+                            onPreview={handlePreview}
+                            onChange={handleChange}
+                        >
+                            {fileList.length >= 10 ? null : uploadButton}
+                        </Upload>
+                        {/* preview images */}
+                        {previewImage && (
+                            <Image
+                                key={
+                                    fileList.find((file) => file.url === previewImage)?.uid ||
+                                    'preview'
+                                }
+                                // key={fileList.find((file) => file.url === previewImage)?.uid}
+                                wrapperStyle={{ display: 'none' }}
+                                preview={{
+                                    visible: previewOpen,
+                                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                }}
+                                src={previewImage}
+                            />
+                        )}
                     </Form.Item>
 
+                    {/* button submit */}
                     <Button
                         type='primary'
                         htmlType='submit'

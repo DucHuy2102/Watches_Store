@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { resetAllUser } from '../../../redux/slides/adminSlide';
-import { resetOrder, resetOrderDetail, resetProduct } from '../../../redux/slides/adminSlide';
+import {
+    resetAllUser,
+    resetOrder,
+    resetOrderDetail,
+    resetProduct,
+} from '../../../redux/slides/adminSlide';
+import { resetUser } from '../../../redux/slides/userSlide';
 
 const Admin_HeaderComponent = () => {
     const accountRef = useRef(null);
@@ -27,6 +32,7 @@ const Admin_HeaderComponent = () => {
         dispatch(resetOrderDetail());
         dispatch(resetProduct());
         dispatch(resetOrder());
+        dispatch(resetUser());
         navigate('/admin');
     };
 

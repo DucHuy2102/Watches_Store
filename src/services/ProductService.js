@@ -187,4 +187,3 @@ export const buyNowProduct = async (token, data) => {
     });
     return res.data;
 };
-

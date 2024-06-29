@@ -5,8 +5,8 @@ export { default as Admin_AddProduct } from './Admin/pages/product/Admin_AddProd
 export { default as Admin_EditProduct } from './Admin/pages/product/Admin_EditProduct';
 export { default as Admin_ListProduct } from './Admin/pages/product/Admin_ListProduct';
 export { default as Admin_UserPage } from './Admin/pages/user/Admin_UserPage';
-export { default as Admin_DashboardPage } from './Admin/pages/Admin_DashboardPage';
-export { default as Admin_LoginPage } from './Admin/pages/Admin_LoginPage';
+export { default as Admin_DashboardPage } from './Admin/pages/default/Admin_DashboardPage';
+export { default as Admin_LoginPage } from './Admin/pages/default/Admin_LoginPage';
 
 // main page
 export { default as HomePage } from './MainPage/HomePage';

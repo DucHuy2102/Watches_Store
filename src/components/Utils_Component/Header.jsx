@@ -9,7 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Badge } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateSearch } from '../../redux/slides/productSlide';
+import { resetAllProducts, updateSearch } from '../../redux/slides/productSlide';
 import { resetOrder } from '../../redux/slides/orderSlide';
 import { resetUser } from '../../redux/slides/userSlide';
 
@@ -62,6 +62,7 @@ const Header = () => {
         localStorage.removeItem('adminToken');
         dispatch(resetUser());
         dispatch(resetOrder());
+        dispatch(resetAllProducts());
         navigate('/');
     };
 

@@ -10,7 +10,6 @@ const initialState = {
     avatarImg: '',
     address: '',
     admin: false,
-    access_token: '',
 };
 
 export const userSlide = createSlice({

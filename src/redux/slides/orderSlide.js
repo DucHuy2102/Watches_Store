@@ -4,6 +4,7 @@ const initialState = {
     products: [],
     orderItems: {
         data: [],
+        productBuyNow: null,
         isBuyNow: false,
     },
     orderDetail: [],
@@ -24,8 +25,14 @@ export const orderSlide = createSlice({
     initialState,
     reducers: {
         updateOrderItems: (state, action) => {
-            const { data, isBuyNow } = action.payload;
+            const {
+                data = state.orderItems.data,
+                productBuyNow = state.orderItems.productBuyNow,
+                isBuyNow = state.orderItems.isBuyNow,
+            } = action.payload;
+
             state.orderItems.data = data;
+            state.orderItems.productBuyNow = productBuyNow;
             state.orderItems.isBuyNow = isBuyNow;
         },
 
@@ -44,7 +51,7 @@ export const orderSlide = createSlice({
 
                 if (existItemInOrder) {
                     // If the product exists in orderItems, update its quantity
-                    existItemInOrder.quantity += orderItems.data.quantity;
+                    existItemInOrder.quantity += orderItems.quantity;
                 } else {
                     // If the product does not exist in orderItems, add it with the given quantity
                     state.orderItems.data.push({

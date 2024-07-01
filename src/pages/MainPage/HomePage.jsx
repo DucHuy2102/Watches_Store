@@ -17,6 +17,12 @@ const HomePage = () => {
     const products_Redux = useSelector((state) => state.product.products);
     const productLength = products_Redux.length;
 
+    // scroll to top when render page
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    // ----------------- Fetch data from API using react-query -----------------
     // Function to get all products from API
     const getProducts = async () => {
         const res = await ProductService.getAllProduct();
@@ -27,7 +33,6 @@ const HomePage = () => {
     const { data } = useQuery({
         queryKey: ['products'],
         queryFn: getProducts,
-        // Only fetch if products are not in redux
         enabled: productLength === 0,
     });
 
@@ -37,11 +42,6 @@ const HomePage = () => {
             dispatch(addAllProducts(data.data));
         }
     }, [data, dispatch, productLength]);
-
-    // scroll to top when render page
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
 
     return (
         <div>

@@ -22,14 +22,14 @@ const persistConfig = {
     key: 'root',
     version: 1,
     storage,
-    blacklist: ['searchProduct', 'product'],
+    blacklist: ['product', 'comment'],
 };
 const rootReducer = combineReducers({
     user: userReducer,
-    product: productReducer,
-    orderProduct: orderReducer,
     admin: adminReducer,
+    product: productReducer,
     comment: commentReducer,
+    orderProduct: orderReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

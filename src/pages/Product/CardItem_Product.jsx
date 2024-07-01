@@ -17,7 +17,7 @@ const CardItem_Product = (props) => {
 
     // state for quantity and idProduct
     const [quantityProduct, setQuantityProduct] = useState(1);
-    const [idProduct, setIdProduct] = useState('');
+    // const [idProduct, setIdProduct] = useState('');
 
     // get data from redux
     const userRedux = useSelector((state) => state.user);
@@ -58,12 +58,13 @@ const CardItem_Product = (props) => {
     const handleDisplayModal = (id) => {
         if (tokenUser) {
             setShowProductDetail(true);
-            setIdProduct(id);
+            // setIdProduct(id);
         } else {
             toast.info('Vui lòng đăng nhập để mua hàng!');
         }
     };
 
+    // ----------------- Handle buy now product -----------------
     // handle buy now product and navigate to checkout page
     const handleBuyNow = () => {
         const valueDispatch = [
@@ -72,9 +73,12 @@ const CardItem_Product = (props) => {
                 quantity: quantityProduct,
             },
         ];
-        dispatch(updateOrderItems({ data: valueDispatch, isBuyNow: true }));
-        setShowProductDetail(false);
-        navigate('/checkout');
+        dispatch(updateOrderItems({ productBuyNow: valueDispatch, isBuyNow: true }));
+        toast.success('Đang chuyển đến trang đặt hàng!');
+        setTimeout(() => {
+            setShowProductDetail(false);
+            navigate('/checkout');
+        }, 1500);
     };
 
     return (

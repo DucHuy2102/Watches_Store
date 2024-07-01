@@ -1,7 +1,7 @@
 import { Form, Input, Select } from 'antd';
 import { HomeOutlined, UserOutlined, TruckOutlined, PhoneOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import * as ProductService from '../../services/ProductService';
@@ -31,9 +31,16 @@ const CheckoutPage = () => {
     const dispatch = useDispatch();
     const token = localStorage.getItem('tokenUser');
 
+    // scroll to top when render page
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     // get data from redux
     const user_Redux = useSelector((state) => state.user);
     const orders_Redux = useSelector((state) => state.orderProduct.orderItems);
+    const checkBuyNow = orders_Redux?.isBuyNow;
+    console.log(orders_Redux);
 
     // get total price of all product in cart
     const totalPrice = orders_Redux?.data.reduce((acc, order) => {
@@ -64,16 +71,17 @@ const CheckoutPage = () => {
         ProductService.buyNowProduct(token, data)
     );
 
-    // handle checkout
+    // handle checkout function: using isBuyNow to check if user
+    // click buy now or not to call different function
     const handleCheckout = () => {
         console.log({ productItem: productItem, address: address, paymentMethod: paymentMethod });
-        if (orders_Redux?.isBuyNow) {
+        if (checkBuyNow) {
             mutationBuyNow.mutate(
                 {
                     token: token,
                     data: {
-                        product: orders_Redux.data[0].product.id,
-                        quantity: orders_Redux.data[0].quantity,
+                        product: orders_Redux.productBuyNow[0].product.id,
+                        quantity: orders_Redux.productBuyNow[0].quantity,
                         address: address,
                         paymentMethod: paymentMethod,
                     },
@@ -130,6 +138,13 @@ const CheckoutPage = () => {
             );
         }
     };
+
+    // clear data in redux store when component unmounts
+    useEffect(() => {
+        return () => {
+            dispatch(resetOrder());
+        };
+    }, [dispatch]);
 
     return (
         <div className='bg-gray-100 min-h-screen py-8'>
@@ -282,45 +297,87 @@ const CheckoutPage = () => {
 
                                         {/* body product */}
                                         <tbody>
-                                            {orders_Redux?.data.map((item) => {
-                                                return (
-                                                    <tr key={item.id}>
-                                                        {/* image, name */}
-                                                        <td className='py-4'>
-                                                            <div className='flex items-center'>
-                                                                {/* image */}
-                                                                <img
-                                                                    className='h-16 w-16 mr-4'
-                                                                    src={item.product.img[0]}
-                                                                    alt='Product image'
-                                                                />
+                                            {checkBuyNow
+                                                ? orders_Redux?.productBuyNow.map((item) => {
+                                                      return (
+                                                          <tr key={item.id}>
+                                                              {/* image, name */}
+                                                              <td className='py-4'>
+                                                                  <div className='flex items-center'>
+                                                                      {/* image */}
+                                                                      <img
+                                                                          className='h-16 w-16 mr-4'
+                                                                          src={item.product.img[0]}
+                                                                          alt='Product image'
+                                                                      />
 
-                                                                {/* name */}
-                                                                <span className='w-80 font-semibold'>
-                                                                    {item.product.productName}
-                                                                </span>
-                                                            </div>
-                                                        </td>
+                                                                      {/* name */}
+                                                                      <span className='w-80 font-semibold'>
+                                                                          {item.product.productName}
+                                                                      </span>
+                                                                  </div>
+                                                              </td>
 
-                                                        {/* price */}
-                                                        <td className='py-4 text-center'>
-                                                            {priceFormat(item.product.price)}
-                                                        </td>
+                                                              {/* price */}
+                                                              <td className='py-4 text-center'>
+                                                                  {priceFormat(item.product.price)}
+                                                              </td>
 
-                                                        {/* quantity */}
-                                                        <td className='py-4 text-center'>
-                                                            {item.quantity}
-                                                        </td>
+                                                              {/* quantity */}
+                                                              <td className='py-4 text-center'>
+                                                                  {item.quantity}
+                                                              </td>
 
-                                                        {/* total price = (price * quantity) */}
-                                                        <td className='py-4 text-center'>
-                                                            {priceFormat(
-                                                                item.product.price * item.quantity
-                                                            )}
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            })}
+                                                              {/* total price = (price * quantity) */}
+                                                              <td className='py-4 text-center'>
+                                                                  {priceFormat(
+                                                                      item.product.price *
+                                                                          item.quantity
+                                                                  )}
+                                                              </td>
+                                                          </tr>
+                                                      );
+                                                  })
+                                                : orders_Redux?.data.map((item) => {
+                                                      return (
+                                                          <tr key={item.id}>
+                                                              {/* image, name */}
+                                                              <td className='py-4'>
+                                                                  <div className='flex items-center'>
+                                                                      {/* image */}
+                                                                      <img
+                                                                          className='h-16 w-16 mr-4'
+                                                                          src={item.product.img[0]}
+                                                                          alt='Product image'
+                                                                      />
+
+                                                                      {/* name */}
+                                                                      <span className='w-80 font-semibold'>
+                                                                          {item.product.productName}
+                                                                      </span>
+                                                                  </div>
+                                                              </td>
+
+                                                              {/* price */}
+                                                              <td className='py-4 text-center'>
+                                                                  {priceFormat(item.product.price)}
+                                                              </td>
+
+                                                              {/* quantity */}
+                                                              <td className='py-4 text-center'>
+                                                                  {item.quantity}
+                                                              </td>
+
+                                                              {/* total price = (price * quantity) */}
+                                                              <td className='py-4 text-center'>
+                                                                  {priceFormat(
+                                                                      item.product.price *
+                                                                          item.quantity
+                                                                  )}
+                                                              </td>
+                                                          </tr>
+                                                      );
+                                                  })}
                                         </tbody>
                                     </table>
                                 </div>

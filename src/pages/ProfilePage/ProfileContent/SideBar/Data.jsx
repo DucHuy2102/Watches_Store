@@ -1,4 +1,4 @@
-import { Box, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, Text, VStack, useColorMode } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
 
 function Data() {
@@ -28,9 +28,11 @@ function Data() {
         },
     ];
 
+    const { colorMode, toggleColorMode } = useColorMode();
+
     return (
         <VStack as='ul' spacing={0} listStyleType='none'>
-            {list.map((item) => (
+            {/* {list.map((item) => (
                 <Box
                     key={item.id}
                     className='w-full py-3 px-5 flex justify-between items-center border-b-2 border-brand-light'
@@ -40,7 +42,10 @@ function Data() {
                         {item.value}
                     </Text>
                 </Box>
-            ))}
+            ))} */}
+            {/* <Button onClick={toggleColorMode}>
+                Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+            </Button> */}
         </VStack>
     );
 }

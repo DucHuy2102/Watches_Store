@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { AreaChart } from '@tremor/react';
 import Admin_OverViewComponent from '../../components/Admin_OverViewComponent';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import * as UserService from '../../../../services/UserService';
+import { useQuery } from '@tanstack/react-query';
+import { addAllUser } from '../../../../redux/slides/adminSlide';
 
 // data for the chart
 const chartdata = [
@@ -107,6 +110,31 @@ const Admin_DashboardPage = () => {
 
         return () => clearInterval(intervalId);
     }, []);
+
+    // ---------------------------------- GET USERS ----------------------------------
+    // get data from redux
+    const users_Redux = useSelector((state) => state.admin.users);
+    const needReload = users_Redux?.needReload;
+
+    // function to get all users
+    const getUsers = async () => {
+        const res = await UserService.getAllUser(tokenAdmin);
+        return res;
+    };
+
+    // using react-query to fetch data
+    const { data } = useQuery({
+        queryKey: ['users'],
+        queryFn: getUsers,
+        enabled: needReload === true,
+    });
+
+    // add all user to Redux store
+    useEffect(() => {
+        if (data?.data) {
+            dispatch(addAllUser({ data: data.data, needReload: false }));
+        }
+    }, [data, dispatch, needReload]);
 
     return (
         <div>

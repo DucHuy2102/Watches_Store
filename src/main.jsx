@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript, theme } from '@chakra-ui/react';
 import { PersistGate } from 'redux-persist/integration/react';
 
 const queryClient = new QueryClient();
@@ -16,6 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
+                <ColorModeScript initialColorMode={theme.config.initialColorMode} />
                 <ChakraProvider>
                     <App />
                 </ChakraProvider>

@@ -1,5 +1,6 @@
 import React from 'react';
 
+// data for policy component
 const policyData = [
     {
         img: 'https://casio-hcm.vn/wp-content/uploads/2024/03/relationship.png',
@@ -34,9 +35,12 @@ const PolicyComponent = () => {
             {policyData.map((item, index) => (
                 <div
                     key={index}
-                    className='h-56 w-64 flex flex-col justify-center items-center gap-5 border border-gray-300 rounded-lg hover:shadow-2xl hover:cursor-pointer hover:transition hover:duration-300'
+                    className='h-56 w-64 flex flex-col justify-center items-center gap-5 border border-gray-300 rounded-lg transition-all duration-500 hover:shadow-2xl hover:scale-105 hover:cursor-pointer'
                 >
-                    <img src={item.img} className='h-16 w-16 object-cover' />
+                    <img
+                        src={item.img}
+                        className='h-16 w-16 object-cover transition-opacity duration-300 hover:opacity-75'
+                    />
                     <div className='flex flex-col justify-center items-center text-lg'>
                         <p className='uppercase font-bold'>{item.title}</p>
                         <p className='uppercase font-bold'>{item.subtitle}</p>

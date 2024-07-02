@@ -71,7 +71,6 @@ export const adminSlide = createSlice({
             state.productsAdmin.data = state.productsAdmin.data.filter(
                 (item) => item?.id !== idProduct
             );
-            // state.productsAdmin.needReload = true;
         },
 
         // ---------------------------- USER ----------------------------

@@ -151,7 +151,7 @@ export const getOrderDetail = async (token, orderId) => {
     return res.data;
 };
 
-// accept order
+// accept order user
 export const acceptOrder = async (token, orderId) => {
     const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/order/delivered/${orderId}`,
@@ -166,7 +166,7 @@ export const acceptOrder = async (token, orderId) => {
     return res.data;
 };
 
-// cancel order
+// cancel order user
 export const cancelOrder = async (token, orderId) => {
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/order/cancel/${orderId}`, null, {
         headers: {

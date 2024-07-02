@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { SiAdblock } from 'react-icons/si';
 import * as ProductService from '../../../../services/ProductService';
+import * as AdminService from '../../../../services/AdminService';
 import { Modal, Space, Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -101,9 +102,13 @@ const Admin_BillPage = () => {
 
     const { data: dataOrderDetail } = mutationGetDetailOrder;
     const dataTableOrderDetail = dataOrderDetail?.data?.productItems;
+    console.log('dataOrderDetail -->', dataOrderDetail);
+    console.log('dataTableOrderDetail', dataTableOrderDetail);
 
     // get value user
-    const valueUser = users_Redux?.data.find((user) => user?.id === dataOrderDetail?.data.user.id);
+    const valueUser = users_Redux?.data.find((user) => user?.id === dataOrderDetail?.data?.user.id);
+    console.log('users_Redux', users_Redux);
+    console.log('valueUser', valueUser);
 
     const totalPrice = dataOrderDetail?.data?.totalPrice;
 
@@ -135,6 +140,7 @@ const Admin_BillPage = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    // ---------------------- ACCEPT ORDER ----------------------
     // show modal accept order
     const showModalAccept = (orderId) => {
         setCurrentOrderId(orderId);
@@ -143,7 +149,7 @@ const Admin_BillPage = () => {
 
     // function to accept order
     const mutationAcceptOrder = useMutationHook(({ token, orderId }) => {
-        return ProductService.acceptOrder(token, orderId);
+        return AdminService.acceptOrder(token, orderId);
     });
 
     // handle accept order
@@ -162,6 +168,7 @@ const Admin_BillPage = () => {
         );
     };
 
+    // ---------------------- CANCEL ORDER ----------------------
     // show modal cancel order
     const showModalCancel = (orderId) => {
         setCurrentOrderId(orderId);
@@ -170,7 +177,7 @@ const Admin_BillPage = () => {
 
     // function to accept order
     const mutationCancelOrder = useMutationHook(({ token, orderId }) => {
-        return ProductService.cancelOrder(token, orderId);
+        return AdminService.cancelOrder(token, orderId);
     });
 
     // handle cancel order
@@ -359,9 +366,6 @@ const Admin_BillPage = () => {
                                     <EyeOutlined size={20} />
                                     Xem đơn
                                 </button>
-                                <span className='bg-red-500 cursor-not-allowed text-white rounded-lg px-2 py-2 font-bold'>
-                                    Đơn hàng đã bị hủy
-                                </span>
                             </div>
                         </Space>
                     );

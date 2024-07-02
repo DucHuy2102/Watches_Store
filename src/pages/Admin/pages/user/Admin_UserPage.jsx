@@ -27,7 +27,7 @@ const Admin_UserPage = () => {
     // ---------------------------------- GET USERS ----------------------------------
     // get data from redux
     const users_Redux = useSelector((state) => state.admin.users);
-    const needReload = users_Redux.needReload;
+    const needReload = users_Redux?.needReload;
 
     // function to get all users
     const getUsers = async () => {

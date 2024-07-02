@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateProduct } from '../../redux/slides/productSlide';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import { updateOrderItems } from '../../redux/slides/orderSlide';
 
@@ -15,12 +15,16 @@ const CardItem_Product = (props) => {
     const tokenUser = localStorage.getItem('tokenUser');
     const [showProductDetail, setShowProductDetail] = useState(false);
 
+    // scroll to top when render page
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     // state for quantity and idProduct
     const [quantityProduct, setQuantityProduct] = useState(1);
     // const [idProduct, setIdProduct] = useState('');
 
     // get data from redux
-    const userRedux = useSelector((state) => state.user);
     const allProduct = useSelector((state) => state.product.products);
 
     // get data from props

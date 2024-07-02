@@ -9,6 +9,16 @@ import { Button, Modal } from 'antd';
 import { toast } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 
+// format date to dd/mm/yyyy
+const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const parts = dateString.split('T')[0].split('-');
+    const day = parts[2];
+    const month = parts[1];
+    const year = parts[0];
+    return `${day}/${month}/${year}`;
+};
+
 const Comment = ({ idProduct }) => {
     const dispatch = useDispatch();
     const token = localStorage.getItem('tokenUser');
@@ -23,16 +33,6 @@ const Comment = ({ idProduct }) => {
     const dataComment = useSelector((state) => state.comment.commentValue);
     const dataCommentLength = dataComment.length;
     const haveComment = dataComment.length > 0;
-
-    // format date to dd/mm/yyyy
-    const formatDate = (dateString) => {
-        if (!dateString) return '';
-        const parts = dateString.split('T')[0].split('-');
-        const day = parts[2];
-        const month = parts[1];
-        const year = parts[0];
-        return `${day}/${month}/${year}`;
-    };
 
     // ----------------------- POST COMMENT --------------------------------
     // mutation post comment
@@ -65,7 +65,7 @@ const Comment = ({ idProduct }) => {
                         })
                     );
                     setCommentValue('');
-                    setRating(0);
+                    setRating(1);
                 },
             }
         );
@@ -160,7 +160,7 @@ const Comment = ({ idProduct }) => {
                     </div>
                 )}
 
-                {/* see comment */}
+                {/* read comment */}
                 <div className='w-full mt-5'>
                     {haveComment ? (
                         <>
@@ -192,25 +192,29 @@ const Comment = ({ idProduct }) => {
                                                 <p className='text-xs ml-2 font-semibold text-gray-600'>
                                                     {formatDate(comment.createdOn)}
                                                 </p>
-                                                {token && (
-                                                    <Button
-                                                        onClick={() => handleEditComment(comment)}
-                                                        icon={<EditOutlined />}
-                                                        className='text-gray-400 hover:text-gray-600'
-                                                    >
-                                                        Sửa
-                                                    </Button>
-                                                )}
-                                                {token && (
-                                                    <Button
-                                                        onClick={() =>
-                                                            handleDeleteComment(comment.id)
-                                                        }
-                                                        icon={<DeleteOutlined />}
-                                                        className='text-gray-400 hover:text-red-600'
-                                                    >
-                                                        Xóa
-                                                    </Button>
+
+                                                {thisUser.username === comment.user.username && (
+                                                    <>
+                                                        <Button
+                                                            onClick={() =>
+                                                                handleEditComment(comment)
+                                                            }
+                                                            icon={<EditOutlined />}
+                                                            className='text-gray-400 hover:text-gray-600'
+                                                        >
+                                                            Sửa
+                                                        </Button>
+
+                                                        <Button
+                                                            onClick={() =>
+                                                                handleDeleteComment(comment.id)
+                                                            }
+                                                            icon={<DeleteOutlined />}
+                                                            className='text-gray-400 hover:text-red-600'
+                                                        >
+                                                            Xóa
+                                                        </Button>
+                                                    </>
                                                 )}
                                             </div>
                                             <p className='text-sm mt-2 text-gray-700'>

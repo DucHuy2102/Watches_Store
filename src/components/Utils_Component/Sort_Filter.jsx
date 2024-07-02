@@ -103,6 +103,7 @@ const Sort_Filter = () => {
     const handleOk = () => {
         setIsModalVisible(false);
         dispatch(filterProducts(selectedFilters));
+        console.log('selectedFilters', selectedFilters);
     };
 
     // handle select filter

@@ -155,8 +155,8 @@ const AddProduct = () => {
             { adminToken, product: productData },
             {
                 onSuccess: () => {
-                    dispatch(addNewProductAdmin({ data: productData, needReload: true }));
-                    toast.success('Thêm sản phẩm thành công! Trang sẽ tự tải lại!');
+                    dispatch(addNewProductAdmin({ data: productData }));
+                    toast.success('Thêm sản phẩm thành công!');
                     navigate('/admin/product');
                 },
                 onError: (error) => {

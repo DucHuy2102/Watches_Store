@@ -43,9 +43,13 @@ const CheckoutPage = () => {
     console.log(orders_Redux);
 
     // get total price of all product in cart
-    const totalPrice = orders_Redux?.data.reduce((acc, order) => {
-        return acc + order.product.price * order.quantity;
-    }, 0);
+    const totalPrice = checkBuyNow
+        ? orders_Redux?.productBuyNow.reduce((acc, order) => {
+              return acc + order.product.price * order.quantity;
+          }, 0)
+        : orders_Redux?.data.reduce((acc, order) => {
+              return acc + order.product.price * order.quantity;
+          }, 0);
 
     // state for user info (phone, firstname, lastname, email, address)
     const [phone, setPhone] = useState(user_Redux.phone ?? '');

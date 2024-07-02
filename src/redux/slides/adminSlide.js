@@ -46,9 +46,9 @@ export const adminSlide = createSlice({
     reducers: {
         // ---------------------------- PRODUCT ----------------------------
         addAllProducts: (state, action) => {
-            const { data, needReload } = action.payload;
+            const { data } = action.payload;
             state.productsAdmin.data = data;
-            state.productsAdmin.needReload = needReload;
+            state.productsAdmin.needReload = false;
         },
         getDetailProduct: (state, action) => {
             state.product = action.payload;
@@ -62,15 +62,16 @@ export const adminSlide = createSlice({
             };
         },
         addNewProductAdmin: (state, action) => {
-            const { needReload } = action.payload;
-            state.productsAdmin.needReload = needReload;
+            const { data } = action.payload;
+            state.productsAdmin.data = [...state.productsAdmin.data, data];
+            state.productsAdmin.needReload = true;
         },
         removeProductAdmin: (state, action) => {
             const { idProduct } = action.payload;
             state.productsAdmin.data = state.productsAdmin.data.filter(
                 (item) => item?.id !== idProduct
             );
-            state.productsAdmin.needReload = true;
+            // state.productsAdmin.needReload = true;
         },
 
         // ---------------------------- USER ----------------------------

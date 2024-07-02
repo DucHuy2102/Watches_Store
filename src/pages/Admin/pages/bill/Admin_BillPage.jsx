@@ -388,6 +388,7 @@ const Admin_BillPage = () => {
                   action: order.state,
               }))
         : [];
+
     // column display order detail
     const columnOrder = [
         {

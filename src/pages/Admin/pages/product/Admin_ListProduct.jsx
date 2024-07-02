@@ -34,6 +34,7 @@ const Admin_ListProduct = () => {
 
     // get data from redux
     const products_Redux = useSelector((state) => state.admin.productsAdmin);
+    console.log('products_Redux:', products_Redux);
     const reloadFetch = products_Redux?.needReload;
 
     // ------------------------------- GET ALL PRODUCTS & DISPATCH TO REDUX STORE -------------------------------
@@ -48,18 +49,22 @@ const Admin_ListProduct = () => {
         queryKey: ['products'],
         queryFn: getProducts,
         enabled: reloadFetch === true,
+        staleTime: 0,
     });
 
     // Add all products to redux store after fetching data
     useEffect(() => {
-        if (data?.data && reloadFetch) {
-            dispatch(addAllProducts({ data: data.data, needReload: false }));
+        if (data?.data) {
+            dispatch(addAllProducts({ data: data.data }));
         }
-    }, [data, dispatch, reloadFetch]);
+    }, [data, dispatch]);
 
-    if (isLoading) {
-        toast.info('Đang tải dữ liệu, vui lòng đợi trong giây lát!');
-    }
+    // Show toast when loading data
+    useEffect(() => {
+        if (isLoading) {
+            toast.info('Đang tải dữ liệu, vui lòng đợi!');
+        }
+    }, [isLoading]);
 
     // ---------------------------------- EDIT PRODUCT ----------------------------------
     // handle edit product
@@ -93,10 +98,10 @@ const Admin_ListProduct = () => {
             {
                 onSuccess: () => {
                     dispatch(removeProductAdmin({ idProduct: selectedProductId }));
-                    toast.success('Xóa sản phẩm thành công! Trang tự động làm mới!');
+                    toast.success('Xóa sản phẩm thành công!');
                 },
                 onError: (error) => {
-                    toast.error('Xóa sản phẩm thất bại! Vui lòng thử lại sau!');
+                    toast.error('Lỗi hệ thống! Vui lòng thử lại sau!');
                     console.error('Error when admin delete product:', error);
                 },
             }
@@ -187,8 +192,6 @@ const Admin_ListProduct = () => {
             ),
         },
     ];
-
-    console.log('products_Redux:', products_Redux.data);
 
     // data for table
     const dataTable = products_Redux?.data?.map((product, indexProduct) => ({
